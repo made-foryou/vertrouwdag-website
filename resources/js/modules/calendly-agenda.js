@@ -1,13 +1,14 @@
 /*
- * Calendly-agenda: pas laden na toestemming voor marketing.
+ * Calendly-agenda: pas laden na toestemming.
  *
  * De strook hero-kennismaken zet een lege #cal-embed op de pagina met de
- * Calendly-link in data-calendly-url. Zonder toestemming laadt er niets
- * van Calendly. De agenda laadt als:
- * - de bezoeker al toestemming voor marketing gaf;
+ * Calendly-link in data-calendly-url en de categorie waar de agenda bij
+ * hoort in data-toestemming (marketing). Zonder toestemming laadt er
+ * niets van Calendly. De agenda laadt als:
+ * - de bezoeker al toestemming voor die categorie gaf;
  * - de bezoeker op "Agenda tonen" (#cal-show) klikt, wat die toestemming
  *   geeft;
- * - de cookiebanner (#11) een keuze met marketing bewaart.
+ * - de cookiebanner een keuze met die categorie bewaart.
  *
  * Vangnet: verschijnt de agenda niet binnen 6 seconden, of laadt het
  * script niet (adblocker, strenge browser, geen verbinding), dan toont de
@@ -32,6 +33,7 @@ export default function calendlyAgenda() {
         return;
     }
 
+    const categorie = embed.dataset.toestemming;
     const poort = document.getElementById('cal-gate');
     const vangnet = document.getElementById('cal-fallback');
     let geladen = false;
@@ -97,16 +99,16 @@ export default function calendlyAgenda() {
     document.getElementById('cal-show')?.addEventListener('click', () => {
         // Eerst laden, zodat de focus van de verdwenen knop naar de agenda gaat.
         laad({ focus: true });
-        geefToestemming('marketing');
+        geefToestemming(categorie);
     });
 
     document.addEventListener('cookiekeuze', (event) => {
-        if (event.detail.marketing) {
+        if (event.detail[categorie]) {
             laad();
         }
     });
 
-    if (heeftToestemming('marketing')) {
+    if (heeftToestemming(categorie)) {
         laad();
     }
 }

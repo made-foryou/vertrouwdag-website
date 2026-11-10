@@ -11,7 +11,8 @@
     De agenda ligt vast. Zonder toestemming voor marketing laadt de pagina
     niets van Calendly: er staat alleen een poort met "Agenda tonen" en
     een link naar Calendly. resources/js/modules/calendly-agenda.js laadt
-    de agenda in #cal-embed na toestemming, en toont het vangnet
+    de agenda in #cal-embed na toestemming voor de categorie in
+    data-toestemming, en toont het vangnet
     (#cal-fallback) als de agenda niet verschijnt. De Calendly-link komt
     uit de config.
 --}}
@@ -55,7 +56,7 @@
                     <x-knop :href="$calendly" variant="secundair" target="_blank" rel="noopener">Open in een nieuw tabblad</x-knop>
                 </div>
             </div>
-            <div class="cal-embed" id="cal-embed" tabindex="-1" data-calendly-url="{{ $calendly }}" hidden></div>
+            <div class="cal-embed" id="cal-embed" tabindex="-1" data-calendly-url="{{ $calendly }}" data-toestemming="marketing" hidden></div>
             <div class="cal-fallback" id="cal-fallback" tabindex="-1" hidden>
                 <p class="eb">Agenda laadt niet</p>
                 <h2 style="font-size:34px">Open de agenda <em>in een nieuw tabblad</em></h2>

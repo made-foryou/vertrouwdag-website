@@ -15,6 +15,7 @@ import lopendeBand from './modules/lopende-band';
 import dienstmappen from './modules/dienstmappen';
 import checklistFormulier from './modules/checklist-formulier';
 import blogfilter from './modules/blogfilter';
+import cookiebanner from './modules/cookiebanner';
 import calendlyAgenda from './modules/calendly-agenda';
 
 naarBoven();
@@ -25,4 +26,5 @@ lopendeBand();
 dienstmappen();
 checklistFormulier();
 blogfilter();
+cookiebanner();
 calendlyAgenda();
