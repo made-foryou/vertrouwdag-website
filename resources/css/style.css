@@ -412,6 +412,8 @@ a.folder:hover{transform:translateY(-4px)}
 }
 @media (prefers-reduced-motion:reduce){
   .js [data-reveal],.js [data-reveal-group]>*,.js [data-reveal-inner]>*{opacity:1!important;translate:none!important}
+  /* Toegevoegd (#4): de stapelkaarten op mobiel (verderop) hebben een eigen transition!important die *{transition:none!important} wint; .js maakt deze regel specifieker */
+  .js .notes .note,.js .folders[data-deck] .folder{transition:none!important}
 }
 
 

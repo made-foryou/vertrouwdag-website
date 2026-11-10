@@ -15,3 +15,8 @@ Route::view('/kennismaken', 'pages.kennismaken')->name('kennismaken');
 Route::view('/privacyverklaring', 'pages.privacyverklaring')->name('privacyverklaring');
 Route::view('/cookiebeleid', 'pages.cookiebeleid')->name('cookiebeleid');
 Route::view('/algemene-voorwaarden', 'pages.algemene-voorwaarden')->name('algemene-voorwaarden');
+
+// Stijlgids met alle gedeelde componenten, alleen lokaal.
+if (app()->environment('local')) {
+    Route::view('/componenten', 'pages.componenten')->name('componenten');
+}
