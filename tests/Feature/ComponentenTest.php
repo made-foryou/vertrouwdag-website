@@ -139,6 +139,39 @@ describe('stapkaart', function () {
     ]);
 });
 
+describe('fasenummer', function () {
+    test('a phase number takes the colour of its place and starts again after the fourth', function (int $nummer, string $stijl) {
+        $document = renderComponent('<x-fasenummer :nummer="$nummer" data-reveal />', ['nummer' => $nummer]);
+        $badge = $document->querySelector('div.tl__badge');
+
+        expect($badge?->getAttribute('style'))->toBe($stijl)
+            ->and($badge?->hasAttribute('data-reveal'))->toBeTrue();
+
+        expect($badge?->querySelector('span')?->textContent)->toBe((string) $nummer)
+            ->and($badge?->querySelector('span')?->hasAttribute('style'))->toBeFalse();
+    })->with([
+        'lila' => [1, 'background:#E0D0E0;color:#401838'],
+        'groen' => [2, 'background:#404830;color:#E0D0E0'],
+        'zand' => [3, 'background:#EFE9DC;color:#401838'],
+        'mos' => [4, 'background:#E3E6D8;color:#401838'],
+        'weer lila' => [5, 'background:#E0D0E0;color:#401838'],
+        'weer groen' => [6, 'background:#404830;color:#E0D0E0'],
+    ]);
+
+    test('a large phase number is bigger, as on the wedding day band', function () {
+        $document = renderComponent('<x-fasenummer :nummer="5" groot />');
+        $badge = $document->querySelector('div.tl__badge');
+
+        expect($badge?->getAttribute('style'))->toBe('background:#E0D0E0;color:#401838;width:100px;height:124px')
+            ->and($badge?->querySelector('span')?->getAttribute('style'))->toBe('font-size:54px');
+    });
+
+    test('a phase number below one is rejected', function () {
+        expect(fn () => $this->blade('<x-fasenummer :nummer="0" />'))
+            ->toThrow(ViewException::class, 'Het fasenummer moet 1 of hoger zijn, niet [0]');
+    });
+});
+
 describe('briefje', function () {
     test('a note is tilted by its rotation and keeps extra styles after its own', function () {
         $document = renderComponent('<x-briefje kleur="mos" :draaiing="3" style="min-height:190px"><p>Tekst</p></x-briefje>');

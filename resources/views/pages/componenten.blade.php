@@ -134,6 +134,17 @@
         </ol>
     </section>
 
+    {{-- Fasenummers (werkwijze.html): de kleur hoort bij het nummer, groot staat op de band --}}
+    <section class="wrap sec stack" style="gap:24px">
+        <p class="eb" data-reveal>Fasenummers</p>
+        <div class="row" data-reveal-group style="gap:28px">
+            @foreach (range(1, 4) as $nummer)
+                <x-fasenummer :nummer="$nummer" />
+            @endforeach
+            <x-fasenummer :nummer="5" groot />
+        </div>
+    </section>
+
     {{-- Reviews (index.html en over-mij.html) --}}
     <section class="reviews">
         <div class="wrap sec stack" style="align-items:center;gap:40px">

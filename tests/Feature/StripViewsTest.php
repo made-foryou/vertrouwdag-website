@@ -114,3 +114,80 @@ test('the closing strip rejects an unknown variant', function () {
     expect(fn () => renderStrip('cta', ['kop' => 'Kop', 'variant' => 'klein']))
         ->toThrow(ViewException::class, 'De strook cta kent geen variant [klein]');
 });
+
+test('the plain closing strip has a taller photo but no heart and the normal heading', function () {
+    $document = renderStrip('cta', ['kop' => 'Het begint met *een gesprek*', 'variant' => 'eenvoudig']);
+
+    expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:480px')
+        ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull()
+        ->and($document->querySelector('.cta-split__txt h2')?->hasAttribute('style'))->toBeFalse()
+        ->and($document->querySelector('.cta-split__txt')?->hasAttribute('style'))->toBeFalse();
+});
+
+test('the timeline numbers its phases from its first number and alternates their sides', function () {
+    $fases = array_map(fn (int $nummer): array => ['id' => null, 'periode' => "Periode {$nummer}", 'titel' => "Fase {$nummer}", 'tekst' => 'Tekst'], range(1, 3));
+
+    $document = renderStrip('tijdlijn', ['eerste_nummer' => 6, 'fases' => $fases]);
+    $lijst = $document->querySelector('ol.tl[data-cms-items="fases"]');
+
+    expect($lijst?->getAttribute('start'))->toBe('6')
+        ->and(tekstenVan($lijst?->querySelectorAll('.tl__badge span')))->toBe(['6', '7', '8'])
+        ->and(attributenVan($document->querySelectorAll('ol.tl > li'), 'class'))->toBe(['tl__step', 'tl__step tl__step--r', 'tl__step']);
+});
+
+test('the timeline starts at one and lies on the band only with that variant', function (?string $variant, ?string $klasse) {
+    $fases = [['id' => null, 'periode' => 'Periode', 'titel' => 'Fase', 'tekst' => 'Tekst']];
+
+    $document = renderStrip('tijdlijn', ['variant' => $variant, 'fases' => $fases]);
+
+    expect($document->querySelector('section[data-cms-strip]')?->getAttribute('class'))->toBe($klasse)
+        ->and($document->querySelector('.tl__badge span')?->textContent)->toBe('1');
+})->with([
+    'zonder variant' => [null, null],
+    'op de band' => ['band', 'band'],
+]);
+
+test('the timeline rejects an unknown variant', function () {
+    expect(fn () => renderStrip('tijdlijn', ['variant' => 'aubergine', 'fases' => []]))
+        ->toThrow(ViewException::class, 'De strook tijdlijn kent geen variant [aubergine]');
+});
+
+test('the wedding day band shows its phase number only when it has one', function (?int $nummer, array $badges) {
+    $document = renderStrip('trouwdag', ['nummer' => $nummer, 'kop' => 'Kop', 'briefjes' => []]);
+
+    expect(tekstenVan($document->querySelectorAll('.tl__badge span')))->toBe($badges);
+})->with([
+    'met nummer' => [5, ['5']],
+    'zonder nummer' => [null, []],
+]);
+
+test('the notes of the wedding day start again with the first colour after the fourth', function () {
+    $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'wie' => "Wie {$nummer}", 'tekst' => "Tekst {$nummer}"], range(1, 5));
+
+    $document = renderStrip('trouwdag', ['kop' => 'Kop', 'briefjes' => $briefjes]);
+    $briefjesOpDePagina = $document->querySelectorAll('[data-cms-items="briefjes"] > .note');
+
+    expect($briefjesOpDePagina)->toHaveCount(5)
+        ->and($briefjesOpDePagina->item(4)->getAttribute('style'))->toBe($briefjesOpDePagina->item(0)->getAttribute('style'))
+        ->and($document->querySelectorAll('.deck-dots span'))->toHaveCount(5);
+});
+
+test('the qualities start again with the first colour after the third', function () {
+    $kwaliteiten = array_map(fn (int $nummer): array => ['id' => null, 'titel' => "Kwaliteit {$nummer}", 'tekst' => 'Tekst'], range(1, 4));
+
+    $document = renderStrip('kwaliteiten', ['kop' => 'Kop', 'kwaliteiten' => $kwaliteiten]);
+    $briefjes = $document->querySelectorAll('[data-cms-items="kwaliteiten"] > .note');
+
+    expect($briefjes)->toHaveCount(4)
+        ->and($briefjes->item(3)->getAttribute('style'))->toBe($briefjes->item(0)->getAttribute('style'))
+        ->and($briefjes->item(3)->querySelector('svg')?->outerHTML)->toBe($briefjes->item(0)->querySelector('svg')?->outerHTML)
+        ->and($document->querySelectorAll('.deck-dots.deck-dots--licht span'))->toHaveCount(4);
+});
+
+test('a quote without a heading shows only the quote', function () {
+    $document = renderStrip('citaat', ['citaat' => 'Het antwoord was er al heel lang.']);
+    $review = $document->querySelector('section.reviews figure.review.review--groot');
+
+    expect($review?->querySelector('blockquote[data-cms-field="citaat"]')?->textContent)->toBe('Het antwoord was er al heel lang.')
+        ->and($review?->querySelector('p.eb'))->toBeNull();
+});
