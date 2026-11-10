@@ -12,6 +12,7 @@ import mobielMenu from './modules/mobiel-menu';
 import inschuiven from './modules/inschuiven';
 import swipeStapel from './modules/swipe-stapel';
 import lopendeBand from './modules/lopende-band';
+import dienstmappen from './modules/dienstmappen';
 import checklistFormulier from './modules/checklist-formulier';
 
 naarBoven();
@@ -19,4 +20,5 @@ mobielMenu();
 inschuiven();
 swipeStapel();
 lopendeBand();
+dienstmappen();
 checklistFormulier();
