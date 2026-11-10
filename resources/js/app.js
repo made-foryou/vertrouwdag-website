@@ -14,6 +14,7 @@ import swipeStapel from './modules/swipe-stapel';
 import lopendeBand from './modules/lopende-band';
 import dienstmappen from './modules/dienstmappen';
 import checklistFormulier from './modules/checklist-formulier';
+import blogfilter from './modules/blogfilter';
 
 naarBoven();
 mobielMenu();
@@ -22,3 +23,4 @@ swipeStapel();
 lopendeBand();
 dienstmappen();
 checklistFormulier();
+blogfilter();

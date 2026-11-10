@@ -1,9 +1,34 @@
-{{-- Tijdelijke pagina, zodat het menu en de footer overal werken. #8 vult hem met de inhoud uit het ontwerp. --}}
+{{--
+    Het blogarchief, opgebouwd uit stroken (resources/views/strips). De
+    inhoud staat hier vast in de vorm die het CMS straks levert: per
+    strook een Strip met zijn velden. De blogs komen uit
+    App\Support\Blogs en staan als extra data op hun strook, zoals with()
+    van een striptype dat later doet. In #20 komen de blogs uit het CMS
+    en verdwijnt dit blok.
+--}}
+@use('App\Support\Blogs')
+@use('App\Support\Strip')
+@php
+    $strips = [
+        new Strip('hero-archief', 'hero-archief', [
+            'label' => 'Blogarchief',
+            'kop' => 'Alle *blogs*',
+            'tekst' => 'Alles wat ik schreef over rustig plannen, mooie plekken in Zuid-Holland en het werk achter de schermen.',
+        ]),
+        new Strip('blog-archief', 'blog-archief', [
+            'leeg' => 'Over dit onderwerp heb ik nog geen blog geschreven. Binnenkort meer!',
+            'knop' => ['text' => 'Terug naar de blog', 'url' => route('blog')],
+            'blogs' => Blogs::gepubliceerd(),
+        ]),
+        new Strip('cta', 'cta', [
+            'kop' => 'Liever direct *persoonlijk advies?*',
+            'variant' => 'compact',
+        ]),
+    ];
+@endphp
 <x-layouts::site
     title="Blogarchief: alle artikelen | vertrouwdag"
     description="Alle blogs van weddingplanner Romy op een rij: tips voor het plannen van jullie bruiloft, locaties in Zuid-Holland en een kijkje achter de schermen."
 >
-    <section class="wrap legal">
-        <h1>Alle <em>blogs</em></h1>
-    </section>
+    <x-strips :strips="$strips" />
 </x-layouts::site>

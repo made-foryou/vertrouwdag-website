@@ -6,8 +6,8 @@ beforeEach(function () {
     $this->withoutVite();
 });
 
-test('every page shows the main menu with the right active link', function (string $page, ?string $activeRoute) {
-    $document = documentVoor(route($page));
+test('every page shows the main menu with the right active link', function (string $page, ?string $activeRoute, array $parameters = []) {
+    $document = documentVoor(route($page, $parameters));
     $menu = config('vertrouwdag.menu');
 
     $links = $document->querySelectorAll('#site-nav a:not(.btn)');
@@ -32,7 +32,7 @@ test('every page shows the main menu with the right active link', function (stri
     'over mij' => ['over-mij', 'over-mij'],
     'blog' => ['blog', 'blog'],
     'blogarchief' => ['blog.archief', 'blog'],
-    'blogartikel' => ['blog.artikel', 'blog'],
+    'blogartikel' => ['blog.artikel', 'blog', ['wanneer-weddingplanner-inschakelen']],
     'veelgestelde vragen' => ['veelgestelde-vragen', 'veelgestelde-vragen'],
     'checklist' => ['checklist', null],
     'kennismaken' => ['kennismaken', null],

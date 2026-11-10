@@ -200,6 +200,18 @@
         </div>
     </section>
 
+    {{-- Blogkaarten (blog.html en archief.html): online met link, binnenkort zonder --}}
+    <section class="band">
+        <div class="wrap sec stack" style="gap:32px">
+            <p class="eb" data-reveal>Blogkaarten</p>
+            <div class="posts" data-reveal-group>
+                <x-blogkaart :blog="new App\Support\Blog('Wanneer schakel je een weddingplanner in? *(En waarom eerder dan je denkt)*', 'De meeste stellen bellen pas als het al druk is. Waarom een vroeg begin juist rust oplevert.', App\Support\Blogcategorie::Planning, 6, Vite::asset('resources/images/paar-meer-herfst.jpg'), 'Bruidspaar bij een meer in de herfst', 'wanneer-weddingplanner-inschakelen')" />
+                <x-blogkaart :blog="new App\Support\Blog('Landelijk-romantisch trouwen in Zuid-Holland: waar begin je?', 'Van boerderij tot buitenplaats, dicht bij huis.', App\Support\Blogcategorie::Locaties, null, Vite::asset('resources/images/ceremonie-buiten.jpg'), 'Ceremonieplek buiten met witte stoelen', binnenkort: true)" :positie="1" />
+                <x-blogkaart :blog="new App\Support\Blog('Waarom jullie familie op jullie trouwdag niets hoeft te regelen', 'Zo mogen jullie ouders en getuigen vooral gast zijn.', App\Support\Blogcategorie::AchterDeSchermen, null, Vite::asset('resources/images/feesttafel.jpg'), 'Gedekte feesttafel met bloemen', binnenkort: true)" :positie="2" />
+            </div>
+        </div>
+    </section>
+
     {{-- Checklist-formulier (index.html zonder en checklist.html met trouwdatum) --}}
     <section class="wrap sec stack" style="gap:32px">
         <div class="checklist" data-reveal>

@@ -108,3 +108,25 @@ function platteTekst(?Element $element): ?string
 {
     return $element === null ? null : trim(preg_replace('/\s+/', ' ', $element->textContent));
 }
+
+/**
+ * Een blog zoals hij in config/blogs.php staat: een gepubliceerde blog
+ * zonder adres, tenzij de test andere velden geeft.
+ *
+ * @param  array<string, mixed>  $velden
+ * @return array{titel: string, intro: string, categorie: string, leestijd: ?int, afbeelding: string, alt: string, slug: ?string, binnenkort: bool}
+ */
+function blogInDeConfig(array $velden = []): array
+{
+    return [
+        'titel' => 'Een blog',
+        'intro' => 'Een korte intro.',
+        'categorie' => 'planning',
+        'leestijd' => 5,
+        'afbeelding' => 'resources/images/ringen-goud.jpg',
+        'alt' => 'Twee gouden trouwringen',
+        'slug' => null,
+        'binnenkort' => false,
+        ...$velden,
+    ];
+}
