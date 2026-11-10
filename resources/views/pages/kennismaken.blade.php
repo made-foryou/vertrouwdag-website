@@ -33,6 +33,8 @@
 <x-layouts::site
     title="Plan een kennismaking | vertrouwdag weddingplanner"
     description="Plan een vrijblijvend kennismakingsgesprek van 30 minuten, online of op locatie. Vertel over jullie plannen, ik vertel hoe ik kan helpen."
+    og-title="Plan een kennismaking · vertrouwdag"
+    og-image="resources/images/romy.jpg"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

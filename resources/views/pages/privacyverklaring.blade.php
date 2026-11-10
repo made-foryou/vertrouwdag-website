@@ -25,6 +25,7 @@
 <x-layouts::site
     title="Privacyverklaring | vertrouwdag"
     description="Hoe vertrouwdag omgaat met jullie persoonsgegevens."
+    og-title="Privacyverklaring · vertrouwdag"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

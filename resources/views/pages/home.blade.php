@@ -113,6 +113,8 @@
 <x-layouts::site
     title="Jullie dag in vertrouwde handen | vertrouwdag"
     description="Weddingplanner in Zuid-Holland. De Dag in handen, Hand in hand en Helemaal in handen: van dagcoördinatie tot full service, zodat jullie en jullie familie op de dag zelf alleen maar hoeven te genieten."
+    og-title="vertrouwdag · Jullie dag in vertrouwde handen"
+    og-description="Weddingplanner in Zuid-Holland. Warm en persoonlijk, en tegelijk strak georganiseerd."
 >
     @push('jsonld')
         <x-json-ld :data="$bedrijf" />

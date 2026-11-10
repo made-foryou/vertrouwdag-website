@@ -49,6 +49,7 @@
 <x-layouts::site
     title="Cookiebeleid | vertrouwdag"
     description="Welke cookies vertrouwdag.nl gebruikt, waarvoor, en hoe jullie je keuze aanpassen."
+    og-title="Cookiebeleid · vertrouwdag"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

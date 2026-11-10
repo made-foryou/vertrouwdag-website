@@ -59,7 +59,7 @@
                     <article @class(['tf__panel', 'tf--'.$dienst['kleur']->value, 'is-active' => $loop->first]) role="tabpanel" id="{{ $dienst['welkeDienst']->anker() }}" aria-labelledby="tab-{{ $dienst['welkeDienst']->value }}" tabindex="0">
                         <div class="tf__media">
                             <div class="polaroid tf__pol" style="transform:rotate({{ $dienst['plaatsing']['polaroid'] }}deg)">
-                                <img src="{{ Vite::asset($dienst['welkeDienst']->foto()) }}" alt="{{ $dienst['welkeDienst']->alt() }}" width="1100" height="825" loading="lazy">
+                                <img src="{{ Vite::asset($dienst['welkeDienst']->foto()) }}" alt="" width="1100" height="825" loading="lazy">
                                 <span data-cms-field="bijschrift">{{ $dienst['bijschrift'] }}</span>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
         <div class="tf-m">
             <div class="folders" data-deck data-cms-items="diensten">
                 @foreach ($diensten as $dienst)
-                    <x-dienstkaart :kleur="$dienst['kleur']->value" :dienst="$dienst['welkeDienst']->value" :foto="Vite::asset($dienst['welkeDienst']->foto())" :alt="$dienst['welkeDienst']->alt()" :draaiing="$dienst['plaatsing']['kaart']" :gespiegeld="$dienst['plaatsing']['gespiegeld']" :kenmerken="$dienst['kenmerken']" :data-for="$dienst['welkeDienst']->anker()">
+                    <x-dienstkaart :kleur="$dienst['kleur']->value" :dienst="$dienst['welkeDienst']->value" :foto="Vite::asset($dienst['welkeDienst']->foto())" :draaiing="$dienst['plaatsing']['kaart']" :gespiegeld="$dienst['plaatsing']['gespiegeld']" :kenmerken="$dienst['kenmerken']" :data-for="$dienst['welkeDienst']->anker()">
                         <x-slot:soort data-cms-field="soort">{{ $dienst['soort'] }}</x-slot:soort>
                         <x-slot:titel data-cms-field="titel">{{ $dienst['titel'] }}</x-slot:titel>
                         <x-slot:omschrijving data-cms-field="omschrijving">{!! $dienst['omschrijving'] !!}</x-slot:omschrijving>

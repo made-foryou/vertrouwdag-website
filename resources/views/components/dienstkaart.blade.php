@@ -12,6 +12,10 @@
     is de sleutel van de prijs in config/vertrouwdag.php. gespiegeld zet
     het tabje en de foto rechts.
 
+    De foto is sfeer en heeft daarom een lege alt: de titel, omschrijving
+    en prijs zeggen al wat de dienst is. Zo blijft ook de naam van de
+    linkkaart kort (besluit Menno, 2026-11-10, zie #12).
+
     De slots soort (eyebrow), titel en omschrijving geven hun attributen
     door aan hun element, bijvoorbeeld data-cms-field.
 --}}
@@ -19,7 +23,6 @@
     'kleur',
     'dienst',
     'foto',
-    'alt',
     'href' => null,
     'draaiing' => 0,
     'gespiegeld' => false,
@@ -33,7 +36,7 @@
     $element = $href !== null ? 'a' : 'article';
 @endphp
 <{{ $element }} @if ($href !== null) href="{{ $href }}" @endif {{ $attributes->class(['folder', 'folder--r' => $gespiegeld, 'f-'.$kleur]) }}>
-    <img class="folder__peek" src="{{ $foto }}" alt="{{ $alt }}" width="1100" height="825" loading="lazy" style="transform:rotate({{ $draaiing }}deg)">
+    <img class="folder__peek" src="{{ $foto }}" alt="" width="1100" height="825" loading="lazy" style="transform:rotate({{ $draaiing }}deg)">
     <div class="folder__body">
         <span class="folder__tab" aria-hidden="true"></span>
         <p {{ $soort->attributes->class(array_filter(['eb', 'eb--sm', $stijl->eyebrowKlasse()])) }}>{{ $soort }}</p>

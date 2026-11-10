@@ -32,6 +32,8 @@
 <x-layouts::site
     title="Blog: rustig je bruiloft plannen | vertrouwdag"
     description="Praktische tips voor het plannen van jullie bruiloft, trouwlocaties in Zuid-Holland en een kijkje achter de schermen bij weddingplanner Romy."
+    og-title="Blog: rustig je bruiloft plannen · vertrouwdag"
+    og-image="resources/images/paar-meer-herfst.jpg"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

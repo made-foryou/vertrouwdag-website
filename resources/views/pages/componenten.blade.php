@@ -6,6 +6,8 @@
 <x-layouts::site
     title="Componenten | vertrouwdag"
     description="Alle gedeelde componenten van de site op één pagina. Alleen lokaal."
+    og-title="Componenten · vertrouwdag"
+    noindex
 >
     <section class="wrap legal">
         <p class="eb">Alleen lokaal</p>
@@ -77,17 +79,17 @@
                 <h2 class="h-xl">Mijn <em>diensten</em></h2>
             </div>
             <div class="folders" data-deck data-reveal-group>
-                <x-dienstkaart kleur="lila" dienst="dag" :href="route('diensten').'#dagcoordinatie'" :foto="Vite::asset('resources/images/schoenen-boeket.jpg')" alt="Bruidsschoenen en boeket op de vensterbank" :draaiing="-4">
+                <x-dienstkaart kleur="lila" dienst="dag" :href="route('diensten').'#dagcoordinatie'" :foto="Vite::asset('resources/images/schoenen-boeket.jpg')" :draaiing="-4">
                     <x-slot:soort>Dagcoördinatie</x-slot:soort>
                     <x-slot:titel>De Dag in handen</x-slot:titel>
                     <x-slot:omschrijving>Jullie plannen, ik neem het zes weken ervoor over en ben op de dag het aanspreekpunt.</x-slot:omschrijving>
                 </x-dienstkaart>
-                <x-dienstkaart kleur="cream" dienst="partial" :href="route('diensten').'#partial-planning'" :foto="Vite::asset('resources/images/hand-in-hand-paar.jpg')" alt="Bruid en bruidegom hand in hand" :draaiing="4" gespiegeld>
+                <x-dienstkaart kleur="cream" dienst="partial" :href="route('diensten').'#partial-planning'" :foto="Vite::asset('resources/images/hand-in-hand-paar.jpg')" :draaiing="4" gespiegeld>
                     <x-slot:soort>Gedeeltelijke planning</x-slot:soort>
                     <x-slot:titel>Hand in hand</x-slot:titel>
                     <x-slot:omschrijving>Locatie staat al? Ik help met leveranciers, planning en budget, en coördineer de dag.</x-slot:omschrijving>
                 </x-dienstkaart>
-                <x-dienstkaart kleur="groen" dienst="full" :href="route('diensten').'#full-service'" :foto="Vite::asset('resources/images/sleep-jurk.jpg')" alt="Bruidegom draagt de sleep van de trouwjurk" :draaiing="-3">
+                <x-dienstkaart kleur="groen" dienst="full" :href="route('diensten').'#full-service'" :foto="Vite::asset('resources/images/sleep-jurk.jpg')" :draaiing="-3">
                     <x-slot:soort>Full service</x-slot:soort>
                     <x-slot:titel>Helemaal in handen</x-slot:titel>
                     <x-slot:omschrijving>Van de eerste locatiebezichtiging tot de dag erna. Jullie kiezen, ik regel de rest.</x-slot:omschrijving>
@@ -101,17 +103,17 @@
     <section class="wrap sec stack" style="gap:32px">
         <p class="eb" data-reveal>Uitgebreide dienstkaarten (op diensten alleen mobiel)</p>
         <div class="folders" data-deck>
-            <x-dienstkaart kleur="lila" dienst="dag" :foto="Vite::asset('resources/images/schoenen-boeket.jpg')" alt="Bruidsschoenen en boeket op de vensterbank" :draaiing="-4" data-for="dagcoordinatie" :kenmerken="['Overdracht zes weken voor de bruiloft', 'Draaiboek en tijdsplanning', 'Afstemming met alle leveranciers', 'Aanwezig van opbouw tot laatste dans']">
+            <x-dienstkaart kleur="lila" dienst="dag" :foto="Vite::asset('resources/images/schoenen-boeket.jpg')" :draaiing="-4" data-for="dagcoordinatie" :kenmerken="['Overdracht zes weken voor de bruiloft', 'Draaiboek en tijdsplanning', 'Afstemming met alle leveranciers', 'Aanwezig van opbouw tot laatste dans']">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel>De Dag in handen</x-slot:titel>
                 <x-slot:omschrijving><strong>Voor stellen</strong> die zelf graag plannen, maar op de dag niets meer willen regelen.</x-slot:omschrijving>
             </x-dienstkaart>
-            <x-dienstkaart kleur="cream" dienst="partial" :foto="Vite::asset('resources/images/hand-in-hand-paar.jpg')" alt="Bruid en bruidegom hand in hand" :draaiing="4" gespiegeld data-for="partial-planning" :kenmerken="['Alles uit De Dag in handen', 'Leveranciers voorstellen en offertes vergelijken', 'Planning en budgetoverzicht', 'Drie vaste overlegmomenten']">
+            <x-dienstkaart kleur="cream" dienst="partial" :foto="Vite::asset('resources/images/hand-in-hand-paar.jpg')" :draaiing="4" gespiegeld data-for="partial-planning" :kenmerken="['Alles uit De Dag in handen', 'Leveranciers voorstellen en offertes vergelijken', 'Planning en budgetoverzicht', 'Drie vaste overlegmomenten']">
                 <x-slot:soort>Gedeeltelijke planning</x-slot:soort>
                 <x-slot:titel>Hand in hand</x-slot:titel>
                 <x-slot:omschrijving><strong>Voor stellen</strong> die de locatie al hebben en hulp willen bij de rest.</x-slot:omschrijving>
             </x-dienstkaart>
-            <x-dienstkaart kleur="groen" dienst="full" :foto="Vite::asset('resources/images/sleep-jurk.jpg')" alt="Bruidegom draagt de sleep van de trouwjurk" :draaiing="-3" data-for="full-service" :kenmerken="['Alles uit Hand in hand', 'Locaties zoeken en samen bezichtigen', 'Concept en styling uitwerken', 'Onbeperkt contact, ook de dag erna']">
+            <x-dienstkaart kleur="groen" dienst="full" :foto="Vite::asset('resources/images/sleep-jurk.jpg')" :draaiing="-3" data-for="full-service" :kenmerken="['Alles uit Hand in hand', 'Locaties zoeken en samen bezichtigen', 'Concept en styling uitwerken', 'Onbeperkt contact, ook de dag erna']">
                 <x-slot:soort>Full service</x-slot:soort>
                 <x-slot:titel>Helemaal in handen</x-slot:titel>
                 <x-slot:omschrijving><strong>Voor stellen</strong> die bij het begin staan en alles in vertrouwde handen willen leggen.</x-slot:omschrijving>

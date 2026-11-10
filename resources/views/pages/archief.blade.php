@@ -16,6 +16,7 @@
             'tekst' => 'Alles wat ik schreef over rustig plannen, mooie plekken in Zuid-Holland en het werk achter de schermen.',
         ]),
         new Strip('blog-archief', 'blog-archief', [
+            'kop' => 'Alle artikelen',
             'leeg' => 'Over dit onderwerp heb ik nog geen blog geschreven. Binnenkort meer!',
             'knop' => ['text' => 'Terug naar de blog', 'url' => route('blog')],
             'blogs' => Blogs::gepubliceerd(),
@@ -29,6 +30,8 @@
 <x-layouts::site
     title="Blogarchief: alle artikelen | vertrouwdag"
     description="Alle blogs van weddingplanner Romy op een rij: tips voor het plannen van jullie bruiloft, locaties in Zuid-Holland en een kijkje achter de schermen."
+    og-title="Blogarchief: alle artikelen · vertrouwdag"
+    og-image="resources/images/paar-meer-herfst.jpg"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

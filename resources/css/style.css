@@ -26,7 +26,7 @@
   --salie-2:#E9EBE1;
   --mos:#E3E6D8;
   --zand:#EFE9DC;
-  --grijs:#6b6f5e;        /* rustige tekst */
+  --grijs:#626655;        /* rustige tekst; iets donkerder dan het ontwerp (#6b6f5e), zodat hij ook op salie, zand en mos 4,5:1 haalt (#12) */
   --lijn:rgba(64,72,48,.12);
   --schaduw:0 18px 48px rgba(45,51,31,.10);
   --schaduw-sm:0 8px 24px rgba(45,51,31,.12);

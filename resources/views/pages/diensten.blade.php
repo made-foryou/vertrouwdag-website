@@ -100,6 +100,9 @@
 <x-layouts::site
     title="Diensten en prijzen | vertrouwdag weddingplanner"
     :description="$omschrijving"
+    og-title="Diensten en prijzen · vertrouwdag"
+    og-description="Weddingplanner in Zuid-Holland. Warm en persoonlijk, en tegelijk strak georganiseerd."
+    og-image="resources/images/ceremonie-buiten.jpg"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

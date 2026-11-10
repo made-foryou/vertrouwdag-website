@@ -3,11 +3,16 @@
     knop terug naar /blog. Het filter in de kop verbergt de blogs van
     andere onderwerpen en toont de melding als er niets overblijft.
 
-    Velden: leeg (de melding zonder blogs) en knop (tekst en url). De
-    blogs zijn extra data: blogs, een lijst van App\Support\Blog.
+    Velden: kop (alleen voor schermlezers, zodat de h3's van de kaarten
+    na de h1 een h2 hebben), leeg (de melding zonder blogs) en knop (tekst
+    en url). De blogs zijn extra data: blogs, een lijst van
+    App\Support\Blog.
 --}}
 <section class="band" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec">
+        @if (filled($strip->kop))
+            <h2 class="sr-only" data-cms-field="kop">{{ $strip->kop }}</h2>
+        @endif
         <div class="posts" data-blog-archive data-reveal-group>
             @foreach ($strip->blogs ?? [] as $blog)
                 <x-blogkaart :blog="$blog" :positie="$loop->index" />

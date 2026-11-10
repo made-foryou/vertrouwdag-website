@@ -26,7 +26,7 @@
         <div class="folders" data-deck data-reveal-group data-cms-items="diensten">
             @foreach ($strip->diensten as $dienst)
                 @php($welkeDienst = Dienst::tryFrom($dienst['dienst']) ?? throw new InvalidArgumentException("De strook diensten kent geen dienst [{$dienst['dienst']}]; kies dag, partial of full."))
-                <x-dienstkaart :kleur="$welkeDienst->kleur()->value" :dienst="$welkeDienst->value" :href="route('diensten').'#'.$welkeDienst->anker()" :foto="Vite::asset($welkeDienst->foto())" :alt="$welkeDienst->alt()" :draaiing="$plaatsing[$welkeDienst->value]['draaiing']" :gespiegeld="$plaatsing[$welkeDienst->value]['gespiegeld']">
+                <x-dienstkaart :kleur="$welkeDienst->kleur()->value" :dienst="$welkeDienst->value" :href="route('diensten').'#'.$welkeDienst->anker()" :foto="Vite::asset($welkeDienst->foto())" :draaiing="$plaatsing[$welkeDienst->value]['draaiing']" :gespiegeld="$plaatsing[$welkeDienst->value]['gespiegeld']">
                     <x-slot:soort data-cms-field="soort">{{ $dienst['soort'] }}</x-slot:soort>
                     <x-slot:titel data-cms-field="titel">{{ $dienst['titel'] }}</x-slot:titel>
                     <x-slot:omschrijving data-cms-field="omschrijving">{{ $dienst['omschrijving'] }}</x-slot:omschrijving>

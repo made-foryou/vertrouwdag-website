@@ -20,6 +20,7 @@
 <x-layouts::site
     title="Algemene voorwaarden | vertrouwdag"
     description="De algemene voorwaarden van vertrouwdag weddingplanning."
+    og-title="Algemene voorwaarden · vertrouwdag"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>
