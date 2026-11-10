@@ -1,5 +1,6 @@
 <?php
 
+use Dom\HTMLDocument;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +45,15 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Rendert een Blade-template en geeft het resultaat als document terug,
+ * zodat een test met CSS-selectors in een component kan zoeken.
+ *
+ * @param  array<string, mixed>  $data
+ */
+function renderComponent(string $template, array $data = []): HTMLDocument
 {
-    // ..
+    $html = (string) test()->blade($template, $data);
+
+    return HTMLDocument::createFromString('<!doctype html><html><body>'.$html.'</body></html>', LIBXML_NOERROR);
 }

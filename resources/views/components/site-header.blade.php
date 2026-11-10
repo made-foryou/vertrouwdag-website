@@ -9,8 +9,8 @@
             @foreach (config('vertrouwdag.menu') as $route => $label)
                 <a href="{{ route($route) }}" @if (request()->routeIs($route, $route.'.*')) aria-current="page" @endif>{{ $label }}</a>
             @endforeach
-            <a class="btn" href="{{ route(config('vertrouwdag.cta.route')) }}">{{ config('vertrouwdag.cta.label') }}</a>
+            <x-knop :href="route(config('vertrouwdag.cta.route'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
         </nav>
-        <a class="btn btn--sm site-header__cta" href="{{ route(config('vertrouwdag.cta.route')) }}">{{ config('vertrouwdag.cta.label') }}</a>
+        <x-knop :href="route(config('vertrouwdag.cta.route'))" klein class="site-header__cta">{{ config('vertrouwdag.cta.label') }}</x-knop>
     </div>
 </header>

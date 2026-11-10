@@ -412,6 +412,8 @@ a.folder:hover{transform:translateY(-4px)}
 }
 @media (prefers-reduced-motion:reduce){
   .js [data-reveal],.js [data-reveal-group]>*,.js [data-reveal-inner]>*{opacity:1!important;translate:none!important}
+  /* Toegevoegd (#4): de stapelkaarten op mobiel (verderop) hebben een eigen transition!important die *{transition:none!important} wint; .js maakt deze regel specifieker */
+  .js .notes .note,.js .folders[data-deck] .folder{transition:none!important}
 }
 
 
@@ -433,10 +435,12 @@ a.folder:hover{transform:translateY(-4px)}
     transform:rotate(var(--r,0deg)) scale(.86)!important;
     transition:transform .45s var(--ease),box-shadow .45s,opacity .8s var(--ease) var(--d,0s),translate .8s var(--ease) var(--d,0s)!important;
   }
-  .notes .note+.note{margin-left:-96px}
+  /* Aangepast (#4): overlap en bolletjes alleen met JavaScript; zonder JS een gewone rij om door te vegen */
+  .notes .note+.note{margin-left:16px}
+  .js .notes .note+.note{margin-left:-96px}
   .notes .note.is-active{transform:rotate(0deg) scale(1)!important;filter:none;z-index:5;box-shadow:0 24px 56px rgba(0,0,0,.32)}
   .notes .note.is-near{z-index:3}
-  .deck-dots{display:flex;gap:8px;justify-content:center;margin-top:-14px}
+  .js .deck-dots{display:flex;gap:8px;justify-content:center;margin-top:-14px}
   .deck-dots span{width:8px;height:8px;border-radius:99px;background:rgba(246,246,240,.35);transition:width .3s var(--ease),background .3s}
   .deck-dots span.is-on{width:22px;background:var(--lila)}
   .deck-dots--licht span{background:rgba(64,72,48,.25)}
@@ -461,7 +465,9 @@ a.folder:hover{transform:translateY(-4px)}
     transform:scale(.88);transform-origin:center 60%;
     transition:transform .45s var(--ease),opacity .8s var(--ease) var(--d,0s),translate .8s var(--ease) var(--d,0s)!important;
   }
-  .folders[data-deck] .folder+.folder{margin-left:-48px}
+  /* Aangepast (#4): overlap alleen met JavaScript, zie de briefjes hierboven */
+  .folders[data-deck] .folder+.folder{margin-left:16px}
+  .js .folders[data-deck] .folder+.folder{margin-left:-48px}
   .folders[data-deck] .folder.is-active{transform:none;filter:none;z-index:5}
   .folders[data-deck] .folder.is-near{z-index:3}
   .folders[data-deck] .folder__body{min-height:0;padding:28px 22px 24px;box-shadow:0 18px 40px rgba(45,51,31,.12)}
