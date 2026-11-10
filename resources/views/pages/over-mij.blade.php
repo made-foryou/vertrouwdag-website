@@ -60,6 +60,8 @@
 <x-layouts::site
     title="Over Romy | Persoonlijke weddingplanner in Zuid-Holland"
     description="Ik ben Romy, de weddingplanner achter vertrouwdag. Punctueel, met oog voor detail en vanuit het hart, zodat jullie op jullie trouwdag alleen maar hoeven te genieten."
+    og-title="Over Romy · vertrouwdag"
+    og-image="resources/images/romy.jpg"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

@@ -81,6 +81,7 @@
 <x-layouts::site
     title="Werkwijze: zo plan ik jullie bruiloft | vertrouwdag"
     description="Van het eerste kennismakingsgesprek tot de dag na de bruiloft: zo werk ik als weddingplanner in Zuid-Holland, stap voor stap."
+    og-title="Werkwijze: zo plan ik jullie bruiloft · vertrouwdag"
 >
     <x-strips :strips="$strips" />
 </x-layouts::site>

@@ -39,7 +39,9 @@ enum Dienst: string
     }
 
     /**
-     * Het pad van de foto voor Vite::asset().
+     * Het pad van de foto voor Vite::asset(). De foto is sfeer: de tekst
+     * ernaast zegt al wat de dienst is, dus de foto krijgt overal een
+     * lege alt (besluit Menno, 2026-11-10, zie #12).
      */
     public function foto(): string
     {
@@ -47,15 +49,6 @@ enum Dienst: string
             self::Dag => 'resources/images/schoenen-boeket.jpg',
             self::Partial => 'resources/images/hand-in-hand-paar.jpg',
             self::Full => 'resources/images/sleep-jurk.jpg',
-        };
-    }
-
-    public function alt(): string
-    {
-        return match ($this) {
-            self::Dag => 'Bruidsschoenen en boeket op de vensterbank',
-            self::Partial => 'Bruid en bruidegom hand in hand',
-            self::Full => 'Bruidegom draagt de sleep van de trouwjurk',
         };
     }
 }

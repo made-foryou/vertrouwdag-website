@@ -1,8 +1,31 @@
+{{--
+    De layout van elke pagina: de head, de header, het menu, de footer en
+    de cookiebanner. De pagina zelf komt in $slot.
+
+    title en description zijn de <title> en de meta description. De Open
+    Graph-tags bepalen hoe een gedeelde link eruitziet: ogTitle is de
+    korte titel ("Diensten en prijzen · vertrouwdag"), ogDescription valt
+    terug op description, en ogImage is het pad van een foto voor
+    Vite::asset(). ogType is website, of article voor een blog.
+
+    De canonical en og:url wijzen naar hetzelfde pad op het canonieke
+    adres uit config/vertrouwdag.php, zonder querystring, tenzij de pagina
+    zelf een canonical meegeeft. Met noindex vraagt de pagina zoekmachines
+    haar over te slaan en heeft ze geen canonical, zoals een foutpagina.
+--}}
 @props([
     'title',
     'description',
+    'ogTitle',
+    'ogDescription' => null,
+    'ogImage' => 'resources/images/paar-landschap.jpg',
+    'ogType' => 'website',
     'canonical' => null,
+    'noindex' => false,
 ])
+@php
+    $canonical ??= rtrim(config('vertrouwdag.canonieke_url'), '/').'/'.ltrim(request()->path(), '/');
+@endphp
 <!doctype html>
 <html lang="nl">
 <head>
@@ -10,7 +33,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description }}">
-    <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
+    @if ($noindex)
+        <meta name="robots" content="noindex">
+    @else
+        <link rel="canonical" href="{{ $canonical }}">
+    @endif
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:title" content="{{ $ogTitle }}">
+    <meta property="og:description" content="{{ $ogDescription ?? $description }}">
+    <meta property="og:image" content="{{ Vite::asset($ogImage) }}">
+    @unless ($noindex)
+        <meta property="og:url" content="{{ $canonical }}">
+    @endunless
     <meta name="theme-color" content="#F6F6F0">
     <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/monogram-groen.png') }}">
     <link rel="preload" href="{{ Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') }}" as="font" type="font/woff2" crossorigin>

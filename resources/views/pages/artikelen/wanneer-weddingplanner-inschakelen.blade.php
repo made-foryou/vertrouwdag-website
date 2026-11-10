@@ -54,6 +54,8 @@
 <x-layouts::site
     title="Wanneer schakel je een weddingplanner in? | vertrouwdag"
     description="Wanneer schakel je een weddingplanner in? Voor full service het liefst 12 tot 18 maanden van tevoren. Waarom een vroeg begin juist rust oplevert."
+    og-title="Wanneer schakel je een weddingplanner in? · vertrouwdag"
+    og-type="article"
 >
     <article>
         <x-strips :strips="$artikel" />

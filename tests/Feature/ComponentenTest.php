@@ -51,7 +51,7 @@ describe('knop', function () {
 describe('dienstkaart', function () {
     test('a service card with a href is a link with the description, price and icon in that order', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" href="/diensten#dagcoordinatie" foto="/foto.jpg" alt="Schoenen" :draaiing="-4">
+            <x-dienstkaart kleur="lila" dienst="dag" href="/diensten#dagcoordinatie" foto="/foto.jpg" :draaiing="-4">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel data-cms-field="titel">De Dag in handen</x-slot:titel>
                 <x-slot:omschrijving>Ik neem het zes weken ervoor over.</x-slot:omschrijving>
@@ -69,7 +69,7 @@ describe('dienstkaart', function () {
 
     test('a service card without a href is an article with the price before the description, the features and a button', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" foto="/foto.jpg" alt="Schoenen" data-for="dagcoordinatie" :kenmerken="['Draaiboek', 'Afstemming met leveranciers']">
+            <x-dienstkaart kleur="lila" dienst="dag" foto="/foto.jpg" data-for="dagcoordinatie" :kenmerken="['Draaiboek', 'Afstemming met leveranciers']">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel>De Dag in handen</x-slot:titel>
                 <x-slot:omschrijving><strong>Voor stellen</strong> die zelf plannen.</x-slot:omschrijving>
@@ -88,7 +88,7 @@ describe('dienstkaart', function () {
 
     test('the colour of a service card sets the eyebrow, the dimmed price and the button', function (string $kleur, string $eyebrow, int $gedempt, string $knop, string $hart) {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart :kleur="$kleur" dienst="dag" foto="/foto.jpg" alt="" :kenmerken="['Draaiboek']">
+            <x-dienstkaart :kleur="$kleur" dienst="dag" foto="/foto.jpg" :kenmerken="['Draaiboek']">
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
@@ -108,7 +108,7 @@ describe('dienstkaart', function () {
 
     test('a mirrored service card has its tab and photo on the right', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="cream" dienst="partial" href="/diensten" foto="/foto.jpg" alt="" gespiegeld>
+            <x-dienstkaart kleur="cream" dienst="partial" href="/diensten" foto="/foto.jpg" gespiegeld>
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
@@ -116,6 +116,18 @@ describe('dienstkaart', function () {
             BLADE);
 
         expect($document->querySelector('a')?->getAttribute('class'))->toBe('folder folder--r f-cream');
+    });
+
+    test('the photo of a service card is decorative, so the link is named by its text only', function () {
+        $document = renderComponent(<<<'BLADE'
+            <x-dienstkaart kleur="lila" dienst="dag" href="/diensten" foto="/foto.jpg">
+                <x-slot:soort>Soort</x-slot:soort>
+                <x-slot:titel>Titel</x-slot:titel>
+                <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
+            </x-dienstkaart>
+            BLADE);
+
+        expect($document->querySelector('a.folder img')?->getAttribute('alt'))->toBe('');
     });
 });
 
@@ -460,7 +472,7 @@ test('a component rejects an unknown variant or colour and names it', function (
     expect(fn () => $this->blade($template))->toThrow(ViewException::class, $melding);
 })->with([
     'knop' => ['<x-knop variant="roze">Bekijk</x-knop>', 'De knop kent geen variant [roze]'],
-    'dienstkaart' => ['<x-dienstkaart kleur="roze" dienst="dag" foto="/foto.jpg" alt="" />', 'De dienstkaart kent geen kleur [roze]'],
+    'dienstkaart' => ['<x-dienstkaart kleur="roze" dienst="dag" foto="/foto.jpg" />', 'De dienstkaart kent geen kleur [roze]'],
     'stapkaart' => ['<x-stapkaart nummer="1" kleur="roze" />', 'De stapkaart kent geen kleur [roze]'],
     'briefje' => ['<x-briefje kleur="roze">Tekst</x-briefje>', 'Het briefje kent geen kleur [roze]'],
 ]);
