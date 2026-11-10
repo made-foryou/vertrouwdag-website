@@ -232,7 +232,7 @@ describe('faq-item', function () {
         $document = renderComponent(<<<'BLADE'
             <x-faq-item :open="$open">
                 <x-slot:vraag>Wat kost een weddingplanner?</x-slot:vraag>
-                <x-slot:antwoord>Bekijk <a href="/diensten">de diensten</a>.</x-slot:antwoord>
+                <x-slot:antwoord><p>Bekijk <a href="/diensten">de diensten</a>.</p></x-slot:antwoord>
             </x-faq-item>
             BLADE, ['open' => $open]);
         $vraag = $document->querySelector('details.faq');
