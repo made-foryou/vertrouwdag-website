@@ -18,6 +18,7 @@
             'secundair' => 'btn--o',
             'lila' => 'btn--l',
             'aubergine' => 'btn--a',
+            default => throw new \InvalidArgumentException("De knop kent geen variant [{$variant}]; kies primair, secundair, lila of aubergine."),
         },
         $klein ? 'btn--sm' : null,
     ]);

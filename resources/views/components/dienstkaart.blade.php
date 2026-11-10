@@ -32,6 +32,7 @@
         'lila' => ['eyebrow' => null, 'gedempt' => false, 'hart' => '#401838', 'knop' => 'aubergine'],
         'cream' => ['eyebrow' => 'eb--grijs', 'gedempt' => true, 'hart' => '#C8AEC6', 'knop' => 'primair'],
         'groen' => ['eyebrow' => 'eb--lila', 'gedempt' => true, 'hart' => '#E0D0E0', 'knop' => 'lila'],
+        default => throw new \InvalidArgumentException("De dienstkaart kent geen kleur [{$kleur}]; kies lila, cream of groen."),
     };
     $element = $href !== null ? 'a' : 'article';
 @endphp

@@ -18,6 +18,7 @@
         'cream' => 'background:#F6F6F0',
         'mos' => 'background:#E3E6D8',
         'zand' => 'background:#EFE9DC',
+        default => throw new \InvalidArgumentException("Het briefje kent geen kleur [{$kleur}]; kies lila, cream, mos of zand."),
     };
 @endphp
 @if ($href !== null)

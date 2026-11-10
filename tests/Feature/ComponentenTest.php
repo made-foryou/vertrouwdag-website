@@ -52,10 +52,6 @@ describe('knop', function () {
             ->and($knoppen->item(0)->getAttribute('class'))->toBe('btn btn--sm')
             ->and($knoppen->item(1)->getAttribute('type'))->toBe('submit');
     });
-
-    test('a button rejects an unknown variant', function () {
-        $this->blade('<x-knop variant="roze">Bekijk</x-knop>');
-    })->throws(ViewException::class, 'roze');
 });
 
 describe('dienstkaart', function () {
@@ -309,3 +305,12 @@ describe('stapel-bolletjes', function () {
             ->and($bolletjes?->firstElementChild?->getAttribute('class'))->toBe('is-on');
     });
 });
+
+test('a component rejects an unknown variant or colour and names it', function (string $template, string $melding) {
+    expect(fn () => $this->blade($template))->toThrow(ViewException::class, $melding);
+})->with([
+    'knop' => ['<x-knop variant="roze">Bekijk</x-knop>', 'De knop kent geen variant [roze]'],
+    'dienstkaart' => ['<x-dienstkaart kleur="roze" dienst="dag" foto="/foto.jpg" alt="" />', 'De dienstkaart kent geen kleur [roze]'],
+    'stapkaart' => ['<x-stapkaart nummer="1" kleur="roze" />', 'De stapkaart kent geen kleur [roze]'],
+    'briefje' => ['<x-briefje kleur="roze">Tekst</x-briefje>', 'Het briefje kent geen kleur [roze]'],
+]);

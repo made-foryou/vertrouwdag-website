@@ -17,6 +17,7 @@
         'mos' => ['kaart' => 'background:#E3E6D8', 'nummer' => null, 'tekst' => null],
         'zand' => ['kaart' => 'background:#EFE9DC', 'nummer' => null, 'tekst' => null],
         'groen' => ['kaart' => 'background:#404830;color:#F6F6F0', 'nummer' => 'color:#E0D0E0', 'tekst' => null],
+        default => throw new \InvalidArgumentException("De stapkaart kent geen kleur [{$kleur}]; kies lila, mos, zand of groen."),
     };
 @endphp
 <li {{ $attributes->class(['step'])->merge(['style' => $stijl['kaart']]) }}><span class="step__nr" @if ($stijl['nummer']) style="{{ $stijl['nummer'] }}" @endif>{{ $nummer }}</span><h3 {{ $titel->attributes }}>{{ $titel }}</h3><p {{ $stijl['tekst'] ? $tekst->attributes->merge(['style' => $stijl['tekst']]) : $tekst->attributes }}>{{ $tekst }}</p></li>
