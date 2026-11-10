@@ -1,5 +1,7 @@
 <?php
 
+use App\Support\Blog;
+use App\Support\Blogcategorie;
 use App\Support\Strip;
 use Dom\NodeList;
 use Illuminate\View\ViewException;
@@ -274,6 +276,46 @@ describe('chip', function () {
             ->and($chips->item(0)->getAttribute('data-filter'))->toBe('alles')
             ->and($chips->item(1)->getAttribute('aria-pressed'))->toBe('false');
     });
+});
+
+describe('blogkaart', function () {
+    test('a published blog is a link to its article with its topic, title and intro', function () {
+        $blog = new Blog('Wanneer *begin* je?', 'Een vroeg begin geeft rust.', Blogcategorie::Planning, 6, '/foto.jpg', 'Bruidspaar bij een meer', 'wanneer');
+
+        $document = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog]);
+        $kaart = $document->querySelector('a.pol');
+
+        expect($kaart?->getAttribute('href'))->toBe(route('blog.artikel', 'wanneer'))
+            ->and($kaart?->getAttribute('data-cat'))->toBe('planning')
+            ->and($kaart?->hasAttribute('data-post'))->toBeTrue()
+            ->and($kaart?->classList->contains('pol--soon'))->toBeFalse()
+            ->and($kaart?->querySelector('img')?->getAttribute('alt'))->toBe('Bruidspaar bij een meer')
+            ->and($kaart?->querySelector('.pol__txt .eb')?->textContent)->toBe('Planning · 6 min')
+            ->and($kaart?->querySelector('h3 em')?->textContent)->toBe('begin')
+            ->and($kaart?->querySelector('.pol__txt p')?->textContent)->toBe('Een vroeg begin geeft rust.');
+    });
+
+    test('a blog to come is a card without a link and with a duller photo', function () {
+        $blog = new Blog('Locaties', 'Binnenkort.', Blogcategorie::Locaties, null, '/foto.jpg', 'Foto', 'locaties', binnenkort: true);
+
+        $document = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog]);
+
+        expect($document->querySelector('a'))->toBeNull()
+            ->and($document->querySelector('article.pol.pol--soon')?->getAttribute('data-cat'))->toBe('locaties');
+    });
+
+    test('the cards tilt in turn and the middle one of every three hangs lower', function (int $positie, string $stijl) {
+        $blog = new Blog('Titel', 'Intro', Blogcategorie::Budget, null, '/foto.jpg', 'Foto');
+
+        $document = renderComponent('<x-blogkaart :blog="$blog" :positie="$positie" />', ['blog' => $blog, 'positie' => $positie]);
+
+        expect($document->querySelector('.pol')?->getAttribute('style'))->toBe($stijl);
+    })->with([
+        [0, 'transform:rotate(-2.5deg)'],
+        [1, 'transform:rotate(2deg);margin-top:28px'],
+        [2, 'transform:rotate(-1.5deg)'],
+        [3, 'transform:rotate(-2.5deg)'],
+    ]);
 });
 
 describe('cta-split', function () {

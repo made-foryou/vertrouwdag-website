@@ -9,12 +9,13 @@ return [
     |
     | Hoe zoekmachines het bedrijf beschrijven, in de gestructureerde
     | gegevens (JSON-LD) van de homepage. Het werkgebied is de regio waar
-    | Romy bruiloften begeleidt.
+    | Romy bruiloften begeleidt. De eigenaar is de schrijver van de blogs.
     |
     */
 
     'bedrijf' => [
         'naam' => 'vertrouwdag',
+        'eigenaar' => 'Romy van Dillen',
         'omschrijving' => 'Weddingplanner in Zuid-Holland',
         'werkgebied' => 'Zuid-Holland',
     ],

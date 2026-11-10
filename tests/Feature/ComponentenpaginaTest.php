@@ -13,5 +13,6 @@ test('the component page renders every shared component together', function () {
 
     $view->assertSee('<div class="folders" data-deck data-reveal-group>', false)
         ->assertSee('class="marquee"', false)
+        ->assertSee('class="pol pol--soon"', false)
         ->assertSee('class="cta-split"', false);
 });

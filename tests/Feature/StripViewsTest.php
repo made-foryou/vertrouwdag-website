@@ -1,5 +1,7 @@
 <?php
 
+use App\Support\Blog;
+use App\Support\Blogcategorie;
 use App\Support\Strip;
 use Dom\HTMLDocument;
 use Illuminate\View\ViewException;
@@ -190,4 +192,42 @@ test('a quote without a heading shows only the quote', function () {
 
     expect($review?->querySelector('blockquote[data-cms-field="citaat"]')?->textContent)->toBe('Het antwoord was er al heel lang.')
         ->and($review?->querySelector('p.eb'))->toBeNull();
+});
+
+test('the compact closing strip has a photo of at least 420px, no heart and no empty text', function () {
+    $document = renderStrip('cta', ['kop' => 'Liever direct *persoonlijk advies?*', 'variant' => 'compact']);
+
+    expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:420px')
+        ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull()
+        ->and($document->querySelector('.cta-split__txt > p'))->toBeNull()
+        ->and($document->querySelector('.cta-split__txt h2')?->hasAttribute('style'))->toBeFalse();
+});
+
+test('the article heading leaves out the reading time when its blog has none', function () {
+    $blog = new Blog('Titel', 'Intro', Blogcategorie::Inspiratie, null, '/foto.jpg', 'Foto', 'titel');
+
+    $document = renderStrip('artikel-kop', ['foto' => '/hero.jpg', 'alt' => 'Hero', 'sticker' => "hoe eerder,\nhoe rustiger", 'blog' => $blog]);
+
+    expect(tekstenVan($document->querySelectorAll('.art-head .row > span')))->toBe(['Inspiratie & styling'])
+        ->and($document->querySelector('.art-hero__sticker')?->innerHTML)->toBe("hoe eerder,<br>\nhoe rustiger");
+});
+
+test('the article text starts with its introduction only when it has one', function (?string $inleiding, array $leads) {
+    $document = renderStrip('artikel-tekst', ['inleiding' => $inleiding, 'tekst' => '<h2>Het begin <em>bepaalt de rest</em></h2><p>Alinea.</p>']);
+
+    expect(tekstenVan($document->querySelectorAll('.art-prose .art-lead')))->toBe($leads)
+        ->and($document->querySelector('.art-prose [data-cms-field="tekst"] h2 em')?->textContent)->toBe('bepaalt de rest');
+})->with([
+    'met inleiding' => ['De meeste stellen zoeken pas hulp als het al druk is.', ['De meeste stellen zoeken pas hulp als het al druk is.']],
+    'zonder inleiding' => [null, []],
+]);
+
+test('the photos of an article tilt one way and then the other', function () {
+    $fotos = array_map(fn (int $nummer): array => ['id' => null, 'foto' => "/foto-{$nummer}.jpg", 'alt' => "Foto {$nummer}", 'bijschrift' => "bijschrift {$nummer}"], range(1, 3));
+
+    $document = renderStrip('artikel-fotos', ['fotos' => $fotos]);
+    $polaroids = $document->querySelectorAll('[data-cms-items="fotos"] > figure.polaroid');
+
+    expect(attributenVan($polaroids, 'style'))->toBe(['transform:rotate(-4deg)', 'transform:rotate(3deg)', 'transform:rotate(-4deg)'])
+        ->and(tekstenVan($document->querySelectorAll('figcaption')))->toBe(['bijschrift 1', 'bijschrift 2', 'bijschrift 3']);
 });
