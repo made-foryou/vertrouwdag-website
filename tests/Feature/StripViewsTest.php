@@ -291,3 +291,27 @@ test('a legal strip gives every section a heading and its text in order', functi
         ->and(tekstenVan($prose?->querySelectorAll('[data-cms-items="secties"] [data-cms-field="tekst"] p')))->toBe(['Altijd aan.', 'Met toestemming.'])
         ->and($prose?->querySelector('button[data-cookie-open]')?->textContent)->toBe('Instellingen');
 });
+
+test('the steps of the acquaintance start again with the first colour after the third', function () {
+    $stappen = array_map(fn (int $nummer): array => ['id' => null, 'tekst' => "Stap {$nummer}"], range(1, 4));
+
+    $document = renderStrip('hero-kennismaken', ['kop' => 'Kop', 'stappen' => $stappen]);
+    $nummers = $document->querySelectorAll('ol.mini-steps[data-cms-items="stappen"] > li > span');
+
+    expect(tekstenVan($nummers))->toBe(['1', '2', '3', '4'])
+        ->and($nummers->item(3)->getAttribute('style'))->toBe($nummers->item(0)->getAttribute('style'))
+        ->and($nummers->item(1)->getAttribute('style'))->not->toBe($nummers->item(0)->getAttribute('style'));
+});
+
+test('the acquaintance hero leaves out the remark it does not have', function () {
+    $document = renderStrip('hero-kennismaken', ['kop' => 'Kop', 'stappen' => [], 'opmerking' => '']);
+
+    expect($document->querySelector('[data-cms-field="opmerking"]'))->toBeNull();
+});
+
+test('the thank-you block leaves out the question it does not have', function () {
+    $document = renderStrip('checklist-bedankt', ['kop' => 'Dank *jullie wel*', 'tekst' => 'Tekst.']);
+
+    expect($document->querySelector('[data-cms-field="vraag"]'))->toBeNull()
+        ->and($document->querySelector('#bedankt a.btn'))->not->toBeNull();
+});
