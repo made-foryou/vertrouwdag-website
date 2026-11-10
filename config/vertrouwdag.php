@@ -25,13 +25,16 @@ return [
     | Contact
     |--------------------------------------------------------------------------
     |
-    | Het WhatsApp-nummer staat in internationale notatie, zonder plus en
-    | zonder de 0: 06 51 59 88 60 wordt 31651598860. De tekst is het
-    | bericht dat alvast klaarstaat.
+    | Het onderwerp staat alvast ingevuld als iemand op het e-mailadres
+    | klikt. Het WhatsApp-nummer staat in internationale notatie, zonder
+    | plus en zonder de 0: 06 51 59 88 60 wordt 31651598860. De tekst is
+    | het bericht dat alvast klaarstaat.
     |
     */
 
     'email' => 'romy@vertrouwdag.nl',
+
+    'email_onderwerp' => 'Vraag via vertrouwdag.nl',
 
     'whatsapp' => [
         'nummer' => '31651598860',
@@ -64,5 +67,47 @@ return [
     */
 
     'kvk' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Navigatie
+    |--------------------------------------------------------------------------
+    |
+    | Per link de routenaam met het label. Een menulink is actief op zijn
+    | eigen route en op de routes eronder: Blog ook op blog.archief en
+    | blog.artikel. Het hoofdmenu komt later uit de paginaboom van het
+    | CMS (#19). De knop en de footerlinks blijven hier.
+    |
+    */
+
+    'menu' => [
+        'diensten' => 'Diensten',
+        'werkwijze' => 'Werkwijze',
+        'over-mij' => 'Over mij',
+        'blog' => 'Blog',
+        'veelgestelde-vragen' => 'Veelgestelde vragen',
+    ],
+
+    'cta' => [
+        'route' => 'kennismaken',
+        'label' => 'Plan een kennismaking',
+    ],
+
+    'footer' => [
+        'paginas' => [
+            'diensten' => 'Diensten',
+            'werkwijze' => 'Werkwijze',
+            'over-mij' => 'Over mij',
+            'blog' => 'Blog',
+            'veelgestelde-vragen' => 'Veelgestelde vragen',
+            'checklist' => 'Gratis checklist',
+            'kennismaken' => 'Plan een kennismaking',
+        ],
+        'juridisch' => [
+            'privacyverklaring' => 'Privacyverklaring',
+            'cookiebeleid' => 'Cookiebeleid',
+            'algemene-voorwaarden' => 'Algemene voorwaarden',
+        ],
+    ],
 
 ];

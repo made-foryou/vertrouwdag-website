@@ -24,8 +24,14 @@
     </svg>
     <a class="skip" href="#inhoud">Naar de inhoud</a>
 
+    <x-site-header />
+
     <main id="inhoud">
         {{ $slot }}
     </main>
+
+    <x-site-footer />
+
+    <x-whatsapp-link class="wa" aria-label="Stuur Romy een WhatsApp-bericht"><svg width="14" height="13" fill="#E0D0E0" aria-hidden="true"><use href="#heart"/></svg>WhatsApp</x-whatsapp-link>
 </body>
 </html>

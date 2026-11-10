@@ -5,3 +5,7 @@
  * met een default export die hier wordt aangeroepen. Een module doet niets
  * als zijn elementen niet op de pagina staan.
  */
+
+import mobielMenu from './modules/mobiel-menu';
+
+mobielMenu();
