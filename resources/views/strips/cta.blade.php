@@ -8,6 +8,8 @@
       zoals op /diensten.
     - eenvoudig: de gewone kop, een foto van minstens 480px en geen
       hartje, zoals op /werkwijze en /over-mij.
+    - middel: de gewone kop, een foto van minstens 440px en geen hartje,
+      zoals op /veelgestelde-vragen.
     - compact: de gewone kop, een foto van minstens 420px en geen hartje,
       zoals op /blog en het archief.
 --}}
@@ -16,8 +18,9 @@
         null, '' => ['hart' => true, 'groot' => false, 'fotoHoogte' => null],
         'groot' => ['hart' => false, 'groot' => true, 'fotoHoogte' => 480],
         'eenvoudig' => ['hart' => false, 'groot' => false, 'fotoHoogte' => 480],
+        'middel' => ['hart' => false, 'groot' => false, 'fotoHoogte' => 440],
         'compact' => ['hart' => false, 'groot' => false, 'fotoHoogte' => 420],
-        default => throw new InvalidArgumentException("De strook cta kent geen variant [{$strip->variant}]; laat hem leeg of kies groot, eenvoudig of compact."),
+        default => throw new InvalidArgumentException("De strook cta kent geen variant [{$strip->variant}]; laat hem leeg of kies groot, eenvoudig, middel of compact."),
     };
 @endphp
 <x-cta-split :hart="$opmaak['hart']" :groot="$opmaak['groot']" :foto-hoogte="$opmaak['fotoHoogte']" data-cms-strip="{{ $strip->id }}">

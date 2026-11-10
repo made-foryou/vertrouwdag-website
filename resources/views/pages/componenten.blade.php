@@ -174,11 +174,11 @@
             <span class="faq-box__tab eb">FAQ-items</span>
             <x-faq-item open>
                 <x-slot:vraag>Wanneer schakelen we een weddingplanner in?</x-slot:vraag>
-                <x-slot:antwoord>Voor Helemaal in handen (full service) het liefst 12 tot 18 maanden van tevoren, zodat we de locatie en datum samen kunnen kiezen. Voor De Dag in handen (dagcoördinatie) is 3 tot 6 maanden ervoor vaak genoeg. Hoe eerder, hoe meer rust.</x-slot:antwoord>
+                <x-slot:antwoord><p>Voor Helemaal in handen (full service) het liefst 12 tot 18 maanden van tevoren, zodat we de locatie en datum samen kunnen kiezen. Voor De Dag in handen (dagcoördinatie) is 3 tot 6 maanden ervoor vaak genoeg. Hoe eerder, hoe meer rust.</p></x-slot:antwoord>
             </x-faq-item>
             <x-faq-item>
                 <x-slot:vraag>Wat kost een weddingplanner?</x-slot:vraag>
-                <x-slot:antwoord>De Dag in handen (dagcoördinatie) begint bij <x-prijs dienst="dag" />, Hand in hand (gedeeltelijke planning) bij <x-prijs dienst="partial" /> en Helemaal in handen (full service) bij <x-prijs dienst="full" />, steeds inclusief {{ config('vertrouwdag.btw_percentage') }}% btw. Bekijk <a href="{{ route('diensten') }}">alle diensten</a>.</x-slot:antwoord>
+                <x-slot:antwoord><p>De Dag in handen (dagcoördinatie) begint bij <x-prijs dienst="dag" />, Hand in hand (gedeeltelijke planning) bij <x-prijs dienst="partial" /> en Helemaal in handen (full service) bij <x-prijs dienst="full" />, steeds inclusief {{ config('vertrouwdag.btw_percentage') }}% btw. Bekijk <a href="{{ route('diensten') }}">alle diensten</a>.</p></x-slot:antwoord>
             </x-faq-item>
         </div>
     </section>

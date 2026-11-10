@@ -231,3 +231,63 @@ test('the photos of an article tilt one way and then the other', function () {
     expect(attributenVan($polaroids, 'style'))->toBe(['transform:rotate(-4deg)', 'transform:rotate(3deg)', 'transform:rotate(-4deg)'])
         ->and(tekstenVan($document->querySelectorAll('figcaption')))->toBe(['bijschrift 1', 'bijschrift 2', 'bijschrift 3']);
 });
+
+test('the medium closing strip has a photo of at least 440px, no heart and the normal heading', function () {
+    $document = renderStrip('cta', ['kop' => 'Nog een *vraag?*', 'tekst' => 'Die beantwoord ik graag.', 'variant' => 'middel']);
+
+    expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:440px')
+        ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull()
+        ->and($document->querySelector('.cta-split__txt h2')?->hasAttribute('style'))->toBeFalse();
+});
+
+test('the FAQ strip opens only its first question and prints the answer as formatted text', function () {
+    $vragen = [
+        ['id' => null, 'vraag' => 'Eerste vraag?', 'antwoord' => '<p>Zie <a href="/diensten">de diensten</a>.</p>'],
+        ['id' => null, 'vraag' => 'Tweede vraag?', 'antwoord' => '<p>Tweede antwoord.</p>'],
+    ];
+
+    $document = renderStrip('faq', ['label' => 'Alle vragen', 'vragen' => $vragen]);
+    $details = $document->querySelectorAll('.faq-box[data-cms-items="vragen"] > details.faq');
+
+    expect($document->querySelector('.faq-box__tab')?->textContent)->toBe('Alle vragen')
+        ->and($details)->toHaveCount(2)
+        ->and($details->item(0)->hasAttribute('open'))->toBeTrue()
+        ->and($details->item(1)->hasAttribute('open'))->toBeFalse()
+        ->and($details->item(0)->querySelector('[data-cms-field="antwoord"] > p > a')?->getAttribute('href'))->toBe('/diensten');
+});
+
+test('the notes of the FAQ hero start again with the first colour after the third', function () {
+    $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'tekst' => "Vraag {$nummer}"], range(1, 4));
+
+    $document = renderStrip('hero-faq', ['label' => 'Label', 'kop' => 'Kop', 'tekst' => 'Tekst', 'app_tekst' => 'App', 'briefjes' => $briefjes]);
+    $notes = $document->querySelectorAll('.faq-notes[data-cms-items="briefjes"] > .note');
+
+    expect($notes)->toHaveCount(4)
+        ->and($notes->item(3)->getAttribute('style'))->toBe($notes->item(0)->getAttribute('style'))
+        ->and($notes->item(1)->getAttribute('style'))->toContain('margin-top:36px');
+});
+
+test('a legal strip leaves out the date, sections, button and closing text it does not have', function () {
+    $document = renderStrip('juridisch', ['label' => 'Goed om te weten', 'kop' => 'Algemene *voorwaarden*', 'inleiding' => '<p>Tekst.</p>']);
+    $strook = $document->querySelector('section.wrap.legal');
+
+    expect($strook?->querySelector('.legal__meta'))->toBeNull()
+        ->and($strook?->querySelector('h2'))->toBeNull()
+        ->and($strook?->querySelector('button'))->toBeNull()
+        ->and($strook?->querySelector('[data-cms-field="afsluiting"]'))->toBeNull()
+        ->and(tekstenVan($strook?->querySelectorAll('.prose p')))->toBe(['Tekst.']);
+});
+
+test('a legal strip gives every section a heading and its text in order', function () {
+    $secties = [
+        ['id' => null, 'kop' => 'Noodzakelijk', 'tekst' => '<p>Altijd aan.</p>'],
+        ['id' => null, 'kop' => 'Statistieken', 'tekst' => '<p>Met toestemming.</p>'],
+    ];
+
+    $document = renderStrip('juridisch', ['label' => 'Label', 'kop' => 'Kop', 'secties' => $secties, 'cookieknop' => 'Instellingen']);
+    $prose = $document->querySelector('.legal .prose');
+
+    expect(tekstenVan($prose?->querySelectorAll('[data-cms-items="secties"] h2[data-cms-field="kop"]')))->toBe(['Noodzakelijk', 'Statistieken'])
+        ->and(tekstenVan($prose?->querySelectorAll('[data-cms-items="secties"] [data-cms-field="tekst"] p')))->toBe(['Altijd aan.', 'Met toestemming.'])
+        ->and($prose?->querySelector('button[data-cookie-open]')?->textContent)->toBe('Instellingen');
+});
