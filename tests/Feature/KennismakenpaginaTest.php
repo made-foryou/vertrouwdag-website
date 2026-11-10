@@ -56,6 +56,12 @@ test('the calendar shows a gate with a button and a link to Calendly from the co
         ->and($agenda?->querySelector('#cal-embed')?->childElementCount)->toBe(0);
 });
 
+test('the calendar declares that it needs consent for marketing', function () {
+    $document = documentVoor('/kennismaken');
+
+    expect($document->getElementById('cal-embed')?->getAttribute('data-toestemming'))->toBe('marketing');
+});
+
 test('the fallback of the calendar is hidden and links to Calendly, WhatsApp and mail from the config', function () {
     config([
         'vertrouwdag.calendly' => 'https://calendly.com/test/kennismaken',

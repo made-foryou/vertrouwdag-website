@@ -77,6 +77,54 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Cookiebanner
+    |--------------------------------------------------------------------------
+    |
+    | De teksten en categorieën van de banner. In de tekst wordt
+    | :cookiebeleid een link naar het cookiebeleid, met het label uit
+    | cookiebeleid. Een verplichte categorie staat altijd aan en heeft
+    | geen vinkje. Voor elke andere categorie vraagt de banner toestemming.
+    | Een script geeft zelf aan bij welke categorie het hoort, met
+    | data-toestemming (zie resources/js/modules/toestemming.js).
+    |
+    | Verhoog de versie als de categorieën of hun doelen wijzigen. De
+    | banner vraagt dan opnieuw, ook aan wie al een keuze maakte.
+    |
+    */
+
+    'cookies' => [
+        'versie' => 1,
+        'titel' => 'Even over cookies',
+        'tekst' => 'Ik gebruik cookies om te zien hoe de site gebruikt wordt en om de afsprakenplanner te tonen. Jullie kiezen zelf. Meer in het :cookiebeleid.',
+        'cookiebeleid' => 'cookiebeleid',
+        'knoppen' => [
+            'voorkeuren' => 'Voorkeuren',
+            'weigeren' => 'Alleen noodzakelijk',
+            'accepteren' => 'Alles accepteren',
+            'opslaan' => 'Keuze opslaan',
+        ],
+        'altijd_aan' => 'Altijd aan',
+        'categorieen' => [
+            'noodzakelijk' => [
+                'naam' => 'Noodzakelijk',
+                'uitleg' => 'Nodig om de site te laten werken en jullie keuze te onthouden.',
+                'verplicht' => true,
+            ],
+            'statistieken' => [
+                'naam' => 'Statistieken',
+                'uitleg' => 'Google Analytics, anoniem, om de site te verbeteren.',
+                'verplicht' => false,
+            ],
+            'marketing' => [
+                'naam' => 'Marketing',
+                'uitleg' => 'Calendly-agenda en later mogelijk Google Ads.',
+                'verplicht' => false,
+            ],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | KvK-nummer
     |--------------------------------------------------------------------------
     |
