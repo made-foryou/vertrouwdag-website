@@ -1,49 +1,6 @@
 <?php
 
-use Dom\HTMLDocument;
 use Dom\Node;
-use Dom\NodeList;
-
-/**
- * Haalt een pagina op en geeft het document terug, zodat de test met
- * CSS-selectors op de header en footer kan zoeken.
- */
-function documentVoor(string $url): HTMLDocument
-{
-    $response = test()->get($url);
-
-    $response->assertOk();
-
-    return HTMLDocument::createFromString($response->getContent(), LIBXML_NOERROR);
-}
-
-/**
- * @return list<string>
- */
-function attributenVan(NodeList $elements, string $attribute): array
-{
-    $values = [];
-
-    foreach ($elements as $element) {
-        $values[] = $element->getAttribute($attribute);
-    }
-
-    return $values;
-}
-
-/**
- * @return list<string>
- */
-function tekstenVan(NodeList $elements): array
-{
-    $values = [];
-
-    foreach ($elements as $element) {
-        $values[] = trim($element->textContent);
-    }
-
-    return $values;
-}
 
 beforeEach(function () {
     $this->withoutVite();

@@ -1,16 +1,8 @@
 <?php
 
-use Dom\Element;
+use App\Support\Strip;
 use Dom\NodeList;
 use Illuminate\View\ViewException;
-
-/**
- * De tekst van een element met de witruimte samengevoegd tot één spatie.
- */
-function platteTekst(?Element $element): ?string
-{
-    return $element === null ? null : trim(preg_replace('/\s+/', ' ', $element->textContent));
-}
 
 /**
  * @return list<string>
@@ -303,6 +295,89 @@ describe('stapel-bolletjes', function () {
         expect($bolletjes?->querySelectorAll('span'))->toHaveCount(3)
             ->and($bolletjes?->querySelectorAll('span.is-on'))->toHaveCount(1)
             ->and($bolletjes?->firstElementChild?->getAttribute('class'))->toBe('is-on');
+    });
+});
+
+describe('accent', function () {
+    test('the words between asterisks become the accent of a heading', function () {
+        $document = renderComponent('<h1><x-accent tekst="Jullie dag in *vertrouwde* handen" /></h1>');
+        $kop = $document->querySelector('h1');
+
+        expect($kop?->innerHTML)->toBe('Jullie dag in <em>vertrouwde</em> handen');
+    });
+
+    test('a heading without asterisks stays plain text and html in it is escaped', function () {
+        $document = renderComponent('<h2><x-accent tekst="Hart & <b>hoofd</b>" /></h2>');
+        $kop = $document->querySelector('h2');
+
+        expect($kop?->textContent)->toBe('Hart & <b>hoofd</b>')
+            ->and($kop?->querySelector('b, em'))->toBeNull();
+    });
+
+    test('a heading can have more than one accent', function () {
+        $document = renderComponent('<h2><x-accent tekst="*Hart* én *hoofd*" /></h2>');
+
+        expect(tekstenVan($document->querySelectorAll('h2 em')))->toBe(['Hart', 'hoofd']);
+    });
+});
+
+describe('strips', function () {
+    test('every strip is rendered with the view of its type, in order', function () {
+        $strips = [
+            new Strip('a', 'cta', ['kop' => 'Zullen we *kennismaken?*', 'tekst' => 'Een half uur.']),
+            new Strip('b', 'lopende-band', ['teksten' => [['id' => null, 'tekst' => 'Punctueel']]]),
+        ];
+
+        $document = renderComponent('<x-strips :strips="$strips" />', ['strips' => $strips]);
+
+        expect(attributenVan($document->querySelectorAll('[data-cms-strip]'), 'data-cms-strip'))->toBe(['a', 'b'])
+            ->and($document->querySelector('[data-cms-strip="a"]')?->getAttribute('class'))->toBe('cta-split')
+            ->and($document->querySelector('[data-cms-strip="b"]')?->getAttribute('class'))->toBe('marquee');
+    });
+});
+
+describe('json-ld', function () {
+    test('the structured data is valid json in a script that a value cannot close', function () {
+        $data = ['@type' => 'ProfessionalService', 'name' => 'vertrouwdag</script><script>alert(1)</script>', 'url' => 'https://vertrouwdag.nl/'];
+
+        $document = renderComponent('<x-json-ld :data="$data" />', ['data' => $data]);
+        $scripts = $document->querySelectorAll('script');
+
+        expect($scripts)->toHaveCount(1)
+            ->and($scripts->item(0)->getAttribute('type'))->toBe('application/ld+json')
+            ->and(json_decode($scripts->item(0)->textContent, true))->toBe($data);
+    });
+});
+
+describe('checklist-formulier', function () {
+    test('the form asks for a first name, an email address and consent, and shows a thank you note', function () {
+        $document = renderComponent('<x-checklist-formulier />');
+        $formulier = $document->querySelector('form#checklist-form[method="post"]');
+
+        expect(attributenVan($formulier?->querySelectorAll('input[required]'), 'name'))->toBe(['voornaam', 'email', 'avg'])
+            ->and($formulier?->querySelector('input[name="email"]')?->getAttribute('type'))->toBe('email')
+            ->and($formulier?->querySelector('input[name="trouwdatum"]'))->toBeNull()
+            ->and($formulier?->querySelector('.check a')?->getAttribute('href'))->toBe(route('privacyverklaring'))
+            ->and(platteTekst($formulier?->querySelector('.check')))->toBe('Ik ontvang de checklist en af en toe een mail van vertrouwdag. Afmelden kan altijd. Lees de privacyverklaring.')
+            ->and($formulier?->querySelector('button[type="submit"]')?->textContent)->toBe('Stuur mij de checklist')
+            ->and($formulier?->getAttribute('data-bedankt'))->not->toBeEmpty()
+            ->and($formulier?->querySelector('.form-msg[role="status"]')?->hasAttribute('hidden'))->toBeTrue();
+    });
+
+    test('the form can ask for an optional wedding date', function () {
+        $document = renderComponent('<x-checklist-formulier trouwdatum />');
+        $datum = $document->querySelector('input[name="trouwdatum"]');
+
+        expect($datum?->getAttribute('type'))->toBe('date')
+            ->and($datum?->hasAttribute('required'))->toBeFalse();
+    });
+
+    test('the form starts with the introduction it is given and keeps extra attributes', function () {
+        $document = renderComponent('<x-checklist-formulier class="cl-form"><p class="eb">Gratis checklist</p></x-checklist-formulier>');
+        $formulier = $document->querySelector('form');
+
+        expect($formulier?->getAttribute('class'))->toBe('cl-form')
+            ->and($formulier?->firstElementChild?->textContent)->toBe('Gratis checklist');
     });
 });
 

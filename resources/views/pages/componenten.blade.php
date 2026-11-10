@@ -189,6 +189,17 @@
         </div>
     </section>
 
+    {{-- Checklist-formulier (index.html zonder en checklist.html met trouwdatum) --}}
+    <section class="wrap sec stack" style="gap:32px">
+        <div class="checklist" data-reveal>
+            <x-checklist-formulier>
+                <p class="eb">Checklist-formulier</p>
+                <h2 style="font-size:clamp(34px,3.8vw,48px);line-height:1.08">Wat regel je <em>wanneer?</em></h2>
+            </x-checklist-formulier>
+        </div>
+        <x-checklist-formulier id="checklist-form-datum" class="cl-form" trouwdatum data-reveal />
+    </section>
+
     {{-- CTA-blokken (index.html en diensten.html) --}}
     <x-cta-split hart>
         <x-slot:kop>Zullen we <em>kennismaken?</em></x-slot:kop>

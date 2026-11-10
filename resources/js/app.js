@@ -12,9 +12,11 @@ import mobielMenu from './modules/mobiel-menu';
 import inschuiven from './modules/inschuiven';
 import swipeStapel from './modules/swipe-stapel';
 import lopendeBand from './modules/lopende-band';
+import checklistFormulier from './modules/checklist-formulier';
 
 naarBoven();
 mobielMenu();
 inschuiven();
 swipeStapel();
 lopendeBand();
+checklistFormulier();

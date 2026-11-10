@@ -1,6 +1,8 @@
 <?php
 
+use Dom\Element;
 use Dom\HTMLDocument;
+use Dom\NodeList;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -56,4 +58,53 @@ function renderComponent(string $template, array $data = []): HTMLDocument
     $html = (string) test()->blade($template, $data);
 
     return HTMLDocument::createFromString('<!doctype html><html><body>'.$html.'</body></html>', LIBXML_NOERROR);
+}
+
+/**
+ * Haalt een pagina op en geeft het document terug, zodat de test met
+ * CSS-selectors in de pagina kan zoeken.
+ */
+function documentVoor(string $url): HTMLDocument
+{
+    $response = test()->get($url);
+
+    $response->assertOk();
+
+    return HTMLDocument::createFromString($response->getContent(), LIBXML_NOERROR);
+}
+
+/**
+ * @return list<string>
+ */
+function attributenVan(NodeList $elements, string $attribute): array
+{
+    $values = [];
+
+    foreach ($elements as $element) {
+        $values[] = $element->getAttribute($attribute);
+    }
+
+    return $values;
+}
+
+/**
+ * @return list<string>
+ */
+function tekstenVan(NodeList $elements): array
+{
+    $values = [];
+
+    foreach ($elements as $element) {
+        $values[] = trim($element->textContent);
+    }
+
+    return $values;
+}
+
+/**
+ * De tekst van een element met de witruimte samengevoegd tot één spatie.
+ */
+function platteTekst(?Element $element): ?string
+{
+    return $element === null ? null : trim(preg_replace('/\s+/', ' ', $element->textContent));
 }
