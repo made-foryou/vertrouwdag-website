@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pint:
+    name: Pint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      - name: Composer-dependencies installeren
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Codestijl controleren
+        run: vendor/bin/pint --test
+
+  tests:
+    name: Pest
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Omgeving voorbereiden
+        run: cp .env.example .env
+
+      - name: Composer-dependencies installeren
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Applicatiesleutel genereren
+        run: php artisan key:generate
+
+      - name: npm-dependencies installeren
+        run: npm ci
+
+      - name: Assets bouwen
+        run: npm run build
+
+      - name: Tests draaien
+        run: php artisan test --compact
