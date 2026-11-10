@@ -5,8 +5,9 @@
  * controleert eerst de verplichte velden en het e-mailadres; pas als
  * die kloppen komt het submit-event. Staat er een bedankblok (#bedankt)
  * op de pagina, zoals op /checklist, dan verschijnt dat en wordt het
- * formulier leeggemaakt. Anders toont het formulier de melding uit zijn
- * data-bedankt in .form-msg.
+ * formulier leeggemaakt. De focus gaat naar de kop van het bedankblok,
+ * zodat ook een schermlezer de bevestiging hoort. Anders toont het
+ * formulier de melding uit zijn data-bedankt in .form-msg.
  */
 export default function checklistFormulier() {
     const formulieren = document.querySelectorAll('form[data-bedankt]');
@@ -26,6 +27,7 @@ export default function checklistFormulier() {
             if (bedankt) {
                 bedankt.hidden = false;
                 bedankt.scrollIntoView({ behavior: minderBeweging ? 'auto' : 'smooth', block: 'center' });
+                bedankt.querySelector('h2')?.focus({ preventScroll: true });
                 formulier.reset();
 
                 return;

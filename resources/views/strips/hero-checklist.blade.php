@@ -1,0 +1,31 @@
+{{--
+    Strook: de hero van /checklist met links een polaroid en een papiertje
+    met de eerste punten van de checklist, en rechts de kop, de tekst en
+    het aanmeldformulier met trouwdatum.
+
+    Velden: label, kop (met accent) en tekst. De visual is decoratie voor
+    schermlezers (aria-hidden) en ligt vast. Na het versturen toont het
+    formulier de strook checklist-bedankt (#bedankt).
+--}}
+<section class="wrap hero" style="gap:64px;padding-bottom:var(--sec)" data-cms-strip="{{ $strip->id }}">
+    <div class="hero__media cl-media" data-reveal aria-hidden="true">
+        <div class="polaroid tilt" style="left:6%;top:4%;width:58%;padding:10px 10px 42px;transform:rotate(-7deg);z-index:1">
+            <img src="{{ Vite::asset('resources/images/ringen-pioenen.jpg') }}" alt="" width="1100" height="733" fetchpriority="high">
+            <span style="font-size:19px;bottom:10px">nog 12 maanden</span>
+        </div>
+        <div class="cl-paper">
+            <p class="eb" style="font-size:9px;margin-bottom:10px">Trouwplanning-checklist</p>
+            <div class="ck"><i></i>Datum prikken</div>
+            <div class="ck"><i></i>Budget op papier</div>
+            <div class="ck"><i></i>Locatie bezichtigen</div>
+            <div class="ck"><i></i>Fotograaf boeken</div>
+            <div class="ck"><i></i>Save the dates</div>
+        </div>
+    </div>
+    <div class="hero__txt" data-reveal style="gap:20px">
+        <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
+        <h1 style="font-size:clamp(44px,5.6vw,76px);line-height:1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <p style="font-size:21px;max-width:36ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        <x-checklist-formulier class="cl-form" trouwdatum />
+    </div>
+</section>
