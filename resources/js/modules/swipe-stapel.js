@@ -9,9 +9,15 @@
  * Een tik op een kaart erachter haalt hem eerst naar voren; een link
  * erin opent pas als hij vooraan ligt. Met het toetsenbord komt een kaart
  * naar voren zodra hij (of een link erin) de focus krijgt, en Enter
- * opent een link meteen. Met prefers-reduced-motion: reduce schuift de
- * stapel zonder animatie.
+ * opent een link meteen. Een stapel zonder links of knoppen (briefjes)
+ * wordt op mobiel zelf focusbaar; de pijltjes bladeren dan door de
+ * kaarten. Met prefers-reduced-motion: reduce schuift de stapel zonder
+ * animatie.
  */
+const FOCUSBAAR = 'a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])';
+
+const LABEL = 'Briefjes, blader met de pijltjestoetsen';
+
 export default function swipeStapel() {
     const stapels = document.querySelectorAll('[data-deck]');
 
@@ -81,8 +87,29 @@ export default function swipeStapel() {
             });
         };
 
+        // Zonder link of knop erin kan de focus de stapel niet in; dan wordt
+        // de stapel zelf focusbaar, zodat de pijltjes door de kaarten bladeren.
+        const heeftFocusbaarElement = stapel.querySelector(FOCUSBAAR) !== null;
+
+        const toetsenbordToegang = () => {
+            if (heeftFocusbaarElement) {
+                return;
+            }
+
+            if (mobiel.matches) {
+                stapel.setAttribute('tabindex', '0');
+                stapel.setAttribute('role', 'region');
+                stapel.setAttribute('aria-label', LABEL);
+            } else {
+                stapel.removeAttribute('tabindex');
+                stapel.removeAttribute('role');
+                stapel.removeAttribute('aria-label');
+            }
+        };
+
         stapel.addEventListener('scroll', planBijwerken, { passive: true });
         window.addEventListener('resize', planBijwerken);
+        mobiel.addEventListener('change', toetsenbordToegang);
 
         kaarten.forEach((kaart, index) => {
             kaart.addEventListener('click', (event) => {
@@ -102,6 +129,7 @@ export default function swipeStapel() {
             });
         });
 
+        toetsenbordToegang();
         bijwerken();
     });
 }
