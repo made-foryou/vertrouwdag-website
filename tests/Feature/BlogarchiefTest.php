@@ -64,3 +64,19 @@ test('the archive links back to the blog', function () {
     expect($knop?->getAttribute('href'))->toBe(route('blog'))
         ->and(trim($knop?->textContent))->toBe('Terug naar de blog');
 });
+
+test('the archive gives its cards a heading for screen readers, so no heading skips a level', function () {
+    config(['blogs' => [blogInDeConfig(['slug' => 'een-blog'])]]);
+
+    $document = documentVoor('/blog/archief');
+
+    $niveaus = [];
+    foreach ($document->querySelectorAll('main h1, main h2, main h3, main h4') as $kop) {
+        $niveaus[] = (int) substr($kop->tagName, 1);
+    }
+    $sprongen = array_filter(array_keys($niveaus), fn (int $i): bool => $i > 0 && $niveaus[$i] > $niveaus[$i - 1] + 1);
+
+    expect($niveaus[0] ?? null)->toBe(1)
+        ->and($sprongen)->toBe([])
+        ->and(platteTekst($document->querySelector('[data-cms-strip="blog-archief"] h2.sr-only')))->toBe('Alle artikelen');
+});

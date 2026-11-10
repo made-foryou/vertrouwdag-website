@@ -16,6 +16,7 @@
             'tekst' => 'Alles wat ik schreef over rustig plannen, mooie plekken in Zuid-Holland en het werk achter de schermen.',
         ]),
         new Strip('blog-archief', 'blog-archief', [
+            'kop' => 'Alle artikelen',
             'leeg' => 'Over dit onderwerp heb ik nog geen blog geschreven. Binnenkort meer!',
             'knop' => ['text' => 'Terug naar de blog', 'url' => route('blog')],
             'blogs' => Blogs::gepubliceerd(),
