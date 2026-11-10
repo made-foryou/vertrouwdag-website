@@ -1,0 +1,34 @@
+{{--
+    Strook: de gratis checklist, met links een polaroid en een papiertje
+    met vinkjes en rechts het aanmeldformulier, zonder trouwdatum.
+
+    Velden: label, kop (met accent) en tekst. De visual is decoratie voor
+    schermlezers (aria-hidden) en ligt vast.
+--}}
+<section class="wrap sec" id="checklist" data-cms-strip="{{ $strip->id }}">
+    <div class="checklist" data-reveal>
+        <div class="checklist__media" aria-hidden="true">
+            <div class="polaroid polaroid--wide tilt" style="left:6%;top:0;width:70%;padding:10px 10px 40px;transform:rotate(-6deg);z-index:1">
+                <img src="{{ Vite::asset('resources/images/hand-in-hand.jpg') }}" alt="" width="1100" height="733" loading="lazy">
+                <span style="font-size:18px;bottom:9px">12 maanden te gaan</span>
+            </div>
+            <div class="paper">
+                <div class="paper__head"><p class="eb" style="font-size:9px">Trouwplanning-checklist</p></div>
+                <div style="padding:8px 22px 0">
+                    <div class="paper__row done"><span class="box"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M2 6.5l2.6 2.5L10 3.5" fill="none" stroke="#F6F6F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Datum prikken</div>
+                    <div class="paper__row done"><span class="box"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M2 6.5l2.6 2.5L10 3.5" fill="none" stroke="#F6F6F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Locatie bezichtigen</div>
+                    <div class="paper__row"><span class="box"></span>Fotograaf boeken</div>
+                    <div class="paper__row"><span class="box"></span>Save the dates</div>
+                </div>
+                <div style="margin-top:auto;padding:0 18px 18px;display:flex;justify-content:flex-end">
+                    <div style="width:64px;height:64px;border-radius:999px;background:#401838;display:flex;align-items:center;justify-content:center;transform:rotate(-10deg);box-shadow:var(--schaduw-sm)"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#E0D0E0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </div>
+            </div>
+        </div>
+        <x-checklist-formulier>
+            <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
+            <h2 style="font-size:clamp(34px,3.8vw,48px);line-height:1.08" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        </x-checklist-formulier>
+    </div>
+</section>
