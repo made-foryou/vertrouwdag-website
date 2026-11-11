@@ -1,11 +1,15 @@
 <?php
 
+use Database\Seeders\HomepaginaSeeder;
+
 beforeEach(function () {
     $this->withoutVite();
 });
 
-test('every page has the hidden cookie banner as a labelled dialog between the skip link and the header', function (string $page, array $parameters = []) {
-    $document = documentVoor(route($page, $parameters));
+test('every page has the hidden cookie banner as a labelled dialog between the skip link and the header', function (string $adres) {
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor($adres);
 
     $banner = $document->getElementById('cookie');
     $dialoog = $banner?->querySelector('.cookie__box[role="dialog"]');
@@ -17,10 +21,10 @@ test('every page has the hidden cookie banner as a labelled dialog between the s
         ->and($dialoog)->not->toBeNull()
         ->and($document->getElementById($dialoog->getAttribute('aria-labelledby'))?->textContent)->toBe('Even over cookies');
 })->with([
-    'home' => ['home'],
-    'kennismaken' => ['kennismaken'],
-    'cookiebeleid' => ['cookiebeleid'],
-    'blogartikel' => ['blog.artikel', ['wanneer-weddingplanner-inschakelen']],
+    'home' => ['/'],
+    'kennismaken' => ['/kennismaken'],
+    'cookiebeleid' => ['/cookiebeleid'],
+    'blogartikel' => ['/blog/wanneer-weddingplanner-inschakelen'],
 ]);
 
 test('the banner takes its title, text, policy link and buttons from the config', function () {
@@ -35,8 +39,9 @@ test('the banner takes its title, text, policy link and buttons from the config'
             'opslaan' => 'Bewaren',
         ],
     ]);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
     $banner = $document->getElementById('cookie');
     $tekst = $document->getElementById('ck-tekst');
 
@@ -47,7 +52,9 @@ test('the banner takes its title, text, policy link and buttons from the config'
 });
 
 test('refusing takes one click on a button that looks the same as accepting', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
 
     $weigeren = $document->querySelector('#cookie .cookie__main button[data-ck="none"]');
     $accepteren = $document->querySelector('#cookie .cookie__main button[data-ck="all"]');
@@ -59,7 +66,9 @@ test('refusing takes one click on a button that looks the same as accepting', fu
 });
 
 test('the preferences are collapsed behind a toggle that controls them', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
 
     $knop = $document->querySelector('#cookie button[data-ck="prefs"]');
     $voorkeuren = $document->getElementById($knop?->getAttribute('aria-controls') ?? '');
@@ -79,8 +88,9 @@ test('the preferences list each category from the config, with an unchecked box 
             'video' => ['naam' => 'Video', 'uitleg' => 'Voor filmpjes.', 'verplicht' => false],
         ],
     ]);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
     $voorkeuren = $document->getElementById('cookie-prefs');
     $vinkjes = $voorkeuren?->querySelectorAll('input[type="checkbox"]');
 
@@ -104,8 +114,9 @@ test('the banner passes the version and the optional categories to the script', 
             'video' => ['naam' => 'Video', 'uitleg' => 'Voor filmpjes.', 'verplicht' => false],
         ],
     ]);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
     $banner = $document->getElementById('cookie');
 
     expect($banner?->getAttribute('data-versie'))->toBe('3')

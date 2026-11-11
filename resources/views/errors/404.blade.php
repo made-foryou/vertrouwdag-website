@@ -12,7 +12,7 @@
     <x-foutmelding label="Pagina niet gevonden" kop="Deze pagina is *zoek*">
         Misschien is het adres veranderd, of zit er een typfout in. Geen zorgen, de weg terug is kort.
         <x-slot:knoppen>
-            <x-knop :href="route('home')">Naar de homepage</x-knop>
+            <x-knop :href="url('/')">Naar de homepage</x-knop>
             <x-knop :href="route(config('vertrouwdag.cta.route'))" variant="secundair">{{ config('vertrouwdag.cta.label') }}</x-knop>
         </x-slot:knoppen>
     </x-foutmelding>

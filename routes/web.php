@@ -4,7 +4,6 @@ use App\Http\Controllers\BlogartikelController;
 use Illuminate\Support\Facades\Route;
 use Made\CmsPackage\Content\Models\Page;
 
-Route::view('/', 'pages.home')->name('home');
 Route::view('/diensten', 'pages.diensten')->name('diensten');
 Route::view('/werkwijze', 'pages.werkwijze')->name('werkwijze');
 Route::view('/over-mij', 'pages.over-mij')->name('over-mij');
@@ -23,6 +22,7 @@ if (app()->environment('local')) {
     Route::view('/componenten', 'pages.componenten')->name('componenten');
 }
 
-// Elke pagina uit het CMS, op het adres dat geen route hierboven claimt. Dit blijft de laatste route: routes eronder
-// worden nooit bereikt. Een vaste route hierboven gaat voor, ook als het CMS een pagina op hetzelfde adres heeft.
+// Elke pagina uit het CMS, op het adres dat geen route hierboven claimt, ook de homepage (/). Dit blijft de laatste
+// route: routes eronder worden nooit bereikt. Een vaste route hierboven gaat voor, ook als het CMS een pagina op
+// hetzelfde adres heeft. Deze route heeft geen naam, dus een link naar de homepage is url('/').
 Route::madeCms(fn (Page $page) => view('page', ['page' => $page]));

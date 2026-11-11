@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\HomepaginaSeeder;
 use Dom\Element;
 use Dom\HTMLDocument;
 
@@ -21,7 +22,9 @@ function directeScripts(HTMLDocument $document): array
 }
 
 test('the first script in the head denies all four consent signals by default', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
 
     $eerste = directeScripts($document)[0] ?? null;
 
@@ -31,8 +34,9 @@ test('the first script in the head denies all four consent signals by default', 
 
 test('every other call to gtag waits for consent for its category', function () {
     config(['vertrouwdag.ga_id' => 'G-TEST123']);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
 
     $directMetGtag = array_filter(directeScripts($document), fn (Element $script): bool => str_contains($script->textContent, 'gtag('));
     $wachtend = $document->querySelectorAll('script[data-toestemming]');
@@ -42,7 +46,9 @@ test('every other call to gtag waits for consent for its category', function () 
 });
 
 test('consent for a category grants only its own consent signals', function (string $categorie, string $update) {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
 
     $scripts = tekstenVan($document->querySelectorAll('script[type="text/plain"][data-toestemming="'.$categorie.'"]'));
 
@@ -54,8 +60,9 @@ test('consent for a category grants only its own consent signals', function (str
 
 test('the page mentions no Google Analytics while the measurement id is empty', function () {
     config(['vertrouwdag.ga_id' => null]);
+    $this->seed(HomepaginaSeeder::class);
 
-    $response = $this->get(route('home'));
+    $response = $this->get('/');
 
     $response->assertOk()
         ->assertDontSee('googletagmanager', false)
@@ -64,8 +71,9 @@ test('the page mentions no Google Analytics while the measurement id is empty', 
 
 test('Google Analytics with the id from the config waits for consent for statistics', function () {
     config(['vertrouwdag.ga_id' => 'G-TEST123']);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
 
     $loader = $document->querySelector('script[data-src^="https://www.googletagmanager.com/"]');
     $configuratie = array_values(array_filter(

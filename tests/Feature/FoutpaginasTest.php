@@ -2,6 +2,7 @@
 
 use Dom\HTMLDocument;
 use Illuminate\Support\Facades\View;
+use Made\CmsPackage\Content\Models\Page;
 
 beforeEach(function () {
     $this->withoutVite();
@@ -18,7 +19,7 @@ test('an unknown address shows the not found page in the layout of the site, hid
         ->and($document->querySelector('meta[name="robots"]')?->getAttribute('content'))->toBe('noindex')
         ->and($document->querySelector('link[rel="canonical"]'))->toBeNull()
         ->and(platteTekst($document->querySelector('main h1')))->toBe('Deze pagina is zoek')
-        ->and(attributenVan($document->querySelectorAll('main a.btn'), 'href'))->toBe([route('home'), route(config('vertrouwdag.cta.route'))])
+        ->and(attributenVan($document->querySelectorAll('main a.btn'), 'href'))->toBe([url('/'), route(config('vertrouwdag.cta.route'))])
         ->and($document->querySelector('#site-nav'))->not->toBeNull();
 })->with([
     'an address without a route' => ['/bestaat-niet'],
@@ -27,9 +28,10 @@ test('an unknown address shows the not found page in the layout of the site, hid
 
 test('a server error shows its own bare page with the mail address, hidden from search engines', function () {
     config(['app.debug' => false, 'vertrouwdag.email' => 'test@voorbeeld.nl']);
-    // Een fout tijdens het renderen van een bestaande pagina. Een eigen testroute kan niet: die komt na de catch-all
-    // van het CMS (Route::madeCms) en wordt dus nooit bereikt.
-    View::composer('pages.home', fn () => throw new RuntimeException('Iets ging stuk.'));
+    // Een fout tijdens het renderen van een bestaande pagina uit het CMS. Een eigen testroute kan niet: die komt na de
+    // catch-all van het CMS (Route::madeCms) en wordt dus nooit bereikt.
+    Page::factory()->published()->at('/')->create();
+    View::composer('page', fn () => throw new RuntimeException('Iets ging stuk.'));
 
     $response = $this->get('/');
 

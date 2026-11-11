@@ -35,7 +35,7 @@ test('the archive has a breadcrumb to the homepage and the blog', function () {
     $kruimelpad = documentVoor('/blog/archief')->querySelector('[data-cms-strip="hero-archief"] nav.crumbs');
 
     expect(platteTekst($kruimelpad))->toBe('Home · Blog · Archief')
-        ->and(attributenVan($kruimelpad?->querySelectorAll('a'), 'href'))->toBe([route('home'), route('blog')]);
+        ->and(attributenVan($kruimelpad?->querySelectorAll('a'), 'href'))->toBe([url('/'), route('blog')]);
 });
 
 test('the archive filters on every topic with all blogs shown at first', function () {
