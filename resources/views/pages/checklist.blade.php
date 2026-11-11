@@ -7,6 +7,7 @@
     Het formulier verstuurt nog niets: na een geldige invoer toont het
     het bedankblok. Het echte versturen komt in #25.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -22,11 +23,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Gratis trouwplanning-checklist | vertrouwdag"
-    description="Wat regel je wanneer? Download de gratis trouwplanning-checklist van weddingplanner Romy: maand voor maand, van twaalf maanden ervoor tot de week zelf."
-    og-title="Gratis trouwplanning-checklist · vertrouwdag"
-    og-image="resources/images/ringen-pioenen.jpg"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/checklist')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

@@ -7,6 +7,7 @@
     en verdwijnt dit blok.
 --}}
 @use('App\Support\Blogs')
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -27,11 +28,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Blogarchief: alle artikelen | vertrouwdag"
-    description="Alle blogs van weddingplanner Romy op een rij: tips voor het plannen van jullie bruiloft, locaties in Zuid-Holland en een kijkje achter de schermen."
-    og-title="Blogarchief: alle artikelen · vertrouwdag"
-    og-image="resources/images/paar-meer-herfst.jpg"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/blog/archief')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

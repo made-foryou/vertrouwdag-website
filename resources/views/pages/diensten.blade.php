@@ -5,10 +5,11 @@
     In #17 komt deze inhoud uit het CMS en verdwijnt dit blok.
 
     De prijzen komen uit config/vertrouwdag.php, ook in de omschrijving
-    voor zoekmachines. Die noemt de bedragen inclusief btw, want de
-    bezoekers zijn consumenten (besluit Menno, 2026-11-10, zie #6).
+    voor zoekmachines (app/Support/PaginaSeo.php). Die noemt de bedragen
+    inclusief btw, want de bezoekers zijn consumenten (besluit Menno,
+    2026-11-10, zie #6).
 --}}
-@use('App\Support\Prijs')
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -89,20 +90,7 @@
             'variant' => 'groot',
         ]),
     ];
-
-    $omschrijving = sprintf(
-        'De Dag in handen (dagcoördinatie) vanaf %s, Hand in hand (gedeeltelijke planning) vanaf %s en Helemaal in handen (full service) vanaf %s, inclusief btw. Vaste vanaf-prijzen, zodat jullie vooraf weten waar jullie aan toe zijn.',
-        Prijs::voorDienst('dag')->inclBtw(),
-        Prijs::voorDienst('partial')->inclBtw(),
-        Prijs::voorDienst('full')->inclBtw(),
-    );
 @endphp
-<x-layouts::site
-    title="Diensten en prijzen | vertrouwdag weddingplanner"
-    :description="$omschrijving"
-    og-title="Diensten en prijzen · vertrouwdag"
-    og-description="Weddingplanner in Zuid-Holland. Warm en persoonlijk, en tegelijk strak georganiseerd."
-    og-image="resources/images/ceremonie-buiten.jpg"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/diensten')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

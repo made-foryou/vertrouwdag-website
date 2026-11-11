@@ -7,6 +7,7 @@
     De Calendly-agenda hoort bij de strook hero-kennismaken en laadt pas
     na toestemming voor marketing. De Calendly-link staat in de config.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -30,11 +31,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Plan een kennismaking | vertrouwdag weddingplanner"
-    description="Plan een vrijblijvend kennismakingsgesprek van 30 minuten, online of op locatie. Vertel over jullie plannen, ik vertel hoe ik kan helpen."
-    og-title="Plan een kennismaking · vertrouwdag"
-    og-image="resources/images/romy.jpg"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/kennismaken')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

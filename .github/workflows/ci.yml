@@ -17,6 +17,22 @@ jobs:
           php-version: '8.5'
           coverage: none
 
+      # Het package staat in composer.json als path-repository naar ../made-cms-package (#14). De repo is
+      # privé, dus de CI checkt hem uit met een read-only deploy key, op de commit die composer.lock noemt.
+      - name: Commit van made-cms-package uit composer.lock lezen
+        id: package
+        run: echo "ref=$(jq -r '.packages[] | select(.name == "made-foryou/made-cms-package") | .dist.reference' composer.lock)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v5
+        with:
+          repository: made-foryou/made-cms-package
+          ref: ${{ steps.package.outputs.ref }}
+          ssh-key: ${{ secrets.MADE_CMS_PACKAGE_DEPLOY_KEY }}
+          path: made-cms-package
+
+      - name: made-cms-package naast de site zetten
+        run: mv made-cms-package ../made-cms-package
+
       - name: Composer-dependencies installeren
         run: composer install --no-interaction --prefer-dist --no-progress
 
@@ -42,6 +58,22 @@ jobs:
 
       - name: Omgeving voorbereiden
         run: cp .env.example .env
+
+      # Het package staat in composer.json als path-repository naar ../made-cms-package (#14). De repo is
+      # privé, dus de CI checkt hem uit met een read-only deploy key, op de commit die composer.lock noemt.
+      - name: Commit van made-cms-package uit composer.lock lezen
+        id: package
+        run: echo "ref=$(jq -r '.packages[] | select(.name == "made-foryou/made-cms-package") | .dist.reference' composer.lock)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v5
+        with:
+          repository: made-foryou/made-cms-package
+          ref: ${{ steps.package.outputs.ref }}
+          ssh-key: ${{ secrets.MADE_CMS_PACKAGE_DEPLOY_KEY }}
+          path: made-cms-package
+
+      - name: made-cms-package naast de site zetten
+        run: mv made-cms-package ../made-cms-package
 
       - name: Composer-dependencies installeren
         run: composer install --no-interaction --prefer-dist --no-progress

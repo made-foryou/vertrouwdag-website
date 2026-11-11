@@ -8,6 +8,7 @@
     (#11). Het e-mailadres komt uit config/vertrouwdag.php via
     <x-mail-link>.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @use('Illuminate\Support\Facades\Blade')
 @php
@@ -46,10 +47,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Cookiebeleid | vertrouwdag"
-    description="Welke cookies vertrouwdag.nl gebruikt, waarvoor, en hoe jullie je keuze aanpassen."
-    og-title="Cookiebeleid · vertrouwdag"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/cookiebeleid')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

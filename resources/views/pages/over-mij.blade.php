@@ -7,6 +7,7 @@
     De tekst van "Van stagiaire tot planner" is nog Lorem ipsum, zoals in
     het ontwerp. De echte tekst levert Romy aan in #27.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -57,11 +58,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Over Romy | Persoonlijke weddingplanner in Zuid-Holland"
-    description="Ik ben Romy, de weddingplanner achter vertrouwdag. Punctueel, met oog voor detail en vanuit het hart, zodat jullie op jullie trouwdag alleen maar hoeven te genieten."
-    og-title="Over Romy · vertrouwdag"
-    og-image="resources/images/romy.jpg"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/over-mij')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

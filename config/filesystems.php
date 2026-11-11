@@ -33,7 +33,9 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Geen route storage/{path}: die kwam na de catch-all van het CMS (Route::madeCms) en zou nooit bereikt
+            // worden. De site serveert geen privébestanden; de media van het CMS staan op de disk public.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],

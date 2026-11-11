@@ -1,7 +1,7 @@
 <?php
 
 use Dom\HTMLDocument;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 beforeEach(function () {
     $this->withoutVite();
@@ -27,9 +27,11 @@ test('an unknown address shows the not found page in the layout of the site, hid
 
 test('a server error shows its own bare page with the mail address, hidden from search engines', function () {
     config(['app.debug' => false, 'vertrouwdag.email' => 'test@voorbeeld.nl']);
-    Route::get('/test-fout', fn () => throw new RuntimeException('Iets ging stuk.'));
+    // Een fout tijdens het renderen van een bestaande pagina. Een eigen testroute kan niet: die komt na de catch-all
+    // van het CMS (Route::madeCms) en wordt dus nooit bereikt.
+    View::composer('pages.home', fn () => throw new RuntimeException('Iets ging stuk.'));
 
-    $response = $this->get('/test-fout');
+    $response = $this->get('/');
 
     $response->assertInternalServerError();
 

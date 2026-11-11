@@ -8,15 +8,20 @@
     terug op description, en ogImage is het pad van een foto voor
     Vite::asset(). ogType is website, of article voor een blog.
 
+    Een pagina van de site geeft die waarden mee als seo, een PaginaSeo
+    uit de vaste lijst in app/Support/PaginaSeo.php. Met seo komen alle
+    zes daaruit. Een foutpagina of een blogartikel geeft ze los mee.
+
     De canonical en og:url wijzen naar hetzelfde pad op het canonieke
     adres uit config/vertrouwdag.php, zonder querystring, tenzij de pagina
     zelf een canonical meegeeft. Met noindex vraagt de pagina zoekmachines
     haar over te slaan en heeft ze geen canonical, zoals een foutpagina.
 --}}
 @props([
-    'title',
-    'description',
-    'ogTitle',
+    'seo' => null,
+    'title' => null,
+    'description' => null,
+    'ogTitle' => null,
     'ogDescription' => null,
     'ogImage' => 'resources/images/paar-landschap.jpg',
     'ogType' => 'website',
@@ -24,6 +29,15 @@
     'noindex' => false,
 ])
 @php
+    if ($seo !== null) {
+        $title = $seo->titel;
+        $description = $seo->omschrijving;
+        $ogTitle = $seo->ogTitel;
+        $ogDescription = $seo->ogOmschrijving;
+        $ogImage = $seo->ogAfbeelding;
+        $ogType = $seo->ogType;
+    }
+
     $canonical ??= rtrim(config('vertrouwdag.canonieke_url'), '/').'/'.ltrim(request()->path(), '/');
 @endphp
 <!doctype html>

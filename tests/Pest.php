@@ -3,7 +3,7 @@
 use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\NodeList;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
 /*
@@ -17,8 +17,10 @@ use Tests\TestCase;
 |
 */
 
+// Elk onbekend adres zoekt een pagina in de database van het CMS (Route::madeCms). Lazily migreert alleen voor een test
+// die de database echt gebruikt.
 pest()->extend(TestCase::class)
- // ->use(RefreshDatabase::class)
+    ->use(LazilyRefreshDatabase::class)
     ->in('Feature');
 
 /*

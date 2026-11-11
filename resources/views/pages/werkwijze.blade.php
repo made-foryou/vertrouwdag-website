@@ -8,6 +8,7 @@
     4, de trouwdag als fase 5 en "Afronden" als fase 6. De nummers zijn
     velden, zodat de nummering doorloopt.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -78,10 +79,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Werkwijze: zo plan ik jullie bruiloft | vertrouwdag"
-    description="Van het eerste kennismakingsgesprek tot de dag na de bruiloft: zo werk ik als weddingplanner in Zuid-Holland, stap voor stap."
-    og-title="Werkwijze: zo plan ik jullie bruiloft · vertrouwdag"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/werkwijze')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

@@ -77,13 +77,22 @@ test('no two pages share a title or a description', function () use ($paginas) {
 });
 
 test('the pages above cover every page of the site, so a new page cannot skip these checks', function () use ($paginas) {
-    /** Adressen zonder pagina voor bezoekers: de health check, de stijlgids (alleen lokaal, noindex) en de bestanden uit storage. */
-    $geenPagina = ['up', 'componenten', 'storage/{path}'];
+    /**
+     * Adressen zonder vaste pagina voor bezoekers: de health check, de stijlgids (alleen lokaal, noindex) en de
+     * catch-all van het CMS. Die laatste serveert de pagina's uit het CMS; hun SEO komt uit dezelfde lijst
+     * (App\Support\PaginaSeo) en heeft een eigen test.
+     */
+    $geenPagina = ['up', 'componenten', '{path?}'];
     $adressen = [];
 
     foreach (Router::getRoutes()->getRoutes() as $route) {
         /** @var Route $route */
         if (! in_array('GET', $route->methods(), true) || in_array($route->uri(), $geenPagina, true)) {
+            continue;
+        }
+
+        // Het beheer van het CMS, met de inlogpagina, de schermen en de launcher.
+        if (str_starts_with($route->uri(), 'made-cms')) {
             continue;
         }
 
