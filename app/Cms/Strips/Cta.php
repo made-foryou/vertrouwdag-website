@@ -2,9 +2,9 @@
 
 namespace App\Cms\Strips;
 
+use App\Cms\Velden;
 use Made\CmsPackage\Content\Strips\Fields\Choice;
 use Made\CmsPackage\Content\Strips\Fields\LongText;
-use Made\CmsPackage\Content\Strips\Fields\Text;
 use Made\CmsPackage\Content\Strips\StripType;
 
 /**
@@ -13,8 +13,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  * resources/views/strips/cta.blade.php. De foto en de knop komen nog uit
  * de site zelf (#21 en config/vertrouwdag.php).
  *
- * Dit is de eerste strook in het CMS, voor de testpagina van #14. De
- * velden van alle striptypes legt #15 vast, ook het accent in de kop.
+ * De standaardwaarden zijn die van de homepage. Op de blog en het archief
+ * staat de strook zonder tekst.
  */
 final class Cta extends StripType
 {
@@ -36,12 +36,12 @@ final class Cta extends StripType
     public function fields(): array
     {
         return [
-            Text::make('kop')
+            Velden::kopMetAccent()
                 ->required()
-                ->default('Zullen we *kennismaken?*')
-                ->hint('Zet één woord tussen sterretjes voor het accent, zoals *kennismaken?*'),
+                ->default('Zullen we *kennismaken?*'),
             LongText::make('tekst')
-                ->hint('Eén of twee korte zinnen onder de kop.'),
+                ->default('Een half uur, online en vrijblijvend. Jullie vertellen over jullie plannen, ik vertel hoe ik kan helpen.')
+                ->hint('Eén of twee korte zinnen onder de kop. Mag leeg blijven.'),
             Choice::make('variant', [
                 'groot' => 'Groot, zoals op Diensten',
                 'eenvoudig' => 'Eenvoudig, zoals op Werkwijze en Over mij',

@@ -9,7 +9,9 @@
     tot #21.
 
     Het laatste woord van het label breekt niet af, zodat "Zuid-Holland"
-    op mobiel niet bij het streepje wordt gesplitst.
+    op mobiel niet bij het streepje wordt gesplitst. Daardoor staat er een
+    element in het label, en herlaadt het frame van het CMS na het opslaan
+    in plaats van direct mee te kijken.
 --}}
 @php
     $label = (string) $strip->label;
