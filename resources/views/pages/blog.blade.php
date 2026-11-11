@@ -6,6 +6,7 @@
     doet. In #20 komen de blogs uit het CMS en verdwijnt dit blok.
 --}}
 @use('App\Support\Blogs')
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -29,11 +30,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Blog: rustig je bruiloft plannen | vertrouwdag"
-    description="Praktische tips voor het plannen van jullie bruiloft, trouwlocaties in Zuid-Holland en een kijkje achter de schermen bij weddingplanner Romy."
-    og-title="Blog: rustig je bruiloft plannen · vertrouwdag"
-    og-image="resources/images/paar-meer-herfst.jpg"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/blog')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

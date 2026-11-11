@@ -6,6 +6,7 @@
     De tekst is nog een placeholder, zoals in het ontwerp. Romy levert de
     definitieve voorwaarden en de datum aan in #27.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @php
     $strips = [
@@ -17,10 +18,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Algemene voorwaarden | vertrouwdag"
-    description="De algemene voorwaarden van vertrouwdag weddingplanning."
-    og-title="Algemene voorwaarden · vertrouwdag"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/algemene-voorwaarden')">
     <x-strips :strips="$strips" />
 </x-layouts::site>

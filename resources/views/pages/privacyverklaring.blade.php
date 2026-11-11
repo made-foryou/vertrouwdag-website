@@ -7,6 +7,7 @@
     definitieve privacyverklaring en de datum aan in #27. Het e-mailadres
     komt uit config/vertrouwdag.php via <x-mail-link>.
 --}}
+@use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @use('Illuminate\Support\Facades\Blade')
 @php
@@ -22,10 +23,6 @@
         ]),
     ];
 @endphp
-<x-layouts::site
-    title="Privacyverklaring | vertrouwdag"
-    description="Hoe vertrouwdag omgaat met jullie persoonsgegevens."
-    og-title="Privacyverklaring · vertrouwdag"
->
+<x-layouts::site :seo="PaginaSeo::voorAdres('/privacyverklaring')">
     <x-strips :strips="$strips" />
 </x-layouts::site>
