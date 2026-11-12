@@ -13,14 +13,14 @@
         </div>
         <nav class="site-footer__col" aria-label="Footer">
             <p class="eb">Pagina's</p>
-            @foreach (config('vertrouwdag.footer.paginas') as $route => $label)
-                <a href="{{ route($route) }}">{{ $label }}</a>
+            @foreach (config('vertrouwdag.footer.paginas') as $pad => $label)
+                <a href="{{ url($pad) }}">{{ $label }}</a>
             @endforeach
         </nav>
         <div class="site-footer__col">
             <p class="eb">Goed om te weten</p>
-            @foreach (config('vertrouwdag.footer.juridisch') as $route => $label)
-                <a href="{{ route($route) }}">{{ $label }}</a>
+            @foreach (config('vertrouwdag.footer.juridisch') as $pad => $label)
+                <a href="{{ url($pad) }}">{{ $label }}</a>
             @endforeach
             <button type="button" class="linkbtn" data-cookie-open>Cookie-instellingen</button>
         </div>

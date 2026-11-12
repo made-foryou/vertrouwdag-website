@@ -5,20 +5,27 @@
     In #18 komt deze inhoud uit het CMS en verdwijnt dit blok.
 
     Een antwoord is opgemaakte tekst, zoals RichText die levert. De
-    prijzen erin komen uit config/vertrouwdag.php via <x-prijs>, en de
-    links uit de routes. De strook faq maakt van dezelfde vragen de
-    JSON-LD (FAQPage).
+    prijzen erin komen uit de strook pakketten op /diensten
+    (App\Support\Aanbod) via <x-prijs>. Heeft een van de drie diensten
+    daar geen prijs, dan noemt het antwoord geen bedragen. De strook faq
+    maakt van dezelfde vragen de JSON-LD (FAQPage).
 
     De omschrijving wijkt af van het ontwerp, waar een verhaspelde zin
     stond ("de vragen die stellen mij het vaakst stellen"). Romy bevestigt
     de nieuwe tekst in #27.
 --}}
+@use('App\Support\Aanbod')
+@use('App\Support\Dienst')
 @use('App\Support\PaginaSeo')
 @use('App\Support\Strip')
 @use('Illuminate\Support\Facades\Blade')
 @php
-    $prijs = fn (string $dienst): string => trim(Blade::render('<x-prijs :dienst="$dienst" />', ['dienst' => $dienst]));
+    $aanbod = app(Aanbod::class);
+    $prijs = fn (Dienst $dienst): string => trim(Blade::render('<x-prijs :prijs="$prijs" :dienst="$dienst" />', ['prijs' => $aanbod->prijs($dienst), 'dienst' => $dienst->value]));
     $btw = config('vertrouwdag.btw_percentage');
+    $kosten = array_all(Dienst::cases(), fn (Dienst $dienst): bool => $aanbod->prijs($dienst) !== null)
+        ? 'De Dag in handen (dagcoördinatie) begint bij '.$prijs(Dienst::Dag).', Hand in hand (gedeeltelijke planning) bij '.$prijs(Dienst::Partial).' en Helemaal in handen (full service) bij '.$prijs(Dienst::Full).', steeds inclusief '.$btw.'% btw. '
+        : '';
 
     $strips = [
         new Strip('hero-faq', 'hero-faq', [
@@ -43,7 +50,7 @@
                 [
                     'id' => null,
                     'vraag' => 'Wat kost een weddingplanner?',
-                    'antwoord' => '<p>De Dag in handen (dagcoördinatie) begint bij '.$prijs('dag').', Hand in hand (gedeeltelijke planning) bij '.$prijs('partial').' en Helemaal in handen (full service) bij '.$prijs('full').', steeds inclusief '.$btw.'% btw. Na de kennismaking krijgen jullie een voorstel met een vaste prijs. <a href="'.e(route('diensten')).'">Bekijk wat er in elk pakket zit</a>.</p>',
+                    'antwoord' => '<p>'.$kosten.'Na de kennismaking krijgen jullie een voorstel met een vaste prijs. <a href="'.e(url(Aanbod::ADRES)).'">Bekijk wat er in elk pakket zit</a>.</p>',
                 ],
                 [
                     'id' => null,

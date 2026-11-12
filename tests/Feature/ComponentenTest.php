@@ -2,6 +2,7 @@
 
 use App\Support\Blog;
 use App\Support\Blogcategorie;
+use App\Support\Prijs;
 use App\Support\Strip;
 use Dom\NodeList;
 use Illuminate\View\ViewException;
@@ -51,12 +52,12 @@ describe('knop', function () {
 describe('dienstkaart', function () {
     test('a service card with a href is a link with the description, price and icon in that order', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" href="/diensten#dagcoordinatie" foto="/foto.jpg" :draaiing="-4">
+            <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijs" href="/diensten#dagcoordinatie" foto="/foto.jpg" :draaiing="-4">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel data-cms-field="titel">De Dag in handen</x-slot:titel>
                 <x-slot:omschrijving>Ik neem het zes weken ervoor over.</x-slot:omschrijving>
             </x-dienstkaart>
-            BLADE);
+            BLADE, ['prijs' => new Prijs(850, 21)]);
         $kaart = $document->querySelector('a.folder');
         $body = $kaart?->querySelector('.folder__body');
 
@@ -69,17 +70,18 @@ describe('dienstkaart', function () {
 
     test('a service card without a href is an article with the price before the description, the features and a button', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" foto="/foto.jpg" data-for="dagcoordinatie" :kenmerken="['Draaiboek', 'Afstemming met leveranciers']">
+            <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijs" foto="/foto.jpg" data-for="dagcoordinatie" :kenmerken="['Draaiboek', 'Afstemming met leveranciers']">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel>De Dag in handen</x-slot:titel>
-                <x-slot:omschrijving><strong>Voor stellen</strong> die zelf plannen.</x-slot:omschrijving>
+                <x-slot:omschrijving><p><strong>Voor stellen</strong> die zelf plannen.</p></x-slot:omschrijving>
             </x-dienstkaart>
-            BLADE);
+            BLADE, ['prijs' => new Prijs(850, 21)]);
         $kaart = $document->querySelector('article.folder[data-for="dagcoordinatie"]');
         $body = $kaart?->querySelector('.folder__body');
         $knop = $body?->querySelector('a.btn');
 
-        expect(klassenVan($document->querySelectorAll('.folder__body > p')))->toBe(['eb eb--sm', 'price', 'folder__desc'])
+        expect(klassenVan($document->querySelectorAll('.folder__body > p, .folder__body > div')))->toBe(['eb eb--sm', 'price', 'folder__desc'])
+            ->and($body->querySelector('div.folder__desc > p > strong')?->textContent)->toBe('Voor stellen')
             ->and(platteTekst($body->querySelector('ul.hl li:last-child')))->toBe('Afstemming met leveranciers')
             ->and($body->querySelector('.folder__icon'))->toBeNull()
             ->and($knop?->getAttribute('href'))->toBe(route(config('vertrouwdag.cta.route')))
@@ -88,12 +90,12 @@ describe('dienstkaart', function () {
 
     test('the colour of a service card sets the eyebrow, the dimmed price and the button', function (string $kleur, string $eyebrow, int $gedempt, string $knop, string $hart) {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart :kleur="$kleur" dienst="dag" foto="/foto.jpg" :kenmerken="['Draaiboek']">
+            <x-dienstkaart :kleur="$kleur" dienst="dag" :prijs="$prijs" foto="/foto.jpg" :kenmerken="['Draaiboek']">
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
             </x-dienstkaart>
-            BLADE, ['kleur' => $kleur]);
+            BLADE, ['kleur' => $kleur, 'prijs' => new Prijs(850, 21)]);
 
         expect($document->querySelector('article')?->getAttribute('class'))->toBe("folder f-{$kleur}")
             ->and($document->querySelector('.folder__body > p')?->getAttribute('class'))->toBe($eyebrow)
@@ -104,6 +106,22 @@ describe('dienstkaart', function () {
         'lila' => ['lila', 'eb eb--sm', 0, 'btn btn--a', '#401838'],
         'cream' => ['cream', 'eb eb--sm eb--grijs', 2, 'btn', '#C8AEC6'],
         'groen' => ['groen', 'eb eb--sm eb--lila', 2, 'btn btn--l', '#E0D0E0'],
+    ]);
+
+    test('a service card without a price has no price line', function (?string $href) {
+        $document = renderComponent(<<<'BLADE'
+            <x-dienstkaart kleur="lila" dienst="dag" :href="$href" foto="/foto.jpg">
+                <x-slot:soort>Soort</x-slot:soort>
+                <x-slot:titel>Titel</x-slot:titel>
+                <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
+            </x-dienstkaart>
+            BLADE, ['href' => $href]);
+
+        expect($document->querySelector('.folder__body'))->not->toBeNull()
+            ->and($document->querySelector('.price'))->toBeNull();
+    })->with([
+        'linkkaart' => ['/diensten#dagcoordinatie'],
+        'uitgebreide kaart' => [null],
     ]);
 
     test('a mirrored service card has its tab and photo on the right', function () {

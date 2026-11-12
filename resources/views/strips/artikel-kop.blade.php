@@ -20,7 +20,7 @@
         'author' => [
             '@type' => 'Person',
             'name' => config('vertrouwdag.bedrijf.eigenaar'),
-            'url' => route('over-mij'),
+            'url' => url('/over-mij'),
         ],
         'publisher' => [
             '@type' => 'Organization',

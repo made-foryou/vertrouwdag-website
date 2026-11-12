@@ -9,8 +9,12 @@
     kleur (lila, cream of groen) bepaalt alles wat per kaart verschilt:
     de achtergrond, de eyebrow, een gedempte prijsregel, het icoon, de
     kleur van de hartjes en de knop (zie App\Support\Dienstkleur). dienst
-    is de sleutel van de prijs in config/vertrouwdag.php. gespiegeld zet
-    het tabje en de foto rechts.
+    (dag, partial of full) markeert de bedragen, prijs is de vanaf-prijs
+    (App\Support\Prijs); zonder prijs heeft de kaart geen prijsregel.
+    gespiegeld zet het tabje en de foto rechts.
+
+    Zonder href is de omschrijving opgemaakte tekst uit het CMS, met een
+    eigen alinea. Daarom staat ze dan in een div en niet in een p.
 
     De foto is sfeer en heeft daarom een lege alt: de titel, omschrijving
     en prijs zeggen al wat de dienst is. Zo blijft ook de naam van de
@@ -22,6 +26,7 @@
 @props([
     'kleur',
     'dienst',
+    'prijs' => null,
     'foto',
     'href' => null,
     'draaiing' => 0,
@@ -43,7 +48,7 @@
         <h3 {{ $titel->attributes }}>{{ $titel }}</h3>
         @if ($href !== null)
             <p {{ $omschrijving->attributes->class(['folder__desc'])->merge(['style' => 'flex-grow:1']) }}>{{ $omschrijving }}</p>
-            <x-prijsregel :dienst="$dienst" :gedempt="$stijl->isGedempt()" />
+            <x-prijsregel :prijs="$prijs" :dienst="$dienst" :gedempt="$stijl->isGedempt()" />
             @switch ($kleur)
                 @case ('lila')
                     <svg class="folder__icon" width="34" height="31" aria-hidden="true" fill="none" stroke="#401838" stroke-width="1.2" style="transform:rotate(12deg)"><use href="#heart"/></svg>
@@ -56,8 +61,8 @@
                     @break
             @endswitch
         @else
-            <x-prijsregel :dienst="$dienst" :gedempt="$stijl->isGedempt()" />
-            <p {{ $omschrijving->attributes->class(['folder__desc']) }}>{{ $omschrijving }}</p>
+            <x-prijsregel :prijs="$prijs" :dienst="$dienst" :gedempt="$stijl->isGedempt()" />
+            <div {{ $omschrijving->attributes->class(['folder__desc']) }}>{{ $omschrijving }}</div>
             @if (count($kenmerken) > 0)
                 <ul class="hl">
                     @foreach ($kenmerken as $kenmerk)

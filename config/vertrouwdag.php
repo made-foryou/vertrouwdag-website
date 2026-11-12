@@ -36,19 +36,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Prijzen
+    | Btw
     |--------------------------------------------------------------------------
     |
-    | De vanaf-prijzen per dienst, in hele euro's exclusief btw. De site
-    | rekent zelf het bedrag inclusief btw uit met het btw-percentage.
+    | Romy zet de vanaf-prijzen exclusief btw in het CMS, in de strook
+    | pakketten op /diensten (#17). De site rekent zelf het bedrag
+    | inclusief btw uit met dit percentage.
     |
     */
-
-    'prijzen' => [
-        'dag' => 850,
-        'partial' => 1850,
-        'full' => 3500,
-    ],
 
     'btw_percentage' => 21,
 
@@ -153,19 +148,21 @@ return [
     | Navigatie
     |--------------------------------------------------------------------------
     |
-    | Per link de routenaam met het label. Een menulink is actief op zijn
-    | eigen route en op de routes eronder: Blog ook op blog.archief en
-    | blog.artikel. Het hoofdmenu komt later uit de paginaboom van het
-    | CMS (#19). De knop en de footerlinks blijven hier.
+    | Per link het pad met het label. Een pagina uit het CMS heeft geen
+    | routenaam, daarom zijn het paden. Een menulink is actief op zijn
+    | eigen pad en op de paden eronder: Blog ook op /blog/archief en de
+    | artikelen. Het hoofdmenu komt later uit de paginaboom van het CMS
+    | (#19). De knop en de footerlinks blijven hier. De knop is een
+    | routenaam, tot de kennismaking naar het CMS verhuist (#18).
     |
     */
 
     'menu' => [
-        'diensten' => 'Diensten',
-        'werkwijze' => 'Werkwijze',
-        'over-mij' => 'Over mij',
-        'blog' => 'Blog',
-        'veelgestelde-vragen' => 'Veelgestelde vragen',
+        '/diensten' => 'Diensten',
+        '/werkwijze' => 'Werkwijze',
+        '/over-mij' => 'Over mij',
+        '/blog' => 'Blog',
+        '/veelgestelde-vragen' => 'Veelgestelde vragen',
     ],
 
     'cta' => [
@@ -175,18 +172,18 @@ return [
 
     'footer' => [
         'paginas' => [
-            'diensten' => 'Diensten',
-            'werkwijze' => 'Werkwijze',
-            'over-mij' => 'Over mij',
-            'blog' => 'Blog',
-            'veelgestelde-vragen' => 'Veelgestelde vragen',
-            'checklist' => 'Gratis checklist',
-            'kennismaken' => 'Plan een kennismaking',
+            '/diensten' => 'Diensten',
+            '/werkwijze' => 'Werkwijze',
+            '/over-mij' => 'Over mij',
+            '/blog' => 'Blog',
+            '/veelgestelde-vragen' => 'Veelgestelde vragen',
+            '/checklist' => 'Gratis checklist',
+            '/kennismaken' => 'Plan een kennismaking',
         ],
         'juridisch' => [
-            'privacyverklaring' => 'Privacyverklaring',
-            'cookiebeleid' => 'Cookiebeleid',
-            'algemene-voorwaarden' => 'Algemene voorwaarden',
+            '/privacyverklaring' => 'Privacyverklaring',
+            '/cookiebeleid' => 'Cookiebeleid',
+            '/algemene-voorwaarden' => 'Algemene voorwaarden',
         ],
     ],
 

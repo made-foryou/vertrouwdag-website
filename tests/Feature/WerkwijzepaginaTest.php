@@ -1,7 +1,10 @@
 <?php
 
+use Database\Seeders\PaginasSeeder;
+
 beforeEach(function () {
     $this->withoutVite();
+    $this->seed(PaginasSeeder::class);
 });
 
 test('the process page responds with the title from the design', function () {
@@ -10,14 +13,14 @@ test('the process page responds with the title from the design', function () {
     expect($document->querySelector('title')?->textContent)->toBe('Werkwijze: zo plan ik jullie bruiloft | vertrouwdag');
 });
 
-test('every section of the process page is a strip, in the order of the design', function () {
-    $document = documentVoor('/werkwijze');
+test('the seeded process page comes from the cms with every strip in the order of the design', function () {
+    $this->get('/werkwijze')->assertOk()->assertViewIs('page');
 
-    expect(attributenVan($document->querySelectorAll('main > *'), 'data-cms-strip'))->toBe([
+    expect(striptypenOp('/werkwijze', documentVoor('/werkwijze')))->toBe([
         'hero-werkwijze',
         'tijdlijn',
         'trouwdag',
-        'tijdlijn-afronden',
+        'tijdlijn',
         'cta',
     ]);
 });
@@ -33,11 +36,17 @@ test('the process page numbers the phases one to six with the wedding day as the
             'Het draaiboek',
             'Afronden',
         ])
-        ->and(platteTekst($document->querySelector('[data-cms-strip="trouwdag"] h2')))->toBe('Wat jullie familie die dag doet');
+        ->and(platteTekst(strookVanType('/werkwijze', $document, 'trouwdag')?->querySelector('h2')))->toBe('Wat jullie familie die dag doet');
+});
+
+test('only the first timeline lies on the band', function () {
+    $document = documentVoor('/werkwijze');
+
+    expect(attributenVan($document->querySelectorAll('main > section:has(ol.tl)'), 'class'))->toBe(['band', null]);
 });
 
 test('the process hero links to the meeting and to the packages', function () {
     $document = documentVoor('/werkwijze');
 
-    expect(attributenVan($document->querySelectorAll('[data-cms-strip="hero-werkwijze"] a.btn'), 'href'))->toBe([route('kennismaken'), route('diensten')]);
+    expect(attributenVan(strookVanType('/werkwijze', $document, 'hero-werkwijze')?->querySelectorAll('a.btn'), 'href'))->toBe([route('kennismaken'), '/diensten']);
 });

@@ -2,7 +2,8 @@
     Strook: de trouwdag zelf als fase op de aubergine band, met briefjes
     over wie wat doet. Op mobiel zijn de briefjes een swipe-stapel.
 
-    Velden: nummer (het nummer van de fase; leeg geeft geen boogje),
+    Velden: nummer (het nummer van de fase; leeg of iets anders dan een
+    positief heel getal geeft geen boogje, want in het CMS is het tekst),
     label, kop (met accent), briefjes (lijst met wie en tekst) en
     slotzin. Kleur en draaiing horen bij de plek van het briefje en
     beginnen na het vierde opnieuw. Het boogje krijgt geen
@@ -10,6 +11,7 @@
     wijziging van het nummer herlaadt de frame.
 --}}
 @php
+    $nummer = filter_var(trim((string) $strip->nummer), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
     $briefjes = [
         ['kleur' => 'lila', 'draaiing' => -4],
         ['kleur' => 'cream', 'draaiing' => 3],
@@ -19,8 +21,8 @@
 @endphp
 <section class="band--aub" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:20px;text-align:center">
-        @if (filled($strip->nummer))
-            <x-fasenummer :nummer="$strip->nummer" groot data-reveal />
+        @if ($nummer !== false)
+            <x-fasenummer :nummer="$nummer" groot data-reveal />
         @endif
         <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
         <h2 data-reveal style="font-size:clamp(38px,5vw,66px)" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>

@@ -4,9 +4,6 @@ use App\Http\Controllers\BlogartikelController;
 use Illuminate\Support\Facades\Route;
 use Made\CmsPackage\Content\Models\Page;
 
-Route::view('/diensten', 'pages.diensten')->name('diensten');
-Route::view('/werkwijze', 'pages.werkwijze')->name('werkwijze');
-Route::view('/over-mij', 'pages.over-mij')->name('over-mij');
 Route::view('/blog', 'pages.blog')->name('blog');
 Route::view('/blog/archief', 'pages.archief')->name('blog.archief');
 Route::get('/blog/{slug}', BlogartikelController::class)->name('blog.artikel');

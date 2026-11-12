@@ -3,7 +3,9 @@
 namespace App\Cms\Strips;
 
 use App\Cms\Velden;
+use App\Support\Aanbod;
 use App\Support\Dienst;
+use App\Support\Prijs;
 use Made\CmsPackage\Content\Strips\Fields\Button;
 use Made\CmsPackage\Content\Strips\Fields\Choice;
 use Made\CmsPackage\Content\Strips\Fields\Items;
@@ -19,8 +21,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  * Het veld dienst kiest een van de drie diensten uit App\Support\Dienst.
  * Dat bepaalt de prijs, de kleur, de foto en het anker op /diensten, dus
  * verandert de volgorde, dan schuift de prijs mee met de dienst. De
- * prijzen komen uit config/vertrouwdag.php, dezelfde bron als op
- * /diensten, tot #17 kiest waar Romy ze wijzigt.
+ * prijzen staan in de strook pakketten op /diensten (#17); with() geeft
+ * ze als prijzen, per dienst.
  */
 final class Diensten extends StripType
 {
@@ -58,7 +60,7 @@ final class Diensten extends StripType
                 ])
                     ->required()
                     ->default(Dienst::Dag->value)
-                    ->hint('Bepaalt de prijs, de kleur, de foto en de map op Diensten.'),
+                    ->hint('Bepaalt de kleur, de foto en de map op Diensten. De prijs komt uit de pakketten op Diensten.'),
                 Text::make('soort')
                     ->required()
                     ->hint('Korte regel boven de titel.'),
@@ -75,5 +77,25 @@ final class Diensten extends StripType
                 ])
                 ->hint('Elke dienst één keer. De prijs hoort bij de dienst.'),
         ];
+    }
+
+    /**
+     * De vanaf-prijs per dienst, uit de strook pakketten op /diensten. Een
+     * dienst zonder (leesbare) prijs ontbreekt.
+     *
+     * @param  array<string, mixed>  $values
+     * @return array{prijzen: array<string, Prijs>}
+     */
+    public function with(array $values): array
+    {
+        $prijzen = [];
+
+        foreach (app(Aanbod::class)->pakketten() as $pakket) {
+            if ($pakket->prijs !== null) {
+                $prijzen[$pakket->dienst->value] = $pakket->prijs;
+            }
+        }
+
+        return ['prijzen' => $prijzen];
     }
 }
