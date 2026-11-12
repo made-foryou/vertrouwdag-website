@@ -152,8 +152,7 @@ return [
     | routenaam, daarom zijn het paden. Een menulink is actief op zijn
     | eigen pad en op de paden eronder: Blog ook op /blog/archief en de
     | artikelen. Het hoofdmenu komt later uit de paginaboom van het CMS
-    | (#19). De knop en de footerlinks blijven hier. De knop is een
-    | routenaam, tot de kennismaking naar het CMS verhuist (#18).
+    | (#19). De knop naar de kennismaking en de footerlinks blijven hier.
     |
     */
 
@@ -166,7 +165,7 @@ return [
     ],
 
     'cta' => [
-        'route' => 'kennismaken',
+        'pad' => '/kennismaken',
         'label' => 'Plan een kennismaking',
     ],
 

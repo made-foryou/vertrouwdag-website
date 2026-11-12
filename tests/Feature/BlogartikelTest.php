@@ -58,7 +58,7 @@ test('the article closes with the writer and an invitation to meet', function ()
     $document = documentVoor('/blog/wanneer-weddingplanner-inschakelen');
 
     expect($document->querySelector('[data-cms-strip="auteur"] a')?->getAttribute('href'))->toBe(url('/over-mij'))
-        ->and($document->querySelector('[data-cms-strip="kennismaking"] a.btn')?->getAttribute('href'))->toBe(route(config('vertrouwdag.cta.route')));
+        ->and($document->querySelector('[data-cms-strip="kennismaking"] a.btn')?->getAttribute('href'))->toBe(url(config('vertrouwdag.cta.pad')));
 });
 
 test('an article that is not online returns 404', function (array $blogs, string $adres) {

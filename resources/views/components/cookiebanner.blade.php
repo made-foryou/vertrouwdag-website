@@ -17,7 +17,7 @@
 @php
     $cookies = config('vertrouwdag.cookies');
     $keuzes = array_keys(array_filter($cookies['categorieen'], fn (array $categorie): bool => ! $categorie['verplicht']));
-    $link = '<a href="'.e(route('cookiebeleid')).'">'.e($cookies['cookiebeleid']).'</a>';
+    $link = '<a href="'.e(url('/cookiebeleid')).'">'.e($cookies['cookiebeleid']).'</a>';
 @endphp
 <div class="cookie" id="cookie" data-versie="{{ $cookies['versie'] }}" data-categorieen="{{ json_encode($keuzes) }}" hidden>
     <div class="cookie__box" role="dialog" aria-modal="false" aria-labelledby="ck-title" aria-describedby="ck-tekst" tabindex="-1">

@@ -64,7 +64,7 @@ test('the header links the logo home and the call to action to the configured ro
     foreach (['#site-nav a.btn', '.site-header__cta'] as $selector) {
         $button = $document->querySelector($selector);
 
-        expect($button?->getAttribute('href'))->toBe(route($cta['route']))
+        expect($button?->getAttribute('href'))->toBe(url($cta['pad']))
             ->and(trim($button->textContent))->toBe($cta['label']);
     }
 });

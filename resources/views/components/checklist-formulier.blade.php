@@ -21,7 +21,7 @@
     @if ($trouwdatum)
         <label class="field"><span class="eb eb--sm" style="color:#404830">Trouwdatum <span style="color:var(--grijs)">(optioneel)</span></span><input class="input" type="date" name="trouwdatum"></label>
     @endif
-    <label class="check"><input type="checkbox" name="avg" required><span>Ik ontvang de checklist en af en toe een mail van vertrouwdag. Afmelden kan altijd. Lees de <a href="{{ route('privacyverklaring') }}">privacyverklaring</a>.</span></label>
+    <label class="check"><input type="checkbox" name="avg" required><span>Ik ontvang de checklist en af en toe een mail van vertrouwdag. Afmelden kan altijd. Lees de <a href="{{ url('/privacyverklaring') }}">privacyverklaring</a>.</span></label>
     <div><x-knop type="submit">Stuur mij de checklist</x-knop></div>
     <p class="form-msg" role="status" hidden></p>
 </form>

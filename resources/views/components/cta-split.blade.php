@@ -27,6 +27,6 @@
         @if ($tekst)
             <p {{ $tekst->attributes }}>{{ $tekst }}</p>
         @endif
-        <div><x-knop :href="route(config('vertrouwdag.cta.route'))" variant="lila">{{ config('vertrouwdag.cta.label') }}</x-knop></div>
+        <div><x-knop :href="url(config('vertrouwdag.cta.pad'))" variant="lila">{{ config('vertrouwdag.cta.label') }}</x-knop></div>
     </div>
 </section>

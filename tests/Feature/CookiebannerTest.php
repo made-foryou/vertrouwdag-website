@@ -1,13 +1,14 @@
 <?php
 
 use Database\Seeders\HomepaginaSeeder;
+use Database\Seeders\PaginasSeeder;
 
 beforeEach(function () {
     $this->withoutVite();
 });
 
 test('every page has the hidden cookie banner as a labelled dialog between the skip link and the header', function (string $adres) {
-    $this->seed(HomepaginaSeeder::class);
+    $this->seed(PaginasSeeder::class);
 
     $document = documentVoor($adres);
 
@@ -47,7 +48,7 @@ test('the banner takes its title, text, policy link and buttons from the config'
 
     expect($document->getElementById('ck-title')?->textContent)->toBe('Koekjes?')
         ->and($tekst?->textContent)->toBe('Wij & jullie. Lees het beleid.')
-        ->and($tekst?->querySelector('a')?->getAttribute('href'))->toBe(route('cookiebeleid'))
+        ->and($tekst?->querySelector('a')?->getAttribute('href'))->toBe(url('/cookiebeleid'))
         ->and(tekstenVan($banner?->querySelectorAll('button[data-ck]')))->toBe(['Zelf kiezen', 'Nee', 'Ja', 'Bewaren']);
 });
 

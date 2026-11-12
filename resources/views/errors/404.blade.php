@@ -13,7 +13,7 @@
         Misschien is het adres veranderd, of zit er een typfout in. Geen zorgen, de weg terug is kort.
         <x-slot:knoppen>
             <x-knop :href="url('/')">Naar de homepage</x-knop>
-            <x-knop :href="route(config('vertrouwdag.cta.route'))" variant="secundair">{{ config('vertrouwdag.cta.label') }}</x-knop>
+            <x-knop :href="url(config('vertrouwdag.cta.pad'))" variant="secundair">{{ config('vertrouwdag.cta.label') }}</x-knop>
         </x-slot:knoppen>
     </x-foutmelding>
 </x-layouts::site>

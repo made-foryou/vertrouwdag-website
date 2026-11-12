@@ -4,6 +4,8 @@ use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\NodeList;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Made\CmsPackage\Content\Actions\PublishPage;
+use Made\CmsPackage\Content\Actions\UpdateStrip;
 use Made\CmsPackage\Content\Data\PagePath;
 use Made\CmsPackage\Content\Models\Page;
 use Tests\TestCase;
@@ -100,6 +102,40 @@ function strookVanType(string $adres, HTMLDocument $document, string $type): ?El
     $index = array_search($type, striptypenOp($adres, $document), true);
 
     return $index === false ? null : $document->querySelectorAll('main > *')->item($index);
+}
+
+/**
+ * Wijzigt de eerste strook van het type op de pagina op het adres, zoals een
+ * redacteur dat in de bewerkschil doet. De wijziging krijgt de waarden van
+ * de strook in het concept en geeft de velden terug die veranderen. Zonder
+ * publiceren staat de wijziging alleen in het concept.
+ *
+ * @param  Closure(array<string, mixed>): array<string, mixed>  $wijziging
+ */
+function wijzigStrook(string $adres, string $type, Closure $wijziging, bool $publiceren = true): void
+{
+    $pagina = Page::query()->atPath(PagePath::fromString($adres))->sole();
+    $strook = collect($pagina->draft_strips ?? $pagina->strips)->firstWhere('type', $type);
+
+    UpdateStrip::run($pagina, $strook['id'], $wijziging($strook['values']), chooseLevels: false);
+
+    if ($publiceren) {
+        PublishPage::run($pagina);
+    }
+}
+
+/**
+ * Wijzigt diensten in de strook pakketten op /diensten, zoals Romy dat in
+ * de bewerkschil doet: per dienst (dag, partial of full) de velden die
+ * veranderen. Zonder publiceren staat de wijziging alleen in het concept.
+ *
+ * @param  array<string, array<string, mixed>>  $wijzigingen
+ */
+function wijzigPakketten(array $wijzigingen, bool $publiceren = true): void
+{
+    wijzigStrook('/diensten', 'pakketten', fn (array $waarden): array => [
+        'diensten' => array_map(fn (array $item): array => [...$item, ...($wijzigingen[$item['dienst']] ?? [])], $waarden['diensten']),
+    ], $publiceren);
 }
 
 /**

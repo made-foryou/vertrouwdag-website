@@ -70,7 +70,7 @@
                     @endforeach
                 </ul>
             @endif
-            <x-knop :href="route(config('vertrouwdag.cta.route'))" :variant="$stijl->knopVariant()">{{ config('vertrouwdag.cta.label') }}</x-knop>
+            <x-knop :href="url(config('vertrouwdag.cta.pad'))" :variant="$stijl->knopVariant()">{{ config('vertrouwdag.cta.label') }}</x-knop>
         @endif
     </div>
 </{{ $element }}>

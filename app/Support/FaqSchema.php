@@ -5,9 +5,9 @@ namespace App\Support;
 /**
  * De veelgestelde vragen als FAQPage voor zoekmachines (schema.org).
  *
- * De strook faq bouwt dit uit dezelfde vragen die hij op de pagina zet,
- * zodat de gestructureerde gegevens nooit van de zichtbare vragen
- * afwijken. Een antwoord is opgemaakte tekst, zoals RichText van het
+ * De strook faq bouwt dit uit dezelfde vragen die hij op de pagina zet
+ * (with() in App\Cms\Strips\Faq), zodat de gestructureerde gegevens
+ * nooit van de zichtbare vragen afwijken. Een antwoord is opgemaakte tekst, zoals RichText van het
  * package hem levert; zoekmachines krijgen hem als platte tekst.
  */
 final class FaqSchema
