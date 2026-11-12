@@ -8,7 +8,7 @@
 --}}
 @use('App\Support\Blogcategorie')
 <section class="wrap stack" style="align-items:center;gap:20px;text-align:center;padding-top:72px;padding-bottom:40px" data-cms-strip="{{ $strip->id }}">
-    <x-kruimelpad :links="['Home' => route('home'), 'Blog' => route('blog')]" huidig="Archief" data-reveal />
+    <x-kruimelpad :links="['Home' => url('/'), 'Blog' => route('blog')]" huidig="Archief" data-reveal />
     <p class="eb" data-reveal data-cms-field="label">{{ $strip->label }}</p>
     <h1 class="display" data-reveal style="font-size:clamp(48px,7vw,104px);padding:0" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
     <p class="lead" data-reveal style="max-width:44ch" data-cms-field="tekst">{{ $strip->tekst }}</p>

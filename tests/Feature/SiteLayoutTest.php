@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\HomepaginaSeeder;
 use Dom\HTMLDocument;
 use Illuminate\Support\Facades\Vite;
 
@@ -36,6 +37,7 @@ test('the open graph description falls back to the description and the type to w
 test('the canonical points to the same path on the live address from the config, without the query string', function (string $url, string $canonical) {
     $this->withoutVite();
     config(['vertrouwdag.canonieke_url' => 'https://voorbeeld.nl/']);
+    $this->seed(HomepaginaSeeder::class);
 
     $document = documentVoor($url);
 
@@ -59,8 +61,9 @@ test('a page with noindex asks search engines to skip it and has no canonical', 
 test('the homepage loads nothing from an external domain', function () {
     // Forceer de gebouwde manifest, ook als de Vite-devserver lokaal draait.
     Vite::useHotFile(storage_path('framework/testing/geen-vite-devserver'));
+    $this->seed(HomepaginaSeeder::class);
 
-    $response = $this->get(route('home'));
+    $response = $this->get('/');
 
     $response->assertOk();
 

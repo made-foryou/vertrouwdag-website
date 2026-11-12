@@ -1,13 +1,16 @@
 <?php
 
+use Database\Seeders\HomepaginaSeeder;
 use Dom\Node;
 
 beforeEach(function () {
     $this->withoutVite();
 });
 
-test('every page shows the main menu with the right active link', function (string $page, ?string $activeRoute, array $parameters = []) {
-    $document = documentVoor(route($page, $parameters));
+test('every page shows the main menu with the right active link', function (string $adres, ?string $activeRoute) {
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor($adres);
     $menu = config('vertrouwdag.menu');
 
     $links = $document->querySelectorAll('#site-nav a:not(.btn)');
@@ -26,26 +29,28 @@ test('every page shows the main menu with the right active link', function (stri
 
     expect($document->querySelectorAll('header [aria-current]')->length)->toBeLessThanOrEqual(1);
 })->with([
-    'home' => ['home', null],
-    'diensten' => ['diensten', 'diensten'],
-    'werkwijze' => ['werkwijze', 'werkwijze'],
-    'over mij' => ['over-mij', 'over-mij'],
-    'blog' => ['blog', 'blog'],
-    'blogarchief' => ['blog.archief', 'blog'],
-    'blogartikel' => ['blog.artikel', 'blog', ['wanneer-weddingplanner-inschakelen']],
-    'veelgestelde vragen' => ['veelgestelde-vragen', 'veelgestelde-vragen'],
-    'checklist' => ['checklist', null],
-    'kennismaken' => ['kennismaken', null],
-    'privacyverklaring' => ['privacyverklaring', null],
-    'cookiebeleid' => ['cookiebeleid', null],
-    'algemene voorwaarden' => ['algemene-voorwaarden', null],
+    'home' => ['/', null],
+    'diensten' => ['/diensten', 'diensten'],
+    'werkwijze' => ['/werkwijze', 'werkwijze'],
+    'over mij' => ['/over-mij', 'over-mij'],
+    'blog' => ['/blog', 'blog'],
+    'blogarchief' => ['/blog/archief', 'blog'],
+    'blogartikel' => ['/blog/wanneer-weddingplanner-inschakelen', 'blog'],
+    'veelgestelde vragen' => ['/veelgestelde-vragen', 'veelgestelde-vragen'],
+    'checklist' => ['/checklist', null],
+    'kennismaken' => ['/kennismaken', null],
+    'privacyverklaring' => ['/privacyverklaring', null],
+    'cookiebeleid' => ['/cookiebeleid', null],
+    'algemene voorwaarden' => ['/algemene-voorwaarden', null],
 ]);
 
 test('the header links the logo home and the call to action to the configured route', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
     $cta = config('vertrouwdag.cta');
 
-    expect($document->querySelector('.site-header__logo')?->getAttribute('href'))->toBe(route('home'));
+    expect($document->querySelector('.site-header__logo')?->getAttribute('href'))->toBe(url('/'));
 
     foreach (['#site-nav a.btn', '.site-header__cta'] as $selector) {
         $button = $document->querySelector($selector);
@@ -56,7 +61,9 @@ test('the header links the logo home and the call to action to the configured ro
 });
 
 test('the header has a closed menu toggle for the mobile menu', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
 
     $toggle = $document->querySelector('button.nav-toggle');
 
@@ -69,7 +76,9 @@ test('the header has a closed menu toggle for the mobile menu', function () {
 });
 
 test('the menu follows its toggle so the tab key continues into the opened menu', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
 
     $toggle = $document->querySelector('button.nav-toggle');
     $menu = $document->getElementById('site-nav');
@@ -85,8 +94,9 @@ test('the footer and the floating button take the contact details from the confi
         'vertrouwdag.whatsapp.tekst' => 'Hoi! Een vraag?',
         'vertrouwdag.instagram' => 'https://www.instagram.com/test/',
     ]);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
     $whatsappUrl = 'https://wa.me/31600000000?text=Hoi%21%20Een%20vraag%3F';
 
     $mail = $document->querySelector('.site-footer a[href^="mailto:"]');
@@ -109,7 +119,9 @@ test('the footer and the floating button take the contact details from the confi
 });
 
 test('the footer links to the configured pages and legal pages and opens the cookie settings', function () {
-    $document = documentVoor(route('home'));
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
     $footer = config('vertrouwdag.footer');
 
     $pageLinks = $document->querySelectorAll('.site-footer nav a');
@@ -132,24 +144,27 @@ test('the footer links to the configured pages and legal pages and opens the coo
 
 test('the footer shows no chamber of commerce line while the number is empty', function () {
     config(['vertrouwdag.kvk' => null]);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
 
     expect($document->querySelector('.site-footer__bottom')?->textContent)->not->toContain('KvK');
 });
 
 test('the footer shows the chamber of commerce number once it is filled in', function () {
     config(['vertrouwdag.kvk' => '12345678']);
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
 
     expect($document->querySelector('.site-footer__bottom')?->textContent)->toContain('KvK 12345678');
 });
 
 test('the footer shows the current year', function () {
     $this->travelTo(now()->setDate(2031, 6, 1));
+    $this->seed(HomepaginaSeeder::class);
 
-    $document = documentVoor(route('home'));
+    $document = documentVoor('/');
 
     expect(preg_replace('/\s+/', ' ', $document->querySelector('.site-footer__bottom')?->textContent))
         ->toContain('© 2031 vertrouwdag');

@@ -187,7 +187,7 @@
 
     {{-- Kruimelpad en chips (archief.html en blog.html) --}}
     <section class="wrap stack" style="align-items:center;gap:20px;text-align:center;padding-top:72px;padding-bottom:72px">
-        <x-kruimelpad :links="['Home' => route('home'), 'Blog' => route('blog')]" huidig="Archief" data-reveal />
+        <x-kruimelpad :links="['Home' => url('/'), 'Blog' => route('blog')]" huidig="Archief" data-reveal />
         <p class="eb" data-reveal>Chips als links (blog)</p>
         <nav class="chips" aria-label="Onderwerpen" data-reveal>
             <x-chip :href="route('blog.archief')">Alles</x-chip>

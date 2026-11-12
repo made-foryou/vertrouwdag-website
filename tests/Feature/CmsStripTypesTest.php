@@ -48,9 +48,21 @@ function buitenLijsten(Element $strook, string $selector): ?Element
     return null;
 }
 
-test('the catalogue of the cms builds with every shared strip type', function (string $key) {
+test('the catalogue of the cms builds with the strip types of the homepage', function (string $key) {
     expect(app(StripTypes::class)->has($key))->toBeTrue();
-})->with(['cta', 'hero', 'lopende-band', 'reviews', 'stappen']);
+})->with([
+    'checklist-aanmelding',
+    'cta',
+    'diensten',
+    'herkenning',
+    'hero',
+    'leveranciers',
+    'lopende-band',
+    'over-mij-intro',
+    'reviews',
+    'stappen',
+    'twee-kolommen',
+]);
 
 test('every strip type of the cms renders its view with its default values', function (string $striptype) {
     $strook = strookMetStandaardwaarden(new $striptype);

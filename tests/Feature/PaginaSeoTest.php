@@ -1,9 +1,11 @@
 <?php
 
 use App\Support\Blogs;
+use Database\Seeders\HomepaginaSeeder;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as Router;
 use Illuminate\Support\Facades\Vite;
+use Made\CmsPackage\Content\Models\Page;
 
 /**
  * Per pagina: het pad, de titel, de omschrijving, de Open Graph-titel,
@@ -41,6 +43,8 @@ beforeEach(function () {
 });
 
 test('every page has its own title, description, canonical and open graph tags', function (string $pad, string $titel, string $omschrijving, string $ogTitel, ?string $ogOmschrijving, string $ogAfbeelding, string $ogType) {
+    $this->seed(HomepaginaSeeder::class);
+
     $document = documentVoor($pad);
 
     $canonical = 'https://vertrouwdag.nl'.$pad;
@@ -63,6 +67,7 @@ test('every page has its own title, description, canonical and open graph tags',
 })->with($paginas);
 
 test('no two pages share a title or a description', function () use ($paginas) {
+    $this->seed(HomepaginaSeeder::class);
     $titels = [];
     $omschrijvingen = [];
 
@@ -77,10 +82,12 @@ test('no two pages share a title or a description', function () use ($paginas) {
 });
 
 test('the pages above cover every page of the site, so a new page cannot skip these checks', function () use ($paginas) {
+    $this->seed(HomepaginaSeeder::class);
+
     /**
      * Adressen zonder vaste pagina voor bezoekers: de health check, de stijlgids (alleen lokaal, noindex) en de
-     * catch-all van het CMS. Die laatste serveert de pagina's uit het CMS; hun SEO komt uit dezelfde lijst
-     * (App\Support\PaginaSeo) en heeft een eigen test.
+     * catch-all van het CMS. Die laatste serveert de pagina's uit het CMS. Die tellen hieronder mee zoals de seeders
+     * ze zetten; hun SEO komt uit dezelfde lijst (App\Support\PaginaSeo).
      */
     $geenPagina = ['up', 'componenten', '{path?}'];
     $adressen = [];
@@ -107,6 +114,10 @@ test('the pages above cover every page of the site, so a new page cannot skip th
         }
 
         $adressen[] = '/'.ltrim($route->uri(), '/');
+    }
+
+    foreach (Page::query()->published()->with('route')->get() as $page) {
+        $adressen[] = $page->route->path;
     }
 
     $gedekt = array_column($paginas, 0);

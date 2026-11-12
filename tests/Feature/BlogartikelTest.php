@@ -32,7 +32,7 @@ test('the article takes its title, topic and reading time from its blog', functi
     expect(platteTekst($kop?->querySelector('h1')))->toBe('Een vroeg begin')
         ->and($kop?->querySelector('h1 em')?->textContent)->toBe('begin')
         ->and(platteTekst($kop?->querySelector('nav.crumbs')))->toBe('Home · Blog · Budget')
-        ->and(attributenVan($kop?->querySelectorAll('nav.crumbs a'), 'href'))->toBe([route('home'), route('blog')])
+        ->and(attributenVan($kop?->querySelectorAll('nav.crumbs a'), 'href'))->toBe([url('/'), route('blog')])
         ->and(tekstenVan($kop?->querySelectorAll('.row > span')))->toBe(['Budget', '9 min lezen']);
 });
 

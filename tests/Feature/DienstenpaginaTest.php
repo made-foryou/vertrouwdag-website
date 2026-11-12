@@ -1,5 +1,7 @@
 <?php
 
+use Database\Seeders\HomepaginaSeeder;
+
 beforeEach(function () {
     $this->withoutVite();
 });
@@ -29,6 +31,7 @@ test('the services page shows the three prices including and excluding vat', fun
 
 test('changing a price in the config changes it on the homepage, the services page and its description', function () {
     config(['vertrouwdag.prijzen.dag' => 1000]);
+    $this->seed(HomepaginaSeeder::class);
 
     $homepage = documentVoor('/');
     $diensten = documentVoor('/diensten');
@@ -56,6 +59,8 @@ test('the folders follow the tabs pattern with the first folder open', function 
 });
 
 test('every service link on the homepage opens a folder and a card on the services page', function () {
+    $this->seed(HomepaginaSeeder::class);
+
     $links = attributenVan(documentVoor('/')->querySelectorAll('.folders a.folder'), 'href');
     $ankers = array_map(fn (string $link): string => parse_url($link, PHP_URL_FRAGMENT), $links);
 

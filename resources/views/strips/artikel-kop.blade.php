@@ -34,7 +34,7 @@
 @endpush
 <header data-cms-strip="{{ $strip->id }}">
     <div class="art-head" data-reveal>
-        <x-kruimelpad :links="['Home' => route('home'), 'Blog' => route('blog')]" :huidig="$blog->categorie->label()" />
+        <x-kruimelpad :links="['Home' => url('/'), 'Blog' => route('blog')]" :huidig="$blog->categorie->label()" />
         <div class="row" style="gap:12px;justify-content:center">
             <span class="eb eb--sm pill-tag pill-tag--lila">{{ $blog->categorie->label() }}</span>
             @if ($blog->leestijd !== null)

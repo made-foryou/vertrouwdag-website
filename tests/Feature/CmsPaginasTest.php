@@ -44,7 +44,6 @@ test('a route of the site goes first, also when the cms has a published page at 
         ->assertViewIs($view)
         ->assertDontSee('Uit het');
 })->with([
-    'de homepage' => ['/', 'pages.home'],
     'diensten' => ['/diensten', 'pages.diensten'],
 ]);
 
