@@ -7,12 +7,6 @@ use Made\CmsPackage\Content\Models\Page;
 Route::view('/blog', 'pages.blog')->name('blog');
 Route::view('/blog/archief', 'pages.archief')->name('blog.archief');
 Route::get('/blog/{slug}', BlogartikelController::class)->name('blog.artikel');
-Route::view('/veelgestelde-vragen', 'pages.veelgestelde-vragen')->name('veelgestelde-vragen');
-Route::view('/checklist', 'pages.checklist')->name('checklist');
-Route::view('/kennismaken', 'pages.kennismaken')->name('kennismaken');
-Route::view('/privacyverklaring', 'pages.privacyverklaring')->name('privacyverklaring');
-Route::view('/cookiebeleid', 'pages.cookiebeleid')->name('cookiebeleid');
-Route::view('/algemene-voorwaarden', 'pages.algemene-voorwaarden')->name('algemene-voorwaarden');
 
 // Stijlgids met alle gedeelde componenten, alleen lokaal.
 if (app()->environment('local')) {

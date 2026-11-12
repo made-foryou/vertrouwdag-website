@@ -19,7 +19,7 @@ test('an unknown address shows the not found page in the layout of the site, hid
         ->and($document->querySelector('meta[name="robots"]')?->getAttribute('content'))->toBe('noindex')
         ->and($document->querySelector('link[rel="canonical"]'))->toBeNull()
         ->and(platteTekst($document->querySelector('main h1')))->toBe('Deze pagina is zoek')
-        ->and(attributenVan($document->querySelectorAll('main a.btn'), 'href'))->toBe([url('/'), route(config('vertrouwdag.cta.route'))])
+        ->and(attributenVan($document->querySelectorAll('main a.btn'), 'href'))->toBe([url('/'), url(config('vertrouwdag.cta.pad'))])
         ->and($document->querySelector('#site-nav'))->not->toBeNull();
 })->with([
     'an address without a route' => ['/bestaat-niet'],

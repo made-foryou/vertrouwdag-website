@@ -4,35 +4,11 @@ use Database\Seeders\PaginasSeeder;
 use Dom\HTMLDocument;
 use Made\CmsPackage\Access\Enums\Role;
 use Made\CmsPackage\Access\Models\Editor;
-use Made\CmsPackage\Content\Actions\PublishPage;
-use Made\CmsPackage\Content\Actions\UpdateStrip;
-use Made\CmsPackage\Content\Data\PagePath;
-use Made\CmsPackage\Content\Models\Page;
 
 beforeEach(function () {
     $this->withoutVite();
     $this->seed(PaginasSeeder::class);
 });
-
-/**
- * Wijzigt diensten in de strook pakketten op /diensten, zoals Romy dat in
- * de bewerkschil doet: per dienst (dag, partial of full) de velden die
- * veranderen. Zonder publiceren staat de wijziging alleen in het concept.
- *
- * @param  array<string, array<string, mixed>>  $wijzigingen
- */
-function wijzigPakketten(array $wijzigingen, bool $publiceren = true): void
-{
-    $pagina = Page::query()->atPath(PagePath::fromString('/diensten'))->sole();
-    $strook = collect($pagina->draft_strips ?? $pagina->strips)->firstWhere('type', 'pakketten');
-    $diensten = array_map(fn (array $item): array => [...$item, ...($wijzigingen[$item['dienst']] ?? [])], $strook['values']['diensten']);
-
-    UpdateStrip::run($pagina, $strook['id'], ['diensten' => $diensten], chooseLevels: false);
-
-    if ($publiceren) {
-        PublishPage::run($pagina);
-    }
-}
 
 test('the seeded services page comes from the cms with every strip in the order of the design', function () {
     $response = $this->get('/diensten');
@@ -72,7 +48,7 @@ test('changing a price in the packages changes it on the homepage, the services 
         ->and(tekstenVan($diensten->querySelectorAll('[data-prijs="dag"]')))->toBe(['€1.000', '€1.000', '€1.000'])
         ->and($diensten->querySelector('meta[name="description"]')?->getAttribute('content'))
         ->toBe('De Dag in handen (dagcoördinatie) vanaf €1.210, Hand in hand (gedeeltelijke planning) vanaf €2.238,50 en Helemaal in handen (full service) vanaf €4.235, inclusief btw. Vaste vanaf-prijzen, zodat jullie vooraf weten waar jullie aan toe zijn.')
-        ->and(tekstenVan($faq->querySelectorAll('[data-cms-field="antwoord"] [data-prijs-incl="dag"]')))->toBe(['€1.210']);
+        ->and(tekstenVan($faq->querySelectorAll('details.faq [data-prijs-incl="dag"]')))->toBe(['€1.210']);
 });
 
 test('a price in the draft shows in the edit mode, and only after publishing to visitors', function () {
@@ -104,7 +80,7 @@ test('a price that is no whole amount leaves out the price, but not the page', f
         ->and(tekstenVan($diensten->querySelectorAll('#vergelijk [data-prijs-incl]')))->toBe(['€1.028,50', '€4.235'])
         ->and($diensten->querySelector('meta[name="description"]')?->getAttribute('content'))
         ->toBe('Van dagcoördinatie tot full service: pakketten met een vaste vanaf-prijs, zodat jullie vooraf weten waar jullie aan toe zijn.')
-        ->and($faq->querySelector('[data-cms-field="antwoord"] [data-prijs-incl]'))->toBeNull();
+        ->and($faq->querySelector('details.faq [data-prijs-incl]'))->toBeNull();
 });
 
 test('the anchors of the folders stay when an editor renames a service', function () {
@@ -160,7 +136,7 @@ test('every service link on the homepage opens a folder and a card on the servic
 test('the hero links to the meeting and to the comparison', function () {
     $document = documentVoor('/diensten');
 
-    expect(attributenVan(strookVanType('/diensten', $document, 'hero-diensten')?->querySelectorAll('a.btn'), 'href'))->toBe([route('kennismaken'), '#vergelijk'])
+    expect(attributenVan(strookVanType('/diensten', $document, 'hero-diensten')?->querySelectorAll('a.btn'), 'href'))->toBe([url('/kennismaken'), '#vergelijk'])
         ->and($document->getElementById('vergelijk'))->toBe(strookVanType('/diensten', $document, 'vergelijking'));
 });
 

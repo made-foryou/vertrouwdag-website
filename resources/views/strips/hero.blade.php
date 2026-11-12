@@ -24,7 +24,7 @@
         <h1 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
         <p class="lead" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="row">
-            <x-knop :href="route(config('vertrouwdag.cta.route'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
+            <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
             @if ($strip->knop)
                 <x-knop :href="$strip->knop['url']" variant="secundair" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop>
             @endif

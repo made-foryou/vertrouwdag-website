@@ -84,7 +84,7 @@ describe('dienstkaart', function () {
             ->and($body->querySelector('div.folder__desc > p > strong')?->textContent)->toBe('Voor stellen')
             ->and(platteTekst($body->querySelector('ul.hl li:last-child')))->toBe('Afstemming met leveranciers')
             ->and($body->querySelector('.folder__icon'))->toBeNull()
-            ->and($knop?->getAttribute('href'))->toBe(route(config('vertrouwdag.cta.route')))
+            ->and($knop?->getAttribute('href'))->toBe(url(config('vertrouwdag.cta.pad')))
             ->and(platteTekst($knop))->toBe(config('vertrouwdag.cta.label'));
     });
 
@@ -362,7 +362,7 @@ describe('cta-split', function () {
             ->and($blok?->querySelector('h2[data-cms-field="kop"] em')?->textContent)->toBe('vraag?')
             ->and($blok?->querySelector('.cta-split__txt p, .cta-split__txt svg'))->toBeNull()
             ->and($blok?->querySelector('.cta-split__photo')?->hasAttribute('style'))->toBeFalse()
-            ->and($knop?->getAttribute('href'))->toBe(route(config('vertrouwdag.cta.route')))
+            ->and($knop?->getAttribute('href'))->toBe(url(config('vertrouwdag.cta.pad')))
             ->and(platteTekst($knop))->toBe(config('vertrouwdag.cta.label'));
     });
 
@@ -462,7 +462,7 @@ describe('checklist-formulier', function () {
         expect(attributenVan($formulier?->querySelectorAll('input[required]'), 'name'))->toBe(['voornaam', 'email', 'avg'])
             ->and($formulier?->querySelector('input[name="email"]')?->getAttribute('type'))->toBe('email')
             ->and($formulier?->querySelector('input[name="trouwdatum"]'))->toBeNull()
-            ->and($formulier?->querySelector('.check a')?->getAttribute('href'))->toBe(route('privacyverklaring'))
+            ->and($formulier?->querySelector('.check a')?->getAttribute('href'))->toBe(url('/privacyverklaring'))
             ->and(platteTekst($formulier?->querySelector('.check')))->toBe('Ik ontvang de checklist en af en toe een mail van vertrouwdag. Afmelden kan altijd. Lees de privacyverklaring.')
             ->and($formulier?->querySelector('button[type="submit"]')?->textContent)->toBe('Stuur mij de checklist')
             ->and($formulier?->getAttribute('data-bedankt'))->not->toBeEmpty()

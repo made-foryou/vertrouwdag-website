@@ -21,6 +21,10 @@ use Made\CmsPackage\Content\Models\Route;
  * de seeder alleen het type. Een type dat op meer pagina's staat (cta,
  * lopende-band, tijdlijn) krijgt hier de waarden die afwijken.
  *
+ * Een pagina staat in het menu, tenzij inMenu() anders zegt. Dat geldt
+ * voor de pagina's die het menu in config/vertrouwdag.php niet noemt,
+ * zoals de kennismaking en de juridische pagina's (#18).
+ *
  * Staat er al een pagina op het adres, dan doet de seeder niets: wat een
  * redacteur wijzigde, gaat nooit verloren (besluit Menno, 2026-11-11, zie
  * #16). Opnieuw beginnen kan lokaal met migrate:fresh --seed.
@@ -44,6 +48,14 @@ abstract class PaginaSeeder extends Seeder
      * @return list<array{0: string, 1?: array<string, mixed>}>
      */
     abstract protected function stroken(): array;
+
+    /**
+     * Of de pagina in het menu staat.
+     */
+    protected function inMenu(): bool
+    {
+        return true;
+    }
 
     public function run(): void
     {
@@ -70,10 +82,10 @@ abstract class PaginaSeeder extends Seeder
 
     /**
      * Maakt de lege pagina: bovenaan in de paginaboom, na de pagina's die
-     * er al staan, en in het menu.
+     * er al staan, en in het menu als inMenu() dat zegt.
      */
     protected function maakPagina(PagePath $adres): Page
     {
-        return CreatePage::run(new NewPage(title: $this->titel(), slug: basename($adres->value), parentId: null));
+        return CreatePage::run(new NewPage(title: $this->titel(), slug: basename($adres->value), parentId: null, inMenu: $this->inMenu()));
     }
 }

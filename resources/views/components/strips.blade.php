@@ -4,8 +4,9 @@
 
     Dit doet hetzelfde als <x-made-cms::strips> uit het package, dat de
     pagina's uit het CMS rendert (page.blade.php). Dit component is voor
-    de vaste pagina's: verhuist een pagina naar het CMS (#16 t/m #18),
-    dan neemt dat component het over en blijven de strip-views gelijk.
+    de vaste pagina's die nog over zijn, de blog en het artikel: verhuizen
+    die naar het CMS (#20), dan neemt dat component het over en blijven de
+    strip-views gelijk.
 --}}
 @props([
     'strips',

@@ -1,7 +1,10 @@
 <?php
 
+use Database\Seeders\PaginasSeeder;
+
 beforeEach(function () {
     $this->withoutVite();
+    $this->seed(PaginasSeeder::class);
 });
 
 test('the acquaintance page responds with the title and description from the design', function () {
@@ -12,18 +15,17 @@ test('the acquaintance page responds with the title and description from the des
         ->toBe('Plan een vrijblijvend kennismakingsgesprek van 30 minuten, online of op locatie. Vertel over jullie plannen, ik vertel hoe ik kan helpen.');
 });
 
-test('every section of the acquaintance page is a strip, in the order of the design', function () {
-    $document = documentVoor('/kennismaken');
+test('the seeded acquaintance page comes from the cms with every strip in the order of the design', function () {
+    $this->get('/kennismaken')->assertOk()->assertViewIs('page');
 
-    expect(attributenVan($document->querySelectorAll('main > *'), 'data-cms-strip'))->toBe([
+    expect(striptypenOp('/kennismaken', documentVoor('/kennismaken')))->toBe([
         'hero-kennismaken',
         'contact',
     ]);
 });
 
 test('the acquaintance page shows the three steps of the conversation in order', function () {
-    $document = documentVoor('/kennismaken');
-    $hero = $document->querySelector('[data-cms-strip="hero-kennismaken"]');
+    $hero = strookVanType('/kennismaken', documentVoor('/kennismaken'), 'hero-kennismaken');
 
     expect(platteTekst($hero?->querySelector('h1')))->toBe('Zullen we kennismaken?')
         ->and(tekstenVan($hero?->querySelectorAll('ol.mini-steps[data-cms-items="stappen"] > li > span')))->toBe(['1', '2', '3'])
@@ -89,7 +91,8 @@ test('the notes in the contact band link to WhatsApp, mail and Instagram from th
     ]);
 
     $document = documentVoor('/kennismaken');
-    $briefjes = $document->querySelectorAll('[data-cms-strip="contact"] .contact-notes > a.note');
+    $contact = strookVanType('/kennismaken', $document, 'contact');
+    $briefjes = $contact?->querySelectorAll('.contact-notes > a.note');
 
     expect(attributenVan($briefjes, 'href'))->toBe([
         'https://wa.me/31600000000?text=Hoi%20%26%20dag',
@@ -97,7 +100,7 @@ test('the notes in the contact band link to WhatsApp, mail and Instagram from th
         'https://www.instagram.com/test/',
     ])
         ->and(attributenVan($briefjes, 'target'))->toBe(['_blank', null, '_blank'])
-        ->and(tekstenVan($document->querySelectorAll('[data-cms-strip="contact"] .contact-notes__big')))->toBe([
+        ->and(tekstenVan($contact?->querySelectorAll('.contact-notes__big')))->toBe([
             '"Hoi Romy, wij gaan trouwen..."',
             'test@voorbeeld.nl',
             'Stuur een DM naar @vertrouwdag',

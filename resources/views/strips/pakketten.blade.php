@@ -82,7 +82,7 @@
                             <div class="tf__foot">
                                 <x-prijsregel class="tf__price" :prijs="$dienst['prijs']" :dienst="$dienst['welkeDienst']->value" :gedempt="$dienst['kleur']->isGedempt()" />
                             </div>
-                            <div class="tf__cta"><x-knop :href="route(config('vertrouwdag.cta.route'))" :variant="$dienst['kleur']->knopVariant()">{{ config('vertrouwdag.cta.label') }}</x-knop></div>
+                            <div class="tf__cta"><x-knop :href="url(config('vertrouwdag.cta.pad'))" :variant="$dienst['kleur']->knopVariant()">{{ config('vertrouwdag.cta.label') }}</x-knop></div>
                         </div>
                     </article>
                 @endforeach

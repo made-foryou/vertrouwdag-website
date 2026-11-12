@@ -11,6 +11,6 @@
             <h2 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
             <p style="font-size:19px" data-cms-field="tekst">{{ $strip->tekst }}</p>
         </div>
-        <x-knop :href="route(config('vertrouwdag.cta.route'))" variant="lila">{{ config('vertrouwdag.cta.label') }}</x-knop>
+        <x-knop :href="url(config('vertrouwdag.cta.pad'))" variant="lila">{{ config('vertrouwdag.cta.label') }}</x-knop>
     </div>
 </section>

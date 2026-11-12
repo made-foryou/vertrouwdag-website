@@ -48,5 +48,5 @@ test('only the first timeline lies on the band', function () {
 test('the process hero links to the meeting and to the packages', function () {
     $document = documentVoor('/werkwijze');
 
-    expect(attributenVan(strookVanType('/werkwijze', $document, 'hero-werkwijze')?->querySelectorAll('a.btn'), 'href'))->toBe([route('kennismaken'), '/diensten']);
+    expect(attributenVan(strookVanType('/werkwijze', $document, 'hero-werkwijze')?->querySelectorAll('a.btn'), 'href'))->toBe([url('/kennismaken'), '/diensten']);
 });

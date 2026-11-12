@@ -9,8 +9,9 @@
     (opgemaakte tekst, optioneel). De opgemaakte tekst wordt ongeëscapet
     geprint, zoals de tekst van artikel-tekst.
 
-    RichText van het package kent geen tussenkoppen, daarom is een
-    tussenkop het veld kop van een sectie en wordt hij een echte <h2>.
+    RichText van het package kent geen tussenkoppen (een <h2> wordt daar
+    gewone tekst), daarom is een tussenkop het veld kop van een sectie en
+    wordt hij een echte <h2>.
     De veldwrappers hebben display:contents, zodat de alinea's en koppen
     de opmaak van .legal .prose houden.
 --}}

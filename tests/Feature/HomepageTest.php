@@ -87,7 +87,7 @@ test('every text on the homepage is a field of the cms, except the listed except
 
     $uitzonderingen = implode(', ', [
         '[aria-hidden="true"]',
-        'a[href="'.route(config('vertrouwdag.cta.route')).'"]',
+        'a[href="'.url(config('vertrouwdag.cta.pad')).'"]',
         '.price',
         '.step__nr',
         'form .field',
@@ -202,7 +202,7 @@ test('the homepage links its buttons to the right pages', function () {
 
     $document = documentVoor('/');
 
-    expect(attributenVan($document->querySelectorAll('main > :first-child a.btn'), 'href'))->toBe([route('kennismaken'), '/diensten'])
+    expect(attributenVan($document->querySelectorAll('main > :first-child a.btn'), 'href'))->toBe([url('/kennismaken'), '/diensten'])
         ->and($document->querySelector('.folders ~ * a.btn')?->getAttribute('href'))->toBe('/diensten')
         ->and($document->querySelector('.steps')?->parentElement?->querySelector('a.btn')?->getAttribute('href'))->toBe('/werkwijze')
         ->and($document->querySelector('.about a.btn')?->getAttribute('href'))->toBe('/over-mij');

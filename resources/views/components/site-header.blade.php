@@ -9,8 +9,8 @@
             @foreach (config('vertrouwdag.menu') as $pad => $label)
                 <a href="{{ url($pad) }}" @if (request()->is(ltrim($pad, '/'), ltrim($pad, '/').'/*')) aria-current="page" @endif>{{ $label }}</a>
             @endforeach
-            <x-knop :href="route(config('vertrouwdag.cta.route'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
+            <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
         </nav>
-        <x-knop :href="route(config('vertrouwdag.cta.route'))" klein class="site-header__cta">{{ config('vertrouwdag.cta.label') }}</x-knop>
+        <x-knop :href="url(config('vertrouwdag.cta.pad'))" klein class="site-header__cta">{{ config('vertrouwdag.cta.label') }}</x-knop>
     </div>
 </header>

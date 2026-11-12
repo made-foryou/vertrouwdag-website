@@ -29,11 +29,11 @@
     <section class="wrap sec stack" style="gap:24px">
         <p class="eb" data-reveal>Knoppen</p>
         <div class="row" data-reveal-group>
-            <x-knop :href="route('kennismaken')">Primair</x-knop>
+            <x-knop :href="url('/kennismaken')">Primair</x-knop>
             <x-knop :href="url('/diensten')" variant="secundair">Secundair</x-knop>
-            <x-knop :href="route('kennismaken')" variant="lila">Lila</x-knop>
-            <x-knop :href="route('kennismaken')" variant="aubergine">Aubergine</x-knop>
-            <x-knop :href="route('kennismaken')" klein>Klein</x-knop>
+            <x-knop :href="url('/kennismaken')" variant="lila">Lila</x-knop>
+            <x-knop :href="url('/kennismaken')" variant="aubergine">Aubergine</x-knop>
+            <x-knop :href="url('/kennismaken')" klein>Klein</x-knop>
             <x-knop type="submit">Stuur mij de checklist</x-knop>
             <x-knop variant="secundair" data-cookie-open>Cookie-instellingen openen</x-knop>
         </div>
@@ -74,7 +74,7 @@
                 </x-briefje>
             </div>
             <x-stapel-bolletjes :aantal="4" />
-            <x-knop :href="route('kennismaken')" variant="lila" style="margin-top:10px">Plan een kennismaking</x-knop>
+            <x-knop :href="url('/kennismaken')" variant="lila" style="margin-top:10px">Plan een kennismaking</x-knop>
         </div>
     </section>
 

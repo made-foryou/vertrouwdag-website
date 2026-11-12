@@ -309,13 +309,37 @@ test('the FAQ strip opens only its first question and prints the answer as forma
     ];
 
     $document = renderStrip('faq', ['label' => 'Alle vragen', 'vragen' => $vragen]);
-    $details = $document->querySelectorAll('.faq-box[data-cms-items="vragen"] > details.faq');
+    $details = $document->querySelectorAll('.faq-box > [data-cms-items="vragen"] > details.faq');
 
-    expect($document->querySelector('.faq-box__tab')?->textContent)->toBe('Alle vragen')
+    expect($document->querySelector('.faq-box > .faq-box__tab')?->textContent)->toBe('Alle vragen')
+        ->and($document->querySelector('[data-cms-items="vragen"]')?->childElementCount)->toBe(2)
         ->and($details)->toHaveCount(2)
         ->and($details->item(0)->hasAttribute('open'))->toBeTrue()
         ->and($details->item(1)->hasAttribute('open'))->toBeFalse()
         ->and($details->item(0)->querySelector('[data-cms-field="antwoord"] > p > a')?->getAttribute('href'))->toBe('/diensten');
+});
+
+test('the FAQ strip puts the sentence with the prices above the answers that ask for it, outside the answer', function () {
+    $vragen = [
+        ['id' => null, 'vraag' => 'Wat kost het?', 'antwoord' => '<p>Een vaste prijs.</p>', 'prijzen' => 'noemen'],
+        ['id' => null, 'vraag' => 'Wat als het regent?', 'antwoord' => '<p>Plan B.</p>', 'prijzen' => null],
+    ];
+
+    $document = renderStrip('faq', ['label' => 'Alle vragen', 'vragen' => $vragen, 'prijzenzin' => 'Dag begint bij <span data-prijs-incl="dag">€1.028,50</span>.']);
+    $details = $document->querySelectorAll('details.faq');
+
+    expect(platteTekst($details->item(0)->querySelector('summary + p')))->toBe('Dag begint bij €1.028,50.')
+        ->and($details->item(0)->querySelector('summary + p')?->hasAttribute('data-cms-field'))->toBeFalse()
+        ->and(platteTekst($details->item(0)->querySelector('[data-cms-field="antwoord"]')))->toBe('Een vaste prijs.')
+        ->and($details->item(1)->querySelector('summary + p'))->toBeNull();
+});
+
+test('the FAQ strip shows no sentence with the prices when there is none', function () {
+    $vragen = [['id' => null, 'vraag' => 'Wat kost het?', 'antwoord' => '<p>Een vaste prijs.</p>', 'prijzen' => 'noemen']];
+
+    $document = renderStrip('faq', ['label' => 'Alle vragen', 'vragen' => $vragen, 'prijzenzin' => null]);
+
+    expect($document->querySelector('details.faq summary + p'))->toBeNull();
 });
 
 test('the notes of the FAQ hero start again with the first colour after the third', function () {
