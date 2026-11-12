@@ -7,7 +7,9 @@
     - variant: leeg, of band voor de salie achtergrond.
     - eerste_nummer: het nummer van de eerste fase, standaard 1. Zo loopt
       de nummering door als de tijdlijn na een andere strook verdergaat,
-      zoals "Afronden" (6) na de trouwdag (5) op /werkwijze.
+      zoals "Afronden" (6) na de trouwdag (5) op /werkwijze. In het CMS is
+      het tekst (er is nog geen veld voor een getal); alleen een positief
+      heel getal telt, anders begint de tijdlijn bij 1.
 --}}
 @php
     $opBand = match ($strip->variant) {
@@ -15,7 +17,7 @@
         'band' => true,
         default => throw new InvalidArgumentException("De strook tijdlijn kent geen variant [{$strip->variant}]; laat hem leeg of kies band."),
     };
-    $eersteNummer = (int) ($strip->eerste_nummer ?? 1);
+    $eersteNummer = filter_var(trim((string) $strip->eerste_nummer), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'default' => 1]]);
 @endphp
 <section @if ($opBand) class="band" @endif data-cms-strip="{{ $strip->id }}">
     <ol class="tl wrap sec" style="max-width:1040px" @if ($eersteNummer !== 1) start="{{ $eersteNummer }}" @endif data-cms-items="fases">

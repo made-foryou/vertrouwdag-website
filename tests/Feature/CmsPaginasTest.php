@@ -44,7 +44,7 @@ test('a route of the site goes first, also when the cms has a published page at 
         ->assertViewIs($view)
         ->assertDontSee('Uit het');
 })->with([
-    'diensten' => ['/diensten', 'pages.diensten'],
+    'veelgestelde vragen' => ['/veelgestelde-vragen', 'pages.veelgestelde-vragen'],
 ]);
 
 test('a published page of the cms shows its strips in the layout of the site', function () {

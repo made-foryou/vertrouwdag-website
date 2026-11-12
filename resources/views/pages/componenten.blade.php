@@ -2,7 +2,14 @@
     Stijlgids met alle gedeelde componenten en het gedrag uit het ontwerp,
     met de inhoud van de pagina's waar ze vandaan komen. Alleen lokaal
     bereikbaar op /componenten (zie routes/web.php).
+
+    De prijzen zijn voorbeelden. Op de site komen ze uit de strook
+    pakketten op /diensten (App\Support\Aanbod).
 --}}
+@use('App\Support\Prijs')
+@php
+    $prijzen = ['dag' => Prijs::uitTekst('850'), 'partial' => Prijs::uitTekst('1850'), 'full' => Prijs::uitTekst('3500')];
+@endphp
 <x-layouts::site
     title="Componenten | vertrouwdag"
     description="Alle gedeelde componenten van de site op één pagina. Alleen lokaal."
@@ -23,7 +30,7 @@
         <p class="eb" data-reveal>Knoppen</p>
         <div class="row" data-reveal-group>
             <x-knop :href="route('kennismaken')">Primair</x-knop>
-            <x-knop :href="route('diensten')" variant="secundair">Secundair</x-knop>
+            <x-knop :href="url('/diensten')" variant="secundair">Secundair</x-knop>
             <x-knop :href="route('kennismaken')" variant="lila">Lila</x-knop>
             <x-knop :href="route('kennismaken')" variant="aubergine">Aubergine</x-knop>
             <x-knop :href="route('kennismaken')" klein>Klein</x-knop>
@@ -34,12 +41,12 @@
 
     {{-- Prijzen --}}
     <section class="wrap sec stack" style="gap:24px">
-        <p class="eb" data-reveal>Prijzen uit config/vertrouwdag.php</p>
-        <p data-reveal style="font-size:21px">De Dag in handen begint bij <x-prijs dienst="dag" /> (<x-prijs dienst="dag" excl /> excl. btw), Hand in hand bij <x-prijs dienst="partial" /> en Helemaal in handen bij <x-prijs dienst="full" />, steeds inclusief {{ config('vertrouwdag.btw_percentage') }}% btw.</p>
+        <p class="eb" data-reveal>Prijzen (voorbeeld)</p>
+        <p data-reveal style="font-size:21px">De Dag in handen begint bij <x-prijs :prijs="$prijzen['dag']" dienst="dag" /> (<x-prijs :prijs="$prijzen['dag']" dienst="dag" excl /> excl. btw), Hand in hand bij <x-prijs :prijs="$prijzen['partial']" dienst="partial" /> en Helemaal in handen bij <x-prijs :prijs="$prijzen['full']" dienst="full" />, steeds inclusief {{ config('vertrouwdag.btw_percentage') }}% btw.</p>
         <div class="row" data-reveal-group style="gap:48px">
-            <x-prijsregel dienst="dag" />
-            <x-prijsregel dienst="partial" gedempt />
-            <x-prijsregel dienst="full" gedempt />
+            <x-prijsregel :prijs="$prijzen['dag']" dienst="dag" />
+            <x-prijsregel :prijs="$prijzen['partial']" dienst="partial" gedempt />
+            <x-prijsregel :prijs="$prijzen['full']" dienst="full" gedempt />
         </div>
     </section>
 
@@ -79,17 +86,17 @@
                 <h2 class="h-xl">Mijn <em>diensten</em></h2>
             </div>
             <div class="folders" data-deck data-reveal-group>
-                <x-dienstkaart kleur="lila" dienst="dag" :href="route('diensten').'#dagcoordinatie'" :foto="Vite::asset('resources/images/schoenen-boeket.jpg')" :draaiing="-4">
+                <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijzen['dag']" :href="url('/diensten').'#dagcoordinatie'" :foto="Vite::asset('resources/images/schoenen-boeket.jpg')" :draaiing="-4">
                     <x-slot:soort>Dagcoördinatie</x-slot:soort>
                     <x-slot:titel>De Dag in handen</x-slot:titel>
                     <x-slot:omschrijving>Jullie plannen, ik neem het zes weken ervoor over en ben op de dag het aanspreekpunt.</x-slot:omschrijving>
                 </x-dienstkaart>
-                <x-dienstkaart kleur="cream" dienst="partial" :href="route('diensten').'#partial-planning'" :foto="Vite::asset('resources/images/hand-in-hand-paar.jpg')" :draaiing="4" gespiegeld>
+                <x-dienstkaart kleur="cream" dienst="partial" :prijs="$prijzen['partial']" :href="url('/diensten').'#partial-planning'" :foto="Vite::asset('resources/images/hand-in-hand-paar.jpg')" :draaiing="4" gespiegeld>
                     <x-slot:soort>Gedeeltelijke planning</x-slot:soort>
                     <x-slot:titel>Hand in hand</x-slot:titel>
                     <x-slot:omschrijving>Locatie staat al? Ik help met leveranciers, planning en budget, en coördineer de dag.</x-slot:omschrijving>
                 </x-dienstkaart>
-                <x-dienstkaart kleur="groen" dienst="full" :href="route('diensten').'#full-service'" :foto="Vite::asset('resources/images/sleep-jurk.jpg')" :draaiing="-3">
+                <x-dienstkaart kleur="groen" dienst="full" :prijs="$prijzen['full']" :href="url('/diensten').'#full-service'" :foto="Vite::asset('resources/images/sleep-jurk.jpg')" :draaiing="-3">
                     <x-slot:soort>Full service</x-slot:soort>
                     <x-slot:titel>Helemaal in handen</x-slot:titel>
                     <x-slot:omschrijving>Van de eerste locatiebezichtiging tot de dag erna. Jullie kiezen, ik regel de rest.</x-slot:omschrijving>
@@ -126,7 +133,7 @@
     <section class="wrap sec stack" style="gap:56px">
         <div class="werk-head" data-reveal>
             <div class="stack werk-head__txt"><p class="eb">Stapkaarten</p><h2 class="h-l">Vier stappen <em>naar ja</em></h2></div>
-            <x-knop :href="route('werkwijze')" variant="secundair">Zo werk ik</x-knop>
+            <x-knop :href="url('/werkwijze')" variant="secundair">Zo werk ik</x-knop>
         </div>
         <ol class="steps" data-reveal-group>
             <x-stapkaart nummer="1" kleur="lila"><x-slot:titel>Kennismaken</x-slot:titel><x-slot:tekst>Een half uur online. Jullie vertellen, ik luister.</x-slot:tekst></x-stapkaart>
@@ -180,7 +187,7 @@
             </x-faq-item>
             <x-faq-item>
                 <x-slot:vraag>Wat kost een weddingplanner?</x-slot:vraag>
-                <x-slot:antwoord><p>De Dag in handen (dagcoördinatie) begint bij <x-prijs dienst="dag" />, Hand in hand (gedeeltelijke planning) bij <x-prijs dienst="partial" /> en Helemaal in handen (full service) bij <x-prijs dienst="full" />, steeds inclusief {{ config('vertrouwdag.btw_percentage') }}% btw. Bekijk <a href="{{ route('diensten') }}">alle diensten</a>.</p></x-slot:antwoord>
+                <x-slot:antwoord><p>De Dag in handen (dagcoördinatie) begint bij <x-prijs :prijs="$prijzen['dag']" dienst="dag" />, Hand in hand (gedeeltelijke planning) bij <x-prijs :prijs="$prijzen['partial']" dienst="partial" /> en Helemaal in handen (full service) bij <x-prijs :prijs="$prijzen['full']" dienst="full" />, steeds inclusief {{ config('vertrouwdag.btw_percentage') }}% btw. Bekijk <a href="{{ url('/diensten') }}">alle diensten</a>.</p></x-slot:antwoord>
             </x-faq-item>
         </div>
     </section>

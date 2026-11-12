@@ -39,7 +39,7 @@
         new Strip('auteur', 'auteur', [
             'label' => 'Geschreven door Romy',
             'tekst' => 'Weddingplanner in Zuid-Holland en de planner achter vertrouwdag.',
-            'link' => ['text' => 'Meer over mij', 'url' => route('over-mij')],
+            'link' => ['text' => 'Meer over mij', 'url' => url('/over-mij')],
         ]),
     ];
 

@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\DienstenpaginaSeeder;
 use Dom\HTMLDocument;
 
 beforeEach(function () {
@@ -71,13 +72,19 @@ test('the structured data has the same questions and answers as the page', funct
         ->and($zichtbaar)->toHaveCount(11);
 });
 
-test('the answer about the costs shows the prices including VAT from the config, on the page and in the structured data', function () {
-    config()->set('vertrouwdag.prijzen', ['dag' => 1000, 'partial' => 2000, 'full' => 3000]);
+test('the answer about the costs names no amounts while the services page is not in the cms', function () {
+    $antwoord = documentVoor('/veelgestelde-vragen')->querySelectorAll('[data-cms-strip="faq"] details.faq')->item(1)->querySelector('[data-cms-field="antwoord"]');
+
+    expect(platteTekst($antwoord))->toBe('Na de kennismaking krijgen jullie een voorstel met een vaste prijs. Bekijk wat er in elk pakket zit.');
+});
+
+test('the answer about the costs shows the prices including VAT from the packages, on the page and in the structured data', function () {
+    $this->seed(DienstenpaginaSeeder::class);
     config()->set('vertrouwdag.btw_percentage', 9);
 
     $document = documentVoor('/veelgestelde-vragen');
     $antwoord = $document->querySelectorAll('[data-cms-strip="faq"] details.faq')->item(1)->querySelector('[data-cms-field="antwoord"]');
-    $verwacht = 'De Dag in handen (dagcoördinatie) begint bij €1.090, Hand in hand (gedeeltelijke planning) bij €2.180 en Helemaal in handen (full service) bij €3.270, steeds inclusief 9% btw. Na de kennismaking krijgen jullie een voorstel met een vaste prijs. Bekijk wat er in elk pakket zit.';
+    $verwacht = 'De Dag in handen (dagcoördinatie) begint bij €926,50, Hand in hand (gedeeltelijke planning) bij €2.016,50 en Helemaal in handen (full service) bij €3.815, steeds inclusief 9% btw. Na de kennismaking krijgen jullie een voorstel met een vaste prijs. Bekijk wat er in elk pakket zit.';
 
     expect(platteTekst($antwoord))->toBe($verwacht)
         ->and(attributenVan($antwoord->querySelectorAll('[data-prijs-incl]'), 'data-prijs-incl'))->toBe(['dag', 'partial', 'full'])
@@ -88,7 +95,7 @@ test('the answers link to the packages and to the meeting', function () {
     $document = documentVoor('/veelgestelde-vragen');
 
     expect(attributenVan($document->querySelectorAll('[data-cms-strip="faq"] [data-cms-field="antwoord"] a'), 'href'))
-        ->toBe([route('diensten'), route('kennismaken')]);
+        ->toBe([url('/diensten'), route('kennismaken')]);
 });
 
 test('the FAQ hero offers a WhatsApp message to the number from the config', function () {

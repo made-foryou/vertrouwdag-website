@@ -1,15 +1,14 @@
 {{--
-    Het bedrag van een dienst uit config/vertrouwdag.php, standaard
-    inclusief btw (€1.028,50). Met excl het bedrag exclusief btw (€850).
-    De data-attributen houden de cijferstijl uit de stylesheet.
+    Het bedrag van een prijs (App\Support\Prijs), standaard inclusief btw
+    (€1.028,50). Met excl het bedrag exclusief btw (€850). dienst (dag,
+    partial of full) komt in het data-attribuut, dat de cijferstijl uit de
+    stylesheet houdt.
 --}}
 @props([
+    'prijs',
     'dienst',
     'excl' => false,
 ])
-@php
-    $prijs = \App\Support\Prijs::voorDienst($dienst);
-@endphp
 @if ($excl)
 <span data-prijs="{{ $dienst }}" {{ $attributes }}>{{ $prijs->exclBtw() }}</span>
 @else

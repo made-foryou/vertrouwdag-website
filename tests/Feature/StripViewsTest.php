@@ -2,6 +2,9 @@
 
 use App\Support\Blog;
 use App\Support\Blogcategorie;
+use App\Support\Dienst;
+use App\Support\Pakket;
+use App\Support\Prijs;
 use App\Support\Strip;
 use Dom\HTMLDocument;
 use Illuminate\View\ViewException;
@@ -30,7 +33,7 @@ test('the last word of the hero label does not wrap', function (string $label, s
     'één woord' => ['Weddingplanner', 'Weddingplanner'],
 ]);
 
-test('the services strip rejects a service without a price and names it', function () {
+test('the services strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving']];
 
     expect(fn () => renderStrip('diensten', ['kop' => 'Mijn *diensten*', 'diensten' => $diensten]))
@@ -70,7 +73,7 @@ test('the steps are numbered in their order', function () {
         ->and($document->querySelector('.werk-head .btn'))->toBeNull();
 });
 
-test('the packages strip rejects a service without a price and names it', function () {
+test('the packages strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving', 'kenmerken' => '', 'bijschrift' => null]];
 
     expect(fn () => renderStrip('pakketten', ['kop' => 'Welke map?', 'diensten' => $diensten]))
@@ -86,10 +89,53 @@ test('the features of a package are its lines without the empty ones', function 
         ->and(tekstenVan($document->querySelectorAll('.tf-m .folder ul.hl li')))->toBe(['Draaiboek', 'Afstemming met leveranciers']);
 });
 
+test('a package shows the price it was given in whole euros, and no price line when it cannot be read', function () {
+    $diensten = [
+        ['id' => null, 'dienst' => 'dag', 'soort' => 'Dagcoördinatie', 'titel' => 'De Dag in handen', 'omschrijving' => '<p>Voor stellen.</p>', 'kenmerken' => '', 'bijschrift' => null, 'prijs' => '€ 1.000'],
+        ['id' => null, 'dienst' => 'partial', 'soort' => 'Gedeeltelijke planning', 'titel' => 'Hand in hand', 'omschrijving' => '<p>Voor stellen.</p>', 'kenmerken' => '', 'bijschrift' => null, 'prijs' => 'op aanvraag'],
+    ];
+
+    $document = renderStrip('pakketten', ['kop' => 'Welke map?', 'diensten' => $diensten]);
+
+    expect(tekstenVan($document->querySelectorAll('.tf__panel [data-prijs-incl]')))->toBe(['€1.210'])
+        ->and(tekstenVan($document->querySelectorAll('.tf-m .folder [data-prijs]')))->toBe(['€1.000'])
+        ->and($document->querySelector('#partial-planning .price'))->toBeNull()
+        ->and($document->querySelector('.tf-m .folder[data-for="partial-planning"] .price'))->toBeNull();
+});
+
+test('the comparison has a column per package, with its title and price, and an empty cell for a package without one', function () {
+    $values = [
+        'kop' => 'Wat zit *waarin?*',
+        'pakketten' => [
+            new Pakket(Dienst::Full, 'Full service', 'Alles in handen', new Prijs(3000, 21)),
+            new Pakket(Dienst::Dag, 'Dagcoördinatie', 'De Dag in handen', null),
+        ],
+        'onderdelen' => [['id' => null, 'onderdeel' => 'Budgetoverzicht', 'dag' => 'nee', 'partial' => 'ja', 'full' => 'ja']],
+        'prijs_label' => 'Vanaf, incl. btw',
+    ];
+
+    $document = renderStrip('vergelijking', $values);
+    $prijzen = $document->querySelectorAll('tbody tr:last-child td');
+
+    expect(attributenVan($document->querySelectorAll('thead th[data-short]'), 'data-short'))->toBe(['Alles in handen', 'De Dag in handen'])
+        ->and(attributenVan($document->querySelectorAll('thead th[data-short]'), 'class'))->toBe(['c-full', 'c-dag'])
+        ->and(tekstenVan($document->querySelectorAll('tbody tr:first-child td')))->toBe(['Ja', 'Nee'])
+        ->and(platteTekst($prijzen->item(0)))->toBe('€3.630 €3.000 excl. btw')
+        ->and($prijzen->item(1)->textContent)->toBe('');
+});
+
+test('the comparison has no table without packages', function () {
+    $document = renderStrip('vergelijking', ['kop' => 'Wat zit *waarin?*', 'onderdelen' => [], 'slotzin' => 'Past geen pakket precies?']);
+
+    expect($document->querySelector('table'))->toBeNull()
+        ->and($document->querySelector('.cmp-legend'))->toBeNull()
+        ->and($document->querySelector('[data-cms-field="slotzin"]'))->not->toBeNull();
+});
+
 test('the comparison rejects an answer other than yes, no or partly and names the row', function () {
     $values = [
         'kop' => 'Wat zit *waarin?*',
-        'kolommen' => [['id' => null, 'dienst' => 'dag', 'titel' => 'De Dag in handen']],
+        'pakketten' => [new Pakket(Dienst::Dag, 'Dagcoördinatie', 'De Dag in handen', new Prijs(850, 21))],
         'onderdelen' => [['id' => null, 'onderdeel' => 'Budgetoverzicht', 'dag' => 'misschien']],
     ];
 
@@ -129,7 +175,7 @@ test('the plain closing strip has a taller photo but no heart and the normal hea
 test('the timeline numbers its phases from its first number and alternates their sides', function () {
     $fases = array_map(fn (int $nummer): array => ['id' => null, 'periode' => "Periode {$nummer}", 'titel' => "Fase {$nummer}", 'tekst' => 'Tekst'], range(1, 3));
 
-    $document = renderStrip('tijdlijn', ['eerste_nummer' => 6, 'fases' => $fases]);
+    $document = renderStrip('tijdlijn', ['eerste_nummer' => '6', 'fases' => $fases]);
     $lijst = $document->querySelector('ol.tl[data-cms-items="fases"]');
 
     expect($lijst?->getAttribute('start'))->toBe('6')
@@ -149,18 +195,34 @@ test('the timeline starts at one and lies on the band only with that variant', f
     'op de band' => ['band', 'band'],
 ]);
 
+test('the timeline starts at one when its first number is no positive whole number', function (?string $eersteNummer) {
+    $fases = [['id' => null, 'periode' => 'Periode', 'titel' => 'Fase', 'tekst' => 'Tekst']];
+
+    $document = renderStrip('tijdlijn', ['eerste_nummer' => $eersteNummer, 'fases' => $fases]);
+
+    expect($document->querySelector('ol.tl')?->hasAttribute('start'))->toBeFalse()
+        ->and($document->querySelector('.tl__badge span')?->textContent)->toBe('1');
+})->with([
+    'leeg' => [''],
+    'in woorden' => ['zes'],
+    'nul' => ['0'],
+]);
+
 test('the timeline rejects an unknown variant', function () {
     expect(fn () => renderStrip('tijdlijn', ['variant' => 'aubergine', 'fases' => []]))
         ->toThrow(ViewException::class, 'De strook tijdlijn kent geen variant [aubergine]');
 });
 
-test('the wedding day band shows its phase number only when it has one', function (?int $nummer, array $badges) {
+test('the wedding day band shows its phase number only when it has one', function (?string $nummer, array $badges) {
     $document = renderStrip('trouwdag', ['nummer' => $nummer, 'kop' => 'Kop', 'briefjes' => []]);
 
     expect(tekstenVan($document->querySelectorAll('.tl__badge span')))->toBe($badges);
 })->with([
-    'met nummer' => [5, ['5']],
+    'met nummer' => ['5', ['5']],
+    'met witruimte' => [' 5 ', ['5']],
     'zonder nummer' => [null, []],
+    'leeg' => ['', []],
+    'in woorden' => ['vijf', []],
 ]);
 
 test('the notes of the wedding day start again with the first colour after the fourth', function () {

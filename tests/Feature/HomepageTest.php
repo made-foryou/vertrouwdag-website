@@ -1,6 +1,7 @@
 <?php
 
 use Database\Seeders\HomepaginaSeeder;
+use Database\Seeders\PaginasSeeder;
 use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\Text;
@@ -75,7 +76,7 @@ test('the homepage comes from the cms with every strip in the order of the desig
  * - [aria-hidden]: decoratie, zoals de checklist-visual en de hartjes. De lopende band is ook aria-hidden, maar zijn
  *   teksten zijn een lijst die het frame herlaadt;
  * - de knop naar de kennismaking: uit de config, net als in de header;
- * - .price: de prijs uit de config (#17) met "vanaf", "incl. btw" en "excl. btw";
+ * - .price: de prijs uit de strook pakketten op /diensten (#17) met "vanaf", "incl. btw" en "excl. btw";
  * - .step__nr: het nummer van een stap volgt de volgorde;
  * - de velden, de toestemming en de knop van het checklistformulier, dat ook op /checklist staat.
  */
@@ -97,26 +98,30 @@ test('every text on the homepage is a field of the cms, except the listed except
     expect(tekstenBuitenVelden($main, $uitzonderingen))->toBe([]);
 });
 
-test('the homepage shows the three services with their price from the config', function () {
-    config([
-        'vertrouwdag.prijzen.dag' => 1000,
-        'vertrouwdag.prijzen.partial' => 2000,
-        'vertrouwdag.prijzen.full' => 4000,
-    ]);
-    $this->seed(HomepaginaSeeder::class);
+test('the homepage shows the three services with their price from the packages on the services page', function () {
+    $this->seed(PaginasSeeder::class);
 
     $document = documentVoor('/');
 
     $diensten = $document->querySelectorAll('.folders a.folder');
 
     expect(tekstenVan($document->querySelectorAll('.folders a.folder h3')))->toBe(['De Dag in handen', 'Hand in hand', 'Helemaal in handen'])
-        ->and(tekstenVan($document->querySelectorAll('.folders [data-prijs-incl]')))->toBe(['€1.210', '€2.420', '€4.840'])
-        ->and(tekstenVan($document->querySelectorAll('.folders [data-prijs]')))->toBe(['€1.000', '€2.000', '€4.000'])
+        ->and(tekstenVan($document->querySelectorAll('.folders [data-prijs-incl]')))->toBe(['€1.028,50', '€2.238,50', '€4.235'])
+        ->and(tekstenVan($document->querySelectorAll('.folders [data-prijs]')))->toBe(['€850', '€1.850', '€3.500'])
         ->and(attributenVan($diensten, 'href'))->toBe([
-            route('diensten').'#dagcoordinatie',
-            route('diensten').'#partial-planning',
-            route('diensten').'#full-service',
+            url('/diensten').'#dagcoordinatie',
+            url('/diensten').'#partial-planning',
+            url('/diensten').'#full-service',
         ]);
+});
+
+test('the homepage shows its services without a price while the services page is not in the cms', function () {
+    $this->seed(HomepaginaSeeder::class);
+
+    $document = documentVoor('/');
+
+    expect($document->querySelectorAll('.folders a.folder'))->toHaveCount(3)
+        ->and($document->querySelector('.folders .price'))->toBeNull();
 });
 
 test('the homepage shows two placeholder reviews until the real ones arrive', function () {

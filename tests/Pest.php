@@ -4,6 +4,8 @@ use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\NodeList;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Made\CmsPackage\Content\Data\PagePath;
+use Made\CmsPackage\Content\Models\Page;
 use Tests\TestCase;
 
 /*
@@ -73,6 +75,31 @@ function documentVoor(string $url): HTMLDocument
     $response->assertOk();
 
     return HTMLDocument::createFromString($response->getContent(), LIBXML_NOERROR);
+}
+
+/**
+ * De types van de stroken in <main>, van boven naar beneden. Een strook uit
+ * het CMS heeft een uuid als id; de gepubliceerde pagina op het adres zegt
+ * van welk type hij is. Een strook die niet van die pagina is, wordt null.
+ *
+ * @return list<?string>
+ */
+function striptypenOp(string $adres, HTMLDocument $document): array
+{
+    $typen = array_column(Page::query()->published()->atPath(PagePath::fromString($adres))->sole()->strips, 'type', 'id');
+
+    return array_map(fn (?string $id): ?string => $typen[$id] ?? null, attributenVan($document->querySelectorAll('main > *'), 'data-cms-strip'));
+}
+
+/**
+ * De eerste strook van het type in <main>, op de gepubliceerde pagina op
+ * het adres.
+ */
+function strookVanType(string $adres, HTMLDocument $document, string $type): ?Element
+{
+    $index = array_search($type, striptypenOp($adres, $document), true);
+
+    return $index === false ? null : $document->querySelectorAll('main > *')->item($index);
 }
 
 /**

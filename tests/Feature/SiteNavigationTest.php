@@ -1,48 +1,57 @@
 <?php
 
 use Database\Seeders\HomepaginaSeeder;
+use Database\Seeders\PaginasSeeder;
 use Dom\Node;
+use Made\CmsPackage\Content\Models\Page;
 
 beforeEach(function () {
     $this->withoutVite();
 });
 
-test('every page shows the main menu with the right active link', function (string $adres, ?string $activeRoute) {
-    $this->seed(HomepaginaSeeder::class);
+test('every page shows the main menu with the right active link', function (string $adres, ?string $actiefPad) {
+    $this->seed(PaginasSeeder::class);
 
     $document = documentVoor($adres);
     $menu = config('vertrouwdag.menu');
 
     $links = $document->querySelectorAll('#site-nav a:not(.btn)');
 
-    expect(attributenVan($links, 'href'))->toBe(array_map(fn (string $route): string => route($route), array_keys($menu)))
+    expect(attributenVan($links, 'href'))->toBe(array_map(fn (string $pad): string => url($pad), array_keys($menu)))
         ->and(tekstenVan($links))->toBe(array_values($menu));
 
     $current = $document->querySelectorAll('#site-nav [aria-current="page"]');
 
-    if ($activeRoute === null) {
+    if ($actiefPad === null) {
         expect($current)->toHaveCount(0);
     } else {
         expect($current)->toHaveCount(1)
-            ->and($current->item(0)->getAttribute('href'))->toBe(route($activeRoute));
+            ->and($current->item(0)->getAttribute('href'))->toBe(url($actiefPad));
     }
 
     expect($document->querySelectorAll('header [aria-current]')->length)->toBeLessThanOrEqual(1);
 })->with([
     'home' => ['/', null],
-    'diensten' => ['/diensten', 'diensten'],
-    'werkwijze' => ['/werkwijze', 'werkwijze'],
-    'over mij' => ['/over-mij', 'over-mij'],
-    'blog' => ['/blog', 'blog'],
-    'blogarchief' => ['/blog/archief', 'blog'],
-    'blogartikel' => ['/blog/wanneer-weddingplanner-inschakelen', 'blog'],
-    'veelgestelde vragen' => ['/veelgestelde-vragen', 'veelgestelde-vragen'],
+    'diensten' => ['/diensten', '/diensten'],
+    'werkwijze' => ['/werkwijze', '/werkwijze'],
+    'over mij' => ['/over-mij', '/over-mij'],
+    'blog' => ['/blog', '/blog'],
+    'blogarchief' => ['/blog/archief', '/blog'],
+    'blogartikel' => ['/blog/wanneer-weddingplanner-inschakelen', '/blog'],
+    'veelgestelde vragen' => ['/veelgestelde-vragen', '/veelgestelde-vragen'],
     'checklist' => ['/checklist', null],
     'kennismaken' => ['/kennismaken', null],
     'privacyverklaring' => ['/privacyverklaring', null],
     'cookiebeleid' => ['/cookiebeleid', null],
     'algemene voorwaarden' => ['/algemene-voorwaarden', null],
 ]);
+
+test('a menu link is not active on another page that starts with the same letters', function () {
+    config(['vertrouwdag.menu' => ['/blog' => 'Blog']]);
+    Page::factory()->published()->at('/blogger')->create(['title' => 'Blogger']);
+
+    expect(documentVoor('/blogger')->querySelector('#site-nav [aria-current]'))->toBeNull();
+});
 
 test('the header links the logo home and the call to action to the configured route', function () {
     $this->seed(HomepaginaSeeder::class);
@@ -126,11 +135,11 @@ test('the footer links to the configured pages and legal pages and opens the coo
 
     $pageLinks = $document->querySelectorAll('.site-footer nav a');
 
-    expect(attributenVan($pageLinks, 'href'))->toBe(array_map(fn (string $route): string => route($route), array_keys($footer['paginas'])))
+    expect(attributenVan($pageLinks, 'href'))->toBe(array_map(fn (string $pad): string => url($pad), array_keys($footer['paginas'])))
         ->and(tekstenVan($pageLinks))->toBe(array_values($footer['paginas']));
 
-    foreach ($footer['juridisch'] as $route => $label) {
-        $link = $document->querySelector('.site-footer a[href="'.route($route).'"]');
+    foreach ($footer['juridisch'] as $pad => $label) {
+        $link = $document->querySelector('.site-footer a[href="'.url($pad).'"]');
 
         expect($link)->not->toBeNull()
             ->and(trim($link->textContent))->toBe($label);

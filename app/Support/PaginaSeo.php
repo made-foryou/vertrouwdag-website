@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Arr;
 use Made\CmsPackage\Content\Models\Page;
 
 /**
@@ -55,12 +56,7 @@ final readonly class PaginaSeo
             ),
             '/diensten' => new self(
                 titel: 'Diensten en prijzen | vertrouwdag weddingplanner',
-                omschrijving: sprintf(
-                    'De Dag in handen (dagcoördinatie) vanaf %s, Hand in hand (gedeeltelijke planning) vanaf %s en Helemaal in handen (full service) vanaf %s, inclusief btw. Vaste vanaf-prijzen, zodat jullie vooraf weten waar jullie aan toe zijn.',
-                    Prijs::voorDienst('dag')->inclBtw(),
-                    Prijs::voorDienst('partial')->inclBtw(),
-                    Prijs::voorDienst('full')->inclBtw(),
-                ),
+                omschrijving: self::omschrijvingVanDeDiensten(app(Aanbod::class)),
                 ogTitel: 'Diensten en prijzen · vertrouwdag',
                 ogOmschrijving: self::ALGEMENE_OMSCHRIJVING,
                 ogAfbeelding: 'resources/images/ceremonie-buiten.jpg',
@@ -123,6 +119,27 @@ final readonly class PaginaSeo
             ),
             default => null,
         };
+    }
+
+    /**
+     * De omschrijving van /diensten noemt elke dienst met zijn vanaf-prijs
+     * inclusief btw, want de bezoekers zijn consumenten (besluit Menno,
+     * 2026-11-10, zie #6). Namen en prijzen komen uit de strook pakketten,
+     * zodat ze een wijziging van Romy volgen (#17). Heeft niet elk pakket
+     * een prijs, dan noemt de omschrijving geen bedragen.
+     */
+    private static function omschrijvingVanDeDiensten(Aanbod $aanbod): string
+    {
+        if (! $aanbod->isCompleet()) {
+            return 'Van dagcoördinatie tot full service: pakketten met een vaste vanaf-prijs, zodat jullie vooraf weten waar jullie aan toe zijn.';
+        }
+
+        $diensten = array_map(
+            fn (Pakket $pakket): string => sprintf('%s (%s) vanaf %s', $pakket->titel, mb_strtolower($pakket->soort), $pakket->prijs?->inclBtw()),
+            $aanbod->pakketten(),
+        );
+
+        return Arr::join($diensten, ', ', ' en ').', inclusief btw. Vaste vanaf-prijzen, zodat jullie vooraf weten waar jullie aan toe zijn.';
     }
 
     /**

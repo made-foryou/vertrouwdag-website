@@ -3,8 +3,10 @@
 namespace App\Support;
 
 /**
- * Een van de drie diensten. De waarde is de sleutel van de prijs in
- * config/vertrouwdag.php (dag, partial of full).
+ * Een van de drie diensten (dag, partial of full). In het CMS is het een
+ * keuze in de strook pakketten op /diensten en in de strook diensten op
+ * de homepage. Via die keuze vindt de homepage de prijs van een dienst in
+ * de pakketten (App\Support\Aanbod).
  *
  * Hier staat wat de homepage en /diensten per dienst delen: de kleur, het
  * anker van de map op /diensten en de foto. Het anker ligt vast en volgt

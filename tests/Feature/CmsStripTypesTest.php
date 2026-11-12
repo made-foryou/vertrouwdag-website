@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\DienstenpaginaSeeder;
 use Dom\Element;
 use Illuminate\Support\Str;
 use Made\CmsPackage\Content\Models\Page;
@@ -34,34 +35,49 @@ function strookMetStandaardwaarden(StripType $type): ?Element
 }
 
 /**
- * Het eerste element in de strook dat bij de selector past en niet in een lijst van de strook ligt: daar zoekt het
- * frame een veld van de strook zelf.
+ * Elk element in de strook dat bij de selector past en niet in een lijst van de strook ligt: daar zoekt het frame een
+ * veld van de strook zelf, en elke lijst met dezelfde key (zoals de tabjes, mappen en mapjes van pakketten).
+ *
+ * @return list<Element>
  */
-function buitenLijsten(Element $strook, string $selector): ?Element
+function buitenLijsten(Element $strook, string $selector): array
 {
+    $elementen = [];
+
     foreach ($strook->querySelectorAll($selector) as $element) {
         if ($element->parentElement?->closest('[data-cms-items]') === null) {
-            return $element;
+            $elementen[] = $element;
         }
     }
 
-    return null;
+    return $elementen;
 }
 
-test('the catalogue of the cms builds with the strip types of the homepage', function (string $key) {
+test('the catalogue of the cms builds with the strip types of the pages in the cms', function (string $key) {
     expect(app(StripTypes::class)->has($key))->toBeTrue();
 })->with([
     'checklist-aanmelding',
+    'citaat',
     'cta',
     'diensten',
     'herkenning',
     'hero',
+    'hero-diensten',
+    'hero-over-mij',
+    'hero-werkwijze',
+    'kijkje',
+    'kwaliteiten',
     'leveranciers',
     'lopende-band',
     'over-mij-intro',
+    'pakketten',
     'reviews',
     'stappen',
+    'tijdlijn',
+    'trouwdag',
     'twee-kolommen',
+    'vergelijking',
+    'verhaal',
 ]);
 
 test('every strip type of the cms renders its view with its default values', function (string $striptype) {
@@ -72,14 +88,24 @@ test('every strip type of the cms renders its view with its default values', fun
 
 /**
  * Het frame van de bewerkschil zoekt een veld op zijn data-cms-field, en een veld in een lijst binnen het item: elk
- * direct kind van data-cms-items is één item (resources/launcher/edit.js in het package). Een keuze herlaadt het
- * frame altijd, en de velden hieronder bewust: daar staat in de view waarom.
+ * direct kind van data-cms-items is één item, en een lijst mag op meer plekken staan (resources/launcher/edit.js in het
+ * package). Een keuze herlaadt het frame altijd, en de velden hieronder bewust: daar staat in de view waarom. Een veld
+ * in een lijst heet hier lijst.veld.
+ *
+ * De vergelijking toont haar tabel alleen met de pakketten van /diensten, dus die staan er eerst.
  */
 test('the edit frame finds every field of a strip type in its view', function (string $striptype) {
     /** @var StripType $type */
     $type = new $striptype;
-    $herlaadt = ['lopende-band' => ['teksten']][$type->key()] ?? [];
+    $herlaadt = [
+        'lopende-band' => ['teksten'],
+        'pakketten' => ['diensten.kenmerken', 'diensten.prijs'],
+        'tijdlijn' => ['eerste_nummer'],
+        'trouwdag' => ['nummer'],
+        'vergelijking' => ['onderdelen'],
+    ][$type->key()] ?? [];
 
+    $this->seed(DienstenpaginaSeeder::class);
     $strook = strookMetStandaardwaarden($type);
 
     foreach ($type->fields() as $veld) {
@@ -88,25 +114,30 @@ test('the edit frame finds every field of a strip type in its view', function (s
         }
 
         if (! $veld instanceof Items) {
-            expect(buitenLijsten($strook, "[data-cms-field=\"{$veld->getKey()}\"]"))->not->toBeNull("Het veld {$veld->getKey()} heeft geen data-cms-field.");
+            expect(buitenLijsten($strook, "[data-cms-field=\"{$veld->getKey()}\"]"))->not->toBeEmpty("Het veld {$veld->getKey()} heeft geen data-cms-field.");
 
             continue;
         }
 
-        $lijst = buitenLijsten($strook, "[data-cms-items=\"{$veld->getKey()}\"]");
+        $lijsten = buitenLijsten($strook, "[data-cms-items=\"{$veld->getKey()}\"]");
 
-        expect($lijst)->not->toBeNull("De lijst {$veld->getKey()} heeft geen data-cms-items.")
-            ->and($lijst->childElementCount)->toBe(count($type->defaults()[$veld->getKey()]), "Niet elk kind van de lijst {$veld->getKey()} is een item.");
+        expect($lijsten)->not->toBeEmpty("De lijst {$veld->getKey()} heeft geen data-cms-items.");
 
-        foreach ($lijst->children as $item) {
-            foreach ($veld->getFields() as $itemveld) {
-                if ($itemveld instanceof Choice) {
-                    continue;
-                }
+        foreach ($lijsten as $lijst) {
+            expect($lijst->childElementCount)->toBe(count($type->defaults()[$veld->getKey()]), "Niet elk kind van de lijst {$veld->getKey()} is een item.");
+        }
 
-                $selector = "[data-cms-field=\"{$itemveld->getKey()}\"]";
+        foreach ($veld->getFields() as $itemveld) {
+            if ($itemveld instanceof Choice || in_array("{$veld->getKey()}.{$itemveld->getKey()}", $herlaadt, true)) {
+                continue;
+            }
 
-                expect($item->matches($selector) || $item->querySelector($selector) !== null)->toBeTrue("Het veld {$itemveld->getKey()} in de lijst {$veld->getKey()} heeft geen data-cms-field.");
+            $selector = "[data-cms-field=\"{$itemveld->getKey()}\"]";
+
+            foreach (range(0, count($type->defaults()[$veld->getKey()]) - 1) as $index) {
+                $gevonden = array_filter($lijsten, fn (Element $lijst): bool => $lijst->children->item($index)->matches($selector) || $lijst->children->item($index)->querySelector($selector) !== null);
+
+                expect($gevonden)->not->toBeEmpty("Het veld {$itemveld->getKey()} in item ".($index + 1)." van de lijst {$veld->getKey()} heeft geen data-cms-field.");
             }
         }
     }

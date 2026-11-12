@@ -7,16 +7,20 @@
 
     Velden: label, kop (met accent), hint (boven de mappen, alleen met
     JavaScript), hint_mobiel (onder de stapel) en diensten (lijst met
-    dienst, soort, titel, omschrijving, kenmerken en bijschrift).
+    dienst, soort, titel, omschrijving, kenmerken, bijschrift en prijs).
 
-    dienst is de sleutel van de prijs in config/vertrouwdag.php en
-    bepaalt via App\Support\Dienst de kleur, de foto en het anker: het id
-    van de map, waar de links op de homepage naartoe gaan. omschrijving
-    is opgemaakte tekst zonder alinea (<strong>Voor stellen</strong> …).
-    kenmerken is één tekst met een kenmerk per regel. Het package kent
-    geen lijst in een lijst; een wijziging daarin herlaadt de frame.
+    dienst (dag, partial of full) bepaalt via App\Support\Dienst de kleur,
+    de foto en het anker: het id van de map, waar de links op de homepage
+    naartoe gaan. omschrijving is opgemaakte tekst met een eigen alinea,
+    dus ze staat in een div. kenmerken is één tekst met een kenmerk per
+    regel. Het package kent geen lijst in een lijst; een wijziging daarin
+    herlaadt de frame. prijs is de tekst van de redacteur, in hele euro's
+    exclusief btw (App\Support\Prijs::uitTekst). Een onleesbare prijs
+    geeft geen prijsregel. Deze prijzen gelden voor de hele site
+    (App\Support\Aanbod).
 --}}
 @use('App\Support\Dienst')
+@use('App\Support\Prijs')
 @php
     $plaatsing = [
         'dag' => ['polaroid' => -5, 'kaart' => -4, 'gespiegeld' => false],
@@ -33,6 +37,7 @@
             'welkeDienst' => $welkeDienst,
             'kleur' => $welkeDienst->kleur(),
             'plaatsing' => $plaatsing[$welkeDienst->value],
+            'prijs' => Prijs::uitTekst(is_string($dienst['prijs'] ?? null) ? $dienst['prijs'] : null),
             'kenmerken' => array_values(array_filter($regels, fn (string $regel): bool => $regel !== '')),
         ];
     }, $strip->diensten ?? []);
@@ -66,7 +71,7 @@
                         <div class="tf__body">
                             <p @class(array_filter(['eb', 'eb--sm', $dienst['kleur']->eyebrowKlasse()])) data-cms-field="soort">{{ $dienst['soort'] }}</p>
                             <h2 data-cms-field="titel">{{ $dienst['titel'] }}</h2>
-                            <p class="tf__desc" data-cms-field="omschrijving">{!! $dienst['omschrijving'] !!}</p>
+                            <div class="tf__desc" data-cms-field="omschrijving">{!! $dienst['omschrijving'] !!}</div>
                             @if (count($dienst['kenmerken']) > 0)
                                 <ul class="hl">
                                     @foreach ($dienst['kenmerken'] as $kenmerk)
@@ -75,7 +80,7 @@
                                 </ul>
                             @endif
                             <div class="tf__foot">
-                                <x-prijsregel class="tf__price" :dienst="$dienst['welkeDienst']->value" :gedempt="$dienst['kleur']->isGedempt()" />
+                                <x-prijsregel class="tf__price" :prijs="$dienst['prijs']" :dienst="$dienst['welkeDienst']->value" :gedempt="$dienst['kleur']->isGedempt()" />
                             </div>
                             <div class="tf__cta"><x-knop :href="route(config('vertrouwdag.cta.route'))" :variant="$dienst['kleur']->knopVariant()">{{ config('vertrouwdag.cta.label') }}</x-knop></div>
                         </div>
@@ -87,7 +92,7 @@
         <div class="tf-m">
             <div class="folders" data-deck data-cms-items="diensten">
                 @foreach ($diensten as $dienst)
-                    <x-dienstkaart :kleur="$dienst['kleur']->value" :dienst="$dienst['welkeDienst']->value" :foto="Vite::asset($dienst['welkeDienst']->foto())" :draaiing="$dienst['plaatsing']['kaart']" :gespiegeld="$dienst['plaatsing']['gespiegeld']" :kenmerken="$dienst['kenmerken']" :data-for="$dienst['welkeDienst']->anker()">
+                    <x-dienstkaart :kleur="$dienst['kleur']->value" :dienst="$dienst['welkeDienst']->value" :prijs="$dienst['prijs']" :foto="Vite::asset($dienst['welkeDienst']->foto())" :draaiing="$dienst['plaatsing']['kaart']" :gespiegeld="$dienst['plaatsing']['gespiegeld']" :kenmerken="$dienst['kenmerken']" :data-for="$dienst['welkeDienst']->anker()">
                         <x-slot:soort data-cms-field="soort">{{ $dienst['soort'] }}</x-slot:soort>
                         <x-slot:titel data-cms-field="titel">{{ $dienst['titel'] }}</x-slot:titel>
                         <x-slot:omschrijving data-cms-field="omschrijving">{!! $dienst['omschrijving'] !!}</x-slot:omschrijving>

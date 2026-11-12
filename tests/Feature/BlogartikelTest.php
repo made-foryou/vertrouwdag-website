@@ -47,7 +47,7 @@ test('the article describes itself to search engines as a blog posting', functio
             '@context' => 'https://schema.org',
             '@type' => 'BlogPosting',
             'headline' => 'Wanneer schakel je een weddingplanner in? (En waarom eerder dan je denkt)',
-            'author' => ['@type' => 'Person', 'name' => 'Romy van Dillen', 'url' => route('over-mij')],
+            'author' => ['@type' => 'Person', 'name' => 'Romy van Dillen', 'url' => url('/over-mij')],
             'publisher' => ['@type' => 'Organization', 'name' => 'vertrouwdag'],
             'mainEntityOfPage' => route('blog.artikel', 'wanneer-weddingplanner-inschakelen'),
         ])
@@ -57,7 +57,7 @@ test('the article describes itself to search engines as a blog posting', functio
 test('the article closes with the writer and an invitation to meet', function () {
     $document = documentVoor('/blog/wanneer-weddingplanner-inschakelen');
 
-    expect($document->querySelector('[data-cms-strip="auteur"] a')?->getAttribute('href'))->toBe(route('over-mij'))
+    expect($document->querySelector('[data-cms-strip="auteur"] a')?->getAttribute('href'))->toBe(url('/over-mij'))
         ->and($document->querySelector('[data-cms-strip="kennismaking"] a.btn')?->getAttribute('href'))->toBe(route(config('vertrouwdag.cta.route')));
 });
 

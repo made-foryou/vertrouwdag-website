@@ -1,7 +1,7 @@
 <?php
 
 use App\Support\Blogs;
-use Database\Seeders\HomepaginaSeeder;
+use Database\Seeders\PaginasSeeder;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as Router;
 use Illuminate\Support\Facades\Vite;
@@ -37,13 +37,12 @@ beforeEach(function () {
 
     config([
         'vertrouwdag.canonieke_url' => 'https://vertrouwdag.nl',
-        'vertrouwdag.prijzen' => ['dag' => 850, 'partial' => 1850, 'full' => 3500],
         'vertrouwdag.btw_percentage' => 21,
     ]);
 });
 
 test('every page has its own title, description, canonical and open graph tags', function (string $pad, string $titel, string $omschrijving, string $ogTitel, ?string $ogOmschrijving, string $ogAfbeelding, string $ogType) {
-    $this->seed(HomepaginaSeeder::class);
+    $this->seed(PaginasSeeder::class);
 
     $document = documentVoor($pad);
 
@@ -67,7 +66,7 @@ test('every page has its own title, description, canonical and open graph tags',
 })->with($paginas);
 
 test('no two pages share a title or a description', function () use ($paginas) {
-    $this->seed(HomepaginaSeeder::class);
+    $this->seed(PaginasSeeder::class);
     $titels = [];
     $omschrijvingen = [];
 
@@ -82,7 +81,7 @@ test('no two pages share a title or a description', function () use ($paginas) {
 });
 
 test('the pages above cover every page of the site, so a new page cannot skip these checks', function () use ($paginas) {
-    $this->seed(HomepaginaSeeder::class);
+    $this->seed(PaginasSeeder::class);
 
     /**
      * Adressen zonder vaste pagina voor bezoekers: de health check, de stijlgids (alleen lokaal, noindex) en de
