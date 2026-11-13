@@ -148,21 +148,13 @@ return [
     | Navigatie
     |--------------------------------------------------------------------------
     |
-    | Per link het pad met het label. Een pagina uit het CMS heeft geen
-    | routenaam, daarom zijn het paden. Een menulink is actief op zijn
-    | eigen pad en op de paden eronder: Blog ook op /blog/archief en de
-    | artikelen. Het hoofdmenu komt later uit de paginaboom van het CMS
-    | (#19). De knop naar de kennismaking en de footerlinks blijven hier.
+    | Het hoofdmenu komt uit de paginaboom van het CMS (#19, zie
+    | App\Support\Menulink). De knop naar de kennismaking en de
+    | footerlinks staan hier, tot het package globale inhoud heeft
+    | (besluit 5 in #13). Per link het pad met het label. Een pagina uit
+    | het CMS heeft geen routenaam, daarom zijn het paden.
     |
     */
-
-    'menu' => [
-        '/diensten' => 'Diensten',
-        '/werkwijze' => 'Werkwijze',
-        '/over-mij' => 'Over mij',
-        '/blog' => 'Blog',
-        '/veelgestelde-vragen' => 'Veelgestelde vragen',
-    ],
 
     'cta' => [
         'pad' => '/kennismaken',

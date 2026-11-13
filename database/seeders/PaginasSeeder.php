@@ -18,6 +18,7 @@ class PaginasSeeder extends Seeder
             DienstenpaginaSeeder::class,
             WerkwijzepaginaSeeder::class,
             OverMijPaginaSeeder::class,
+            BlogpaginaSeeder::class,
             VeelgesteldeVragenpaginaSeeder::class,
             ChecklistpaginaSeeder::class,
             KennismakenpaginaSeeder::class,

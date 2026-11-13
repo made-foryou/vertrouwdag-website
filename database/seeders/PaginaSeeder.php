@@ -21,9 +21,9 @@ use Made\CmsPackage\Content\Models\Route;
  * de seeder alleen het type. Een type dat op meer pagina's staat (cta,
  * lopende-band, tijdlijn) krijgt hier de waarden die afwijken.
  *
- * Een pagina staat in het menu, tenzij inMenu() anders zegt. Dat geldt
- * voor de pagina's die het menu in config/vertrouwdag.php niet noemt,
- * zoals de kennismaking en de juridische pagina's (#18).
+ * Een pagina staat in het menu, tenzij inMenu() anders zegt. Het
+ * hoofdmenu toont de pagina's in de volgorde van de boom (#19). De
+ * kennismaking en de juridische pagina's staan er niet in (#18).
  *
  * Staat er al een pagina op het adres, dan doet de seeder niets: wat een
  * redacteur wijzigde, gaat nooit verloren (besluit Menno, 2026-11-11, zie

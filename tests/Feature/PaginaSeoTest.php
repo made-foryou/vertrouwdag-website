@@ -115,8 +115,11 @@ test('the pages above cover every page of the site, so a new page cannot skip th
         $adressen[] = '/'.ltrim($route->uri(), '/');
     }
 
+    // Een pagina uit het CMS op het adres van een vaste route, zoals /blog tot #20, is voor bezoekers de vaste pagina.
     foreach (Page::query()->published()->with('route')->get() as $page) {
-        $adressen[] = $page->route->path;
+        if (! in_array($page->route->path, $adressen, true)) {
+            $adressen[] = $page->route->path;
+        }
     }
 
     $gedekt = array_column($paginas, 0);

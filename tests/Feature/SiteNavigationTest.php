@@ -2,8 +2,48 @@
 
 use Database\Seeders\HomepaginaSeeder;
 use Database\Seeders\PaginasSeeder;
+use Dom\HTMLDocument;
 use Dom\Node;
+use Made\CmsPackage\Content\Actions\CreatePage;
+use Made\CmsPackage\Content\Actions\DeletePage;
+use Made\CmsPackage\Content\Actions\MovePage;
+use Made\CmsPackage\Content\Actions\UpdatePage;
+use Made\CmsPackage\Content\Data\NewPage;
+use Made\CmsPackage\Content\Data\PageChanges;
+use Made\CmsPackage\Content\Data\PagePath;
 use Made\CmsPackage\Content\Models\Page;
+
+/**
+ * De labels van het hoofdmenu, van links naar rechts, zonder de knop.
+ *
+ * @return list<string>
+ */
+function menulabels(HTMLDocument $document): array
+{
+    return tekstenVan($document->querySelectorAll('#site-nav a:not(.btn)'));
+}
+
+/**
+ * De adressen van de links in het hoofdmenu die als huidige pagina
+ * gemarkeerd zijn.
+ *
+ * @return list<string>
+ */
+function actieveMenulinks(HTMLDocument $document): array
+{
+    return attributenVan($document->querySelectorAll('#site-nav [aria-current="page"]'), 'href');
+}
+
+/**
+ * Zet een pagina in of uit het menu, zoals een redacteur dat met de
+ * schakelaar in het pagina's-scherm doet.
+ */
+function zetInMenu(string $adres, bool $inMenu): void
+{
+    $pagina = Page::query()->atPath(PagePath::fromString($adres))->sole();
+
+    UpdatePage::run($pagina, new PageChanges(title: $pagina->title, slug: $pagina->slug, parentId: $pagina->parent_id, inMenu: $inMenu));
+}
 
 beforeEach(function () {
     $this->withoutVite();
@@ -13,12 +53,11 @@ test('every page shows the main menu with the right active link', function (stri
     $this->seed(PaginasSeeder::class);
 
     $document = documentVoor($adres);
-    $menu = config('vertrouwdag.menu');
 
     $links = $document->querySelectorAll('#site-nav a:not(.btn)');
 
-    expect(attributenVan($links, 'href'))->toBe(array_map(fn (string $pad): string => url($pad), array_keys($menu)))
-        ->and(tekstenVan($links))->toBe(array_values($menu));
+    expect(attributenVan($links, 'href'))->toBe([url('/diensten'), url('/werkwijze'), url('/over-mij'), url('/blog'), url('/veelgestelde-vragen')])
+        ->and(tekstenVan($links))->toBe(['Diensten', 'Werkwijze', 'Over mij', 'Blog', 'Veelgestelde vragen']);
 
     $current = $document->querySelectorAll('#site-nav [aria-current="page"]');
 
@@ -47,11 +86,78 @@ test('every page shows the main menu with the right active link', function (stri
 ]);
 
 test('a menu link is not active on another page that starts with the same letters', function () {
-    config(['vertrouwdag.menu' => ['/blog' => 'Blog']]);
-    Page::factory()->published()->at('/blogger')->create(['title' => 'Blogger']);
+    Page::factory()->published()->at('/blog')->create(['title' => 'Blog']);
+    Page::factory()->published()->inMenu(false)->at('/blogger')->create(['title' => 'Blogger']);
 
-    expect(documentVoor('/blogger')->querySelector('#site-nav [aria-current]'))->toBeNull();
+    $document = documentVoor('/blogger');
+
+    expect(menulabels($document))->toBe(['Blog'])
+        ->and(actieveMenulinks($document))->toBe([]);
 });
+
+test('a page an editor takes out of the menu disappears from it', function () {
+    $this->seed(PaginasSeeder::class);
+
+    zetInMenu('/werkwijze', false);
+
+    expect(menulabels(documentVoor('/')))->toBe(['Diensten', 'Over mij', 'Blog', 'Veelgestelde vragen']);
+});
+
+test('the menu follows the order of the pages in the cms', function () {
+    $this->seed(PaginasSeeder::class);
+
+    MovePage::run(Page::query()->atPath(PagePath::fromString('/veelgestelde-vragen'))->sole(), parentId: null, position: 1);
+
+    expect(menulabels(documentVoor('/')))->toBe(['Veelgestelde vragen', 'Diensten', 'Werkwijze', 'Over mij', 'Blog']);
+});
+
+test('a draft in the menu stays out of the menu until it is published', function () {
+    $this->seed(PaginasSeeder::class);
+
+    CreatePage::run(new NewPage(title: 'Trouwlocaties', slug: null, parentId: null, inMenu: true));
+
+    expect(menulabels(documentVoor('/')))->toBe(['Diensten', 'Werkwijze', 'Over mij', 'Blog', 'Veelgestelde vragen']);
+});
+
+test('a deleted page disappears from the menu', function () {
+    $this->seed(PaginasSeeder::class);
+
+    DeletePage::run(Page::query()->atPath(PagePath::fromString('/werkwijze'))->sole());
+
+    expect(menulabels(documentVoor('/')))->toBe(['Diensten', 'Over mij', 'Blog', 'Veelgestelde vragen']);
+});
+
+test('a published page with changes in its draft stays in the menu', function () {
+    $this->seed(PaginasSeeder::class);
+
+    wijzigStrook('/werkwijze', 'cta', fn (array $waarden): array => ['kop' => 'Nog niet *af*'], publiceren: false);
+
+    expect(menulabels(documentVoor('/')))->toBe(['Diensten', 'Werkwijze', 'Over mij', 'Blog', 'Veelgestelde vragen']);
+});
+
+test('a page under a menu item stays out of the menu and keeps that menu item active', function () {
+    $this->seed(PaginasSeeder::class);
+    $diensten = Page::query()->atPath(PagePath::fromString('/diensten'))->sole();
+    Page::factory()->published()->under($diensten)->at('/diensten/bruiloft-in-het-buitenland')->create(['title' => 'Bruiloft in het buitenland']);
+
+    $document = documentVoor('/diensten/bruiloft-in-het-buitenland');
+
+    expect(menulabels($document))->toBe(['Diensten', 'Werkwijze', 'Over mij', 'Blog', 'Veelgestelde vragen'])
+        ->and(actieveMenulinks($document))->toBe([url('/diensten')]);
+});
+
+test('the homepage in the menu is only active on the homepage itself', function (string $adres, string $actiefPad) {
+    $this->seed(PaginasSeeder::class);
+    zetInMenu('/', true);
+
+    $document = documentVoor($adres);
+
+    expect(menulabels($document))->toBe(['Home', 'Diensten', 'Werkwijze', 'Over mij', 'Blog', 'Veelgestelde vragen'])
+        ->and(actieveMenulinks($document))->toBe([url($actiefPad)]);
+})->with([
+    'on the homepage' => ['/', '/'],
+    'on another page' => ['/diensten', '/diensten'],
+]);
 
 test('the header links the logo home and the call to action to the configured route', function () {
     $this->seed(HomepaginaSeeder::class);
