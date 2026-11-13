@@ -2481,7 +2481,7 @@
             "dist": {
                 "type": "path",
                 "url": "../made-cms-package",
-                "reference": "baee105ea631abb6b4c68338bb452f2d5871b4af"
+                "reference": "da1c5186e940ce94b498b23417408a945fabb2af"
             },
             "require": {
                 "bacon/bacon-qr-code": "^3.0",
@@ -2512,6 +2512,7 @@
                 "symfony/mime": "^7.2||^8.0"
             },
             "require-dev": {
+                "brianium/paratest": "<7.28",
                 "larastan/larastan": "^3.13",
                 "laravel/pao": "^1.0",
                 "laravel/pint": "^1.29",

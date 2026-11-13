@@ -1,6 +1,13 @@
 <?php
 
+use Database\Seeders\BlogpaginaSeeder;
+use Database\Seeders\HomepaginaSeeder;
+use Database\Seeders\OverMijPaginaSeeder;
+use Database\Seeders\VeelgesteldeVragenpaginaSeeder;
 use Illuminate\View\ViewException;
+use Made\CmsPackage\Content\Data\PagePath;
+use Made\CmsPackage\Content\Enums\PageStatus;
+use Made\CmsPackage\Content\Models\Page;
 
 beforeEach(function () {
     $this->withoutVite();
@@ -89,4 +96,31 @@ test('the blog page names a blog with an unknown topic', function () {
     $this->withoutExceptionHandling();
 
     expect(fn () => $this->get('/blog'))->toThrow(ViewException::class, 'De blog [Taart proeven] heeft een onbekende categorie [eten]');
+});
+
+test('the seeder puts the blog page in the cms, published and in the menu, without strips', function () {
+    $this->seed(BlogpaginaSeeder::class);
+
+    $blog = Page::query()->atPath(PagePath::fromString('/blog'))->sole();
+
+    expect($blog->title)->toBe('Blog')
+        ->and($blog->status)->toBe(PageStatus::Published)
+        ->and($blog->in_menu)->toBeTrue()
+        ->and($blog->strips)->toBe([]);
+});
+
+test('the seeder puts the blog page right after over mij on a database that has the other pages', function () {
+    $this->seed([HomepaginaSeeder::class, OverMijPaginaSeeder::class, VeelgesteldeVragenpaginaSeeder::class]);
+
+    $this->seed(BlogpaginaSeeder::class);
+
+    expect(Page::query()->roots()->inMenuOrder()->pluck('title')->all())->toBe(['Home', 'Over mij', 'Blog', 'Veelgestelde vragen']);
+});
+
+test('the seeder puts the blog page last on a database without over mij', function () {
+    $this->seed([HomepaginaSeeder::class, VeelgesteldeVragenpaginaSeeder::class]);
+
+    $this->seed(BlogpaginaSeeder::class);
+
+    expect(Page::query()->roots()->inMenuOrder()->pluck('title')->all())->toBe(['Home', 'Veelgestelde vragen', 'Blog']);
 });
