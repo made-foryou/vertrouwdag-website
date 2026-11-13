@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('path');
             // The upload as it came in, next to a photo that was scaled down; null when the file was kept as it is.
             $table->string('original_path')->nullable();
+            // The small picture of a photo that was scaled down, for the tiles of the CMS; null for any other file.
+            $table->string('thumb_path')->nullable();
             $table->string('mime');
             $table->unsignedBigInteger('size');
             $table->unsignedInteger('width')->nullable();
