@@ -17,24 +17,21 @@ jobs:
           php-version: '8.5'
           coverage: none
 
-      # Het package staat in composer.json als path-repository naar ../made-cms-package (#14). De repo is
-      # privé, dus de CI checkt hem uit met een read-only deploy key, op de commit die composer.lock noemt.
-      - name: Commit van made-cms-package uit composer.lock lezen
-        id: package
-        run: echo "ref=$(jq -r '.packages[] | select(.name == "made-foryou/made-cms-package") | .dist.reference' composer.lock)" >> "$GITHUB_OUTPUT"
-
-      - uses: actions/checkout@v5
-        with:
-          repository: made-foryou/made-cms-package
-          ref: ${{ steps.package.outputs.ref }}
-          ssh-key: ${{ secrets.MADE_CMS_PACKAGE_DEPLOY_KEY }}
-          path: made-cms-package
-
-      - name: made-cms-package naast de site zetten
-        run: mv made-cms-package ../made-cms-package
+      # Composer haalt made-cms-package van GitHub, op dev-main (#28). De repo is privé, dus Composer kloont hem
+      # over SSH met een read-only deploy key, op de commit die composer.lock noemt. Geen --prefer-dist: dat
+      # overschrijft preferred-install in composer.json, en dan probeert Composer de zip via de API zonder token.
+      - name: Deploy key van made-cms-package klaarzetten
+        env:
+          DEPLOY_KEY: ${{ secrets.MADE_CMS_PACKAGE_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/made_cms_package
+          chmod 600 ~/.ssh/made_cms_package
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          echo "GIT_SSH_COMMAND=ssh -i $HOME/.ssh/made_cms_package -o IdentitiesOnly=yes" >> "$GITHUB_ENV"
 
       - name: Composer-dependencies installeren
-        run: composer install --no-interaction --prefer-dist --no-progress
+        run: composer install --no-interaction --no-progress
 
       - name: Codestijl controleren
         run: vendor/bin/pint --test
@@ -59,24 +56,21 @@ jobs:
       - name: Omgeving voorbereiden
         run: cp .env.example .env
 
-      # Het package staat in composer.json als path-repository naar ../made-cms-package (#14). De repo is
-      # privé, dus de CI checkt hem uit met een read-only deploy key, op de commit die composer.lock noemt.
-      - name: Commit van made-cms-package uit composer.lock lezen
-        id: package
-        run: echo "ref=$(jq -r '.packages[] | select(.name == "made-foryou/made-cms-package") | .dist.reference' composer.lock)" >> "$GITHUB_OUTPUT"
-
-      - uses: actions/checkout@v5
-        with:
-          repository: made-foryou/made-cms-package
-          ref: ${{ steps.package.outputs.ref }}
-          ssh-key: ${{ secrets.MADE_CMS_PACKAGE_DEPLOY_KEY }}
-          path: made-cms-package
-
-      - name: made-cms-package naast de site zetten
-        run: mv made-cms-package ../made-cms-package
+      # Composer haalt made-cms-package van GitHub, op dev-main (#28). De repo is privé, dus Composer kloont hem
+      # over SSH met een read-only deploy key, op de commit die composer.lock noemt. Geen --prefer-dist: dat
+      # overschrijft preferred-install in composer.json, en dan probeert Composer de zip via de API zonder token.
+      - name: Deploy key van made-cms-package klaarzetten
+        env:
+          DEPLOY_KEY: ${{ secrets.MADE_CMS_PACKAGE_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/made_cms_package
+          chmod 600 ~/.ssh/made_cms_package
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          echo "GIT_SSH_COMMAND=ssh -i $HOME/.ssh/made_cms_package -o IdentitiesOnly=yes" >> "$GITHUB_ENV"
 
       - name: Composer-dependencies installeren
-        run: composer install --no-interaction --prefer-dist --no-progress
+        run: composer install --no-interaction --no-progress
 
       - name: Applicatiesleutel genereren
         run: php artisan key:generate

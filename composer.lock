@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd4903273739a7e1a10251ffa472bff6",
+    "content-hash": "fc98fb33216404ced493a78a53d7155e",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2478,10 +2478,16 @@
         {
             "name": "made-foryou/made-cms-package",
             "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../made-cms-package",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:made-foryou/made-cms-package.git",
                 "reference": "da1c5186e940ce94b498b23417408a945fabb2af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/da1c5186e940ce94b498b23417408a945fabb2af",
+                "reference": "da1c5186e940ce94b498b23417408a945fabb2af",
+                "shasum": ""
             },
             "require": {
                 "bacon/bacon-qr-code": "^3.0",
@@ -2528,6 +2534,7 @@
                 "ext-gd": "Scales uploaded photos down to WebP (media.image.driver gd, the default); needs WebP support.",
                 "ext-imagick": "Scales uploaded photos down with Imagick instead (media.image.driver imagick)."
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -2611,10 +2618,7 @@
                 "made-cms-package",
                 "made-foryou"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-11-13T12:51:10+00:00"
         },
         {
             "name": "monolog/monolog",
