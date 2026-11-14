@@ -6,11 +6,12 @@
     Graph-tags bepalen hoe een gedeelde link eruitziet: ogTitle is de
     korte titel ("Diensten en prijzen · vertrouwdag"), ogDescription valt
     terug op description, en ogImage is het pad van een foto voor
-    Vite::asset(). ogType is website, of article voor een blog.
+    Vite::asset(), of de url van een foto uit het CMS (een artikel).
+    ogType is website, of article voor een blog.
 
     Een pagina van de site geeft die waarden mee als seo, een PaginaSeo
     uit de vaste lijst in app/Support/PaginaSeo.php. Met seo komen alle
-    zes daaruit. Een foutpagina of een blogartikel geeft ze los mee.
+    zes daaruit. Een foutpagina geeft ze los mee.
 
     De canonical en og:url wijzen naar hetzelfde pad op het canonieke
     adres uit config/vertrouwdag.php, zonder querystring, tenzij de pagina
@@ -55,7 +56,7 @@
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:title" content="{{ $ogTitle }}">
     <meta property="og:description" content="{{ $ogDescription ?? $description }}">
-    <meta property="og:image" content="{{ Vite::asset($ogImage) }}">
+    <meta property="og:image" content="{{ str_starts_with($ogImage, 'resources/') ? Vite::asset($ogImage) : $ogImage }}">
     @unless ($noindex)
         <meta property="og:url" content="{{ $canonical }}">
     @endunless

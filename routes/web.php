@@ -1,12 +1,7 @@
 <?php
 
-use App\Http\Controllers\BlogartikelController;
 use Illuminate\Support\Facades\Route;
 use Made\CmsPackage\Content\Models\Page;
-
-Route::view('/blog', 'pages.blog')->name('blog');
-Route::view('/blog/archief', 'pages.archief')->name('blog.archief');
-Route::get('/blog/{slug}', BlogartikelController::class)->name('blog.artikel');
 
 // Stijlgids met alle gedeelde componenten, alleen lokaal.
 if (app()->environment('local')) {

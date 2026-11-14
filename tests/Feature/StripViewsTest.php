@@ -266,26 +266,52 @@ test('the compact closing strip has a photo of at least 420px, no heart and no e
 });
 
 test('the article heading leaves out the reading time when its blog has none', function () {
-    $blog = new Blog('Titel', 'Intro', Blogcategorie::Inspiratie, null, '/foto.jpg', 'Foto', 'titel');
+    $blog = new Blog('Titel', 'Intro', Blogcategorie::Inspiratie, null, '/foto.jpg', 'Foto', '/blog/titel');
 
-    $document = renderStrip('artikel-kop', ['foto' => '/hero.jpg', 'alt' => 'Hero', 'sticker' => "hoe eerder,\nhoe rustiger", 'blog' => $blog]);
+    $document = renderStrip('artikel-kop', ['titel' => 'Titel', 'foto' => ['url' => '/hero.jpg', 'alt' => 'Hero', 'width' => 1920, 'height' => 1280], 'sticker' => "hoe eerder,\nhoe rustiger", 'blog' => $blog]);
 
     expect(tekstenVan($document->querySelectorAll('.art-head .row > span')))->toBe(['Inspiratie & styling'])
         ->and($document->querySelector('.art-hero__sticker')?->innerHTML)->toBe("hoe eerder,<br>\nhoe rustiger");
 });
 
-test('the article text starts with its introduction only when it has one', function (?string $inleiding, array $leads) {
-    $document = renderStrip('artikel-tekst', ['inleiding' => $inleiding, 'tekst' => '<h2>Het begin <em>bepaalt de rest</em></h2><p>Alinea.</p>']);
+test('the article heading shows a sticker only when it has one', function (?string $sticker, int $aantal) {
+    $document = renderStrip('artikel-kop', ['titel' => 'Titel', 'foto' => null, 'sticker' => $sticker, 'blog' => null]);
 
-    expect(tekstenVan($document->querySelectorAll('.art-prose .art-lead')))->toBe($leads)
-        ->and($document->querySelector('.art-prose [data-cms-field="tekst"] h2 em')?->textContent)->toBe('bepaalt de rest');
+    expect($document->querySelectorAll('.art-hero__sticker'))->toHaveCount($aantal);
 })->with([
-    'met inleiding' => ['De meeste stellen zoeken pas hulp als het al druk is.', ['De meeste stellen zoeken pas hulp als het al druk is.']],
-    'zonder inleiding' => [null, []],
+    'met sticker' => ["hoe eerder,\nhoe rustiger", 1],
+    'zonder sticker' => [null, 0],
 ]);
 
+test('the article heading keeps its photo in shape when it has no photo yet', function () {
+    $document = renderStrip('artikel-kop', ['titel' => 'Titel', 'foto' => null, 'sticker' => null, 'blog' => null]);
+    $img = $document->querySelector('.art-hero__img img[data-cms-field="foto"]');
+
+    expect($img?->getAttribute('width'))->toBe('1100')
+        ->and($img?->getAttribute('height'))->toBe('733')
+        ->and($img?->getAttribute('alt'))->toBe('')
+        ->and($document->querySelector('.art-head .row'))->toBeNull();
+});
+
+test('the article text starts with its heading and introduction only when it has them', function (?string $kop, ?string $inleiding, array $koppen, array $leads) {
+    $document = renderStrip('artikel-tekst', ['kop' => $kop, 'inleiding' => $inleiding, 'tekst' => '<p>Alinea.</p>']);
+
+    expect(tekstenVan($document->querySelectorAll('.art-prose > h2[data-cms-field="kop"]')))->toBe($koppen)
+        ->and(tekstenVan($document->querySelectorAll('.art-prose .art-lead')))->toBe($leads)
+        ->and(tekstenVan($document->querySelectorAll('.art-prose [data-cms-field="tekst"] p')))->toBe(['Alinea.']);
+})->with([
+    'met kop en inleiding' => ['Het begin *bepaalt de rest*', 'De meeste stellen zoeken pas hulp als het al druk is.', ['Het begin bepaalt de rest'], ['De meeste stellen zoeken pas hulp als het al druk is.']],
+    'zonder kop en inleiding' => [null, null, [], []],
+]);
+
+test('the heading of an article text has its accent', function () {
+    $document = renderStrip('artikel-tekst', ['kop' => 'Het begin *bepaalt de rest*', 'inleiding' => null, 'tekst' => '<p>Alinea.</p>']);
+
+    expect($document->querySelector('.art-prose > h2 em')?->textContent)->toBe('bepaalt de rest');
+});
+
 test('the photos of an article tilt one way and then the other', function () {
-    $fotos = array_map(fn (int $nummer): array => ['id' => null, 'foto' => "/foto-{$nummer}.jpg", 'alt' => "Foto {$nummer}", 'bijschrift' => "bijschrift {$nummer}"], range(1, 3));
+    $fotos = array_map(fn (int $nummer): array => ['id' => "item-{$nummer}", 'foto' => ['url' => "/foto-{$nummer}.jpg", 'alt' => "Foto {$nummer}", 'width' => 1920, 'height' => 1280], 'bijschrift' => "bijschrift {$nummer}"], range(1, 3));
 
     $document = renderStrip('artikel-fotos', ['fotos' => $fotos]);
     $polaroids = $document->querySelectorAll('[data-cms-items="fotos"] > figure.polaroid');

@@ -28,7 +28,7 @@ final readonly class PaginaSeo
      * @param  string  $omschrijving  de meta description
      * @param  string  $ogTitel  de korte titel van een gedeelde link
      * @param  ?string  $ogOmschrijving  null is gelijk aan de omschrijving
-     * @param  string  $ogAfbeelding  een pad voor Vite::asset()
+     * @param  string  $ogAfbeelding  een pad voor Vite::asset(), of de url van een foto uit het CMS
      * @param  string  $ogType  website, of article voor een blog
      */
     public function __construct(
@@ -83,6 +83,12 @@ final readonly class PaginaSeo
                 omschrijving: 'Alle blogs van weddingplanner Romy op een rij: tips voor het plannen van jullie bruiloft, locaties in Zuid-Holland en een kijkje achter de schermen.',
                 ogTitel: 'Blogarchief: alle artikelen · vertrouwdag',
                 ogAfbeelding: 'resources/images/paar-meer-herfst.jpg',
+            ),
+            '/blog/wanneer-weddingplanner-inschakelen' => new self(
+                titel: 'Wanneer schakel je een weddingplanner in? | vertrouwdag',
+                omschrijving: 'Wanneer schakel je een weddingplanner in? Voor full service het liefst 12 tot 18 maanden van tevoren. Waarom een vroeg begin juist rust oplevert.',
+                ogTitel: 'Wanneer schakel je een weddingplanner in? · vertrouwdag',
+                ogType: 'article',
             ),
             '/veelgestelde-vragen' => new self(
                 titel: 'Veelgestelde vragen over een weddingplanner | vertrouwdag',
@@ -143,17 +149,39 @@ final readonly class PaginaSeo
     }
 
     /**
-     * De SEO van een pagina uit het CMS: uit de vaste lijst op haar adres,
-     * en anders gemaakt van haar titel met de algemene omschrijving.
+     * De SEO van een pagina uit het CMS: uit de vaste lijst op haar adres.
+     * Een artikel buiten de lijst krijgt de SEO uit zijn artikelkop (#20),
+     * en een andere pagina haar titel met de algemene omschrijving.
      */
     public static function voorPagina(Page $page): self
     {
         $adres = $page->route?->path;
 
-        return ($adres !== null ? self::voorAdres($adres) : null) ?? new self(
-            titel: "{$page->title} | vertrouwdag",
-            omschrijving: self::ALGEMENE_OMSCHRIJVING,
-            ogTitel: "{$page->title} · vertrouwdag",
+        return ($adres !== null ? self::voorAdres($adres) : null)
+            ?? self::voorArtikel(app(Blogs::class)->vanPagina($page))
+            ?? new self(
+                titel: "{$page->title} | vertrouwdag",
+                omschrijving: self::ALGEMENE_OMSCHRIJVING,
+                ogTitel: "{$page->title} · vertrouwdag",
+            );
+    }
+
+    /**
+     * De SEO van een artikel: de titel zonder accent, de intro als
+     * omschrijving en de foto van de artikelkop.
+     */
+    private static function voorArtikel(?Blog $blog): ?self
+    {
+        if ($blog === null) {
+            return null;
+        }
+
+        return new self(
+            titel: "{$blog->platteTitel()} | vertrouwdag",
+            omschrijving: $blog->intro,
+            ogTitel: "{$blog->platteTitel()} · vertrouwdag",
+            ogAfbeelding: $blog->afbeelding,
+            ogType: 'article',
         );
     }
 }

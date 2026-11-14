@@ -1,5 +1,6 @@
 {{--
-    De 404: een adres dat niet bestaat, of een blog zonder artikel. De
+    De 404: een adres dat niet bestaat, of een pagina in het CMS die niet
+    (meer) gepubliceerd is, zoals een artikel in concept. De
     pagina staat in de layout van de site, zodat het menu er is en de
     bezoeker verder kan. Zoekmachines slaan haar over (noindex).
 --}}

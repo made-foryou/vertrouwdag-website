@@ -56,6 +56,14 @@ function buitenLijsten(Element $strook, string $selector): array
 test('the catalogue of the cms builds with the strip types of the pages in the cms', function (string $key) {
     expect(app(StripTypes::class)->has($key))->toBeTrue();
 })->with([
+    'artikel-citaat',
+    'artikel-fotos',
+    'artikel-kop',
+    'artikel-tekst',
+    'auteur',
+    'blog-archief',
+    'blog-laatste',
+    'blog-uitgelicht',
     'checklist-aanmelding',
     'checklist-bedankt',
     'citaat',
@@ -65,6 +73,8 @@ test('the catalogue of the cms builds with the strip types of the pages in the c
     'faq',
     'herkenning',
     'hero',
+    'hero-archief',
+    'hero-blog',
     'hero-checklist',
     'hero-diensten',
     'hero-faq',
@@ -72,6 +82,7 @@ test('the catalogue of the cms builds with the strip types of the pages in the c
     'hero-over-mij',
     'hero-werkwijze',
     'juridisch',
+    'kennismaking',
     'kijkje',
     'kwaliteiten',
     'leveranciers',
@@ -99,12 +110,16 @@ test('every strip type of the cms renders its view with its default values', fun
  * package). Een keuze herlaadt het frame altijd, en de velden hieronder bewust: daar staat in de view waarom. Een veld
  * in een lijst heet hier lijst.veld.
  *
- * De vergelijking toont haar tabel alleen met de pakketten van /diensten, dus die staan er eerst.
+ * De vergelijking toont haar tabel alleen met de pakketten van /diensten, en de blog het nieuwste artikel alleen met
+ * een artikel onder /blog, dus die staan er eerst.
  */
 test('the edit frame finds every field of a strip type in its view', function (string $striptype) {
     /** @var StripType $type */
     $type = new $striptype;
     $herlaadt = [
+        'artikel-kop' => ['intro', 'sticker'],
+        'artikel-tekst' => ['kop', 'inleiding'],
+        'blog-laatste' => ['binnenkort'],
         'lopende-band' => ['teksten'],
         'pakketten' => ['diensten.kenmerken', 'diensten.prijs'],
         'tijdlijn' => ['eerste_nummer'],
@@ -113,6 +128,7 @@ test('the edit frame finds every field of a strip type in its view', function (s
     ][$type->key()] ?? [];
 
     $this->seed(DienstenpaginaSeeder::class);
+    artikelOnderBlog('een-blog');
     $strook = strookMetStandaardwaarden($type);
 
     foreach ($type->fields() as $veld) {

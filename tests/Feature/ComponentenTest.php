@@ -310,12 +310,12 @@ describe('chip', function () {
 
 describe('blogkaart', function () {
     test('a published blog is a link to its article with its topic, title and intro', function () {
-        $blog = new Blog('Wanneer *begin* je?', 'Een vroeg begin geeft rust.', Blogcategorie::Planning, 6, '/foto.jpg', 'Bruidspaar bij een meer', 'wanneer');
+        $blog = new Blog('Wanneer *begin* je?', 'Een vroeg begin geeft rust.', Blogcategorie::Planning, 6, '/foto.jpg', 'Bruidspaar bij een meer', url('/blog/wanneer'));
 
         $document = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog]);
         $kaart = $document->querySelector('a.pol');
 
-        expect($kaart?->getAttribute('href'))->toBe(route('blog.artikel', 'wanneer'))
+        expect($kaart?->getAttribute('href'))->toBe(url('/blog/wanneer'))
             ->and($kaart?->getAttribute('data-cat'))->toBe('planning')
             ->and($kaart?->hasAttribute('data-post'))->toBeTrue()
             ->and($kaart?->classList->contains('pol--soon'))->toBeFalse()
@@ -326,7 +326,7 @@ describe('blogkaart', function () {
     });
 
     test('a blog to come is a card without a link and with a duller photo', function () {
-        $blog = new Blog('Locaties', 'Binnenkort.', Blogcategorie::Locaties, null, '/foto.jpg', 'Foto', 'locaties', binnenkort: true);
+        $blog = new Blog('Locaties', 'Binnenkort.', Blogcategorie::Locaties, null, '/foto.jpg', 'Foto', binnenkort: true);
 
         $document = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog]);
 

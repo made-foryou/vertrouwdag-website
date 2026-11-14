@@ -35,18 +35,6 @@ test('the pages of the cms are the last route, so no route of the site is caught
     expect($routes->last()->uri())->toBe('{path?}');
 });
 
-test('a route of the site goes first, also when the cms has a published page at the same address', function (string $adres, string $view) {
-    Page::factory()->published()->at($adres)->withStrips([ctaStrook('Uit het *CMS*')])->create();
-
-    $response = $this->get($adres);
-
-    $response->assertOk()
-        ->assertViewIs($view)
-        ->assertDontSee('Uit het');
-})->with([
-    'blog' => ['/blog', 'pages.blog'],
-]);
-
 test('a published page of the cms shows its strips in the layout of the site', function () {
     Page::factory()->published()->at('/testpagina')->withStrips([ctaStrook('Zullen we *kennismaken?*')])->create(['title' => 'Testpagina']);
 

@@ -1,10 +1,9 @@
 {{--
-    Strook: de nieuwste blog die online staat, groot, als link naar het
-    artikel.
+    Strook: het nieuwste artikel, groot, als link naar het artikel.
 
-    Velden: label (op het labeltje, "Nieuwste blog") en link_tekst. De
-    blog zelf is extra data: blog, een App\Support\Blog of null. Zonder
-    blog blijft de strook leeg.
+    Velden: label (op het labeltje, "Nieuwste blog") en link_tekst. Het
+    artikel is extra data (with()): blog, een App\Support\Blog uit
+    App\Support\Blogs, of null. Zonder artikel blijft de strook leeg.
 --}}
 <section class="wrap" style="padding-bottom:72px" data-cms-strip="{{ $strip->id }}">
     @if ($strip->blog)

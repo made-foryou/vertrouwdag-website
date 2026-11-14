@@ -1,9 +1,12 @@
 {{--
-    Strook: de blogs na de uitgelichte als polaroids op de band, met een
-    knop naar het archief.
+    Strook: de artikelen na het uitgelichte als polaroids op de band, dan
+    de blogs die binnenkort komen, en een knop naar het archief.
 
-    Velden: knop (tekst en url). De blogs zijn extra data: blogs, een
-    lijst van App\Support\Blog, ook wat binnenkort komt.
+    Velden: binnenkort (lijst met titel, intro, categorie en foto) en knop
+    (tekst en url). De kaarten zijn extra data (with()): blogs, een lijst
+    van App\Support\Blog, eerst de artikelen en dan wat binnenkort komt.
+    Die staan samen in één raster, dus is er geen data-cms-items: een
+    wijziging in de lijst binnenkort herlaadt het frame na het opslaan.
 --}}
 <section class="band" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec">
