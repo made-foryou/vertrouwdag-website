@@ -194,12 +194,12 @@
 
     {{-- Kruimelpad en chips (archief.html en blog.html) --}}
     <section class="wrap stack" style="align-items:center;gap:20px;text-align:center;padding-top:72px;padding-bottom:72px">
-        <x-kruimelpad :links="['Home' => url('/'), 'Blog' => route('blog')]" huidig="Archief" data-reveal />
+        <x-kruimelpad :links="['Home' => url('/'), 'Blog' => url(App\Support\Blogs::ADRES)]" huidig="Archief" data-reveal />
         <p class="eb" data-reveal>Chips als links (blog)</p>
         <nav class="chips" aria-label="Onderwerpen" data-reveal>
-            <x-chip :href="route('blog.archief')">Alles</x-chip>
-            <x-chip :href="route('blog.archief').'#planning'">Planning</x-chip>
-            <x-chip :href="route('blog.archief').'#locaties'">Locaties in Zuid-Holland</x-chip>
+            <x-chip :href="url(App\Support\Blogs::ARCHIEF)">Alles</x-chip>
+            <x-chip :href="url(App\Support\Blogs::ARCHIEF).'#planning'">Planning</x-chip>
+            <x-chip :href="url(App\Support\Blogs::ARCHIEF).'#locaties'">Locaties in Zuid-Holland</x-chip>
         </nav>
         <p class="eb" data-reveal>Chips als filter (archief)</p>
         <div class="chips" role="group" aria-label="Filter op onderwerp" data-reveal>
@@ -214,7 +214,7 @@
         <div class="wrap sec stack" style="gap:32px">
             <p class="eb" data-reveal>Blogkaarten</p>
             <div class="posts" data-reveal-group>
-                <x-blogkaart :blog="new App\Support\Blog('Wanneer schakel je een weddingplanner in? *(En waarom eerder dan je denkt)*', 'De meeste stellen bellen pas als het al druk is. Waarom een vroeg begin juist rust oplevert.', App\Support\Blogcategorie::Planning, 6, Vite::asset('resources/images/paar-meer-herfst.jpg'), 'Bruidspaar bij een meer in de herfst', 'wanneer-weddingplanner-inschakelen')" />
+                <x-blogkaart :blog="new App\Support\Blog('Wanneer schakel je een weddingplanner in? *(En waarom eerder dan je denkt)*', 'De meeste stellen bellen pas als het al druk is. Waarom een vroeg begin juist rust oplevert.', App\Support\Blogcategorie::Planning, 6, Vite::asset('resources/images/paar-meer-herfst.jpg'), 'Bruidspaar bij een meer in de herfst', url('/blog/wanneer-weddingplanner-inschakelen'))" />
                 <x-blogkaart :blog="new App\Support\Blog('Landelijk-romantisch trouwen in Zuid-Holland: waar begin je?', 'Van boerderij tot buitenplaats, dicht bij huis.', App\Support\Blogcategorie::Locaties, null, Vite::asset('resources/images/ceremonie-buiten.jpg'), 'Ceremonieplek buiten met witte stoelen', binnenkort: true)" :positie="1" />
                 <x-blogkaart :blog="new App\Support\Blog('Waarom jullie familie op jullie trouwdag niets hoeft te regelen', 'Zo mogen jullie ouders en getuigen vooral gast zijn.', App\Support\Blogcategorie::AchterDeSchermen, null, Vite::asset('resources/images/feesttafel.jpg'), 'Gedekte feesttafel met bloemen', binnenkort: true)" :positie="2" />
             </div>

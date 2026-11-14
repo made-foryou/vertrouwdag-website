@@ -5,9 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 /**
- * Zet elke pagina die al naar het CMS verhuisde in het CMS: eerst die uit
- * het menu in zijn volgorde, dan de rest. Een pagina die er al staat,
- * blijft zoals ze is.
+ * Zet elke pagina van de site in het CMS: eerst die uit het menu in zijn
+ * volgorde, dan de rest. Het archief en het artikel staan direct na /blog,
+ * want ze staan eronder (#20). Een pagina die er al staat, blijft zoals ze
+ * is; alleen een lege pagina krijgt haar stroken alsnog.
  */
 class PaginasSeeder extends Seeder
 {
@@ -19,6 +20,8 @@ class PaginasSeeder extends Seeder
             WerkwijzepaginaSeeder::class,
             OverMijPaginaSeeder::class,
             BlogpaginaSeeder::class,
+            BlogarchiefpaginaSeeder::class,
+            BlogartikelSeeder::class,
             VeelgesteldeVragenpaginaSeeder::class,
             ChecklistpaginaSeeder::class,
             KennismakenpaginaSeeder::class,

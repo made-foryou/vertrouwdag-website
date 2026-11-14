@@ -7,10 +7,14 @@ use Made\CmsPackage\Content\Data\PagePath;
 use Made\CmsPackage\Content\Models\Page;
 
 /**
- * Zet /blog in het CMS (#19), zodat Blog in het menu staat. Het menu komt
- * uit de paginaboom. De pagina heeft geen stroken: de vaste routes van de
- * blog in routes/web.php gaan voor, tot de blogs uit het CMS komen (#20).
- * Dan is ze de ouder van de artikelen.
+ * Zet /blog in het CMS, met de stroken uit het ontwerp (#20). De pagina is
+ * de ouder van de artikelen en van het archief. De uitgelichte blog en de
+ * kaarten komen uit die artikelen (App\Support\Blogs); de blogs die
+ * binnenkort komen, staan in de strook blog-laatste, met hun foto in de
+ * Media-bibliotheek.
+ *
+ * Eerst stond /blog leeg in het CMS, alleen voor het menu (#19). Zo'n lege
+ * pagina krijgt de stroken alsnog (PaginaSeeder).
  *
  * In het menu staat Blog tussen Over mij en Veelgestelde vragen. Een
  * nieuwe pagina komt achteraan in de boom. Op een database waar de andere
@@ -30,7 +34,37 @@ class BlogpaginaSeeder extends PaginaSeeder
 
     protected function stroken(): array
     {
-        return [];
+        return [
+            ['hero-blog'],
+            ['blog-uitgelicht'],
+            ['blog-laatste', [
+                'binnenkort' => [
+                    [
+                        'titel' => 'Landelijk-romantisch trouwen in Zuid-Holland: waar begin je?',
+                        'intro' => 'Van boerderij tot buitenplaats, dicht bij huis.',
+                        'categorie' => 'locaties',
+                        'foto' => $this->foto('ceremonie-buiten.jpg', 'Ceremonieplek buiten met witte stoelen'),
+                    ],
+                    [
+                        'titel' => 'Waarom jullie familie op jullie trouwdag niets hoeft te regelen',
+                        'intro' => 'Zo mogen jullie ouders en getuigen vooral gast zijn.',
+                        'categorie' => 'achter-de-schermen',
+                        'foto' => $this->foto('feesttafel.jpg', 'Gedekte feesttafel met bloemen'),
+                    ],
+                    [
+                        'titel' => '[Volgend artikel]',
+                        'intro' => 'Hier komt jullie volgende blog.',
+                        'categorie' => 'budget',
+                        'foto' => $this->foto('ringen-goud.jpg', 'Twee gouden trouwringen'),
+                    ],
+                ],
+            ]],
+            ['cta', [
+                'kop' => 'Liever direct *persoonlijk advies?*',
+                'tekst' => null,
+                'variant' => 'compact',
+            ]],
+        ];
     }
 
     protected function maakPagina(PagePath $adres): Page

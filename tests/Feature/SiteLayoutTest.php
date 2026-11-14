@@ -3,6 +3,7 @@
 use Database\Seeders\HomepaginaSeeder;
 use Dom\HTMLDocument;
 use Illuminate\Support\Facades\Vite;
+use Made\CmsPackage\Content\Models\Page;
 
 test('the layout renders the title, description, canonical and open graph tags the page passes', function () {
     $this->withoutVite();
@@ -38,6 +39,7 @@ test('the canonical points to the same path on the live address from the config,
     $this->withoutVite();
     config(['vertrouwdag.canonieke_url' => 'https://voorbeeld.nl/']);
     $this->seed(HomepaginaSeeder::class);
+    Page::factory()->published()->at('/blog/archief')->create(['title' => 'Archief']);
 
     $document = documentVoor($url);
 

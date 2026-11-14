@@ -2,89 +2,177 @@
 
 namespace App\Support;
 
-use Illuminate\Support\Facades\Vite;
-use InvalidArgumentException;
+use Illuminate\Support\Str;
+use Made\CmsPackage\Content\Actions\FindMedia;
+use Made\CmsPackage\Content\Data\EditMode;
+use Made\CmsPackage\Content\Data\PagePath;
+use Made\CmsPackage\Content\Data\PageStrips;
+use Made\CmsPackage\Content\Models\Page;
+use Made\CmsPackage\Content\Strips\StripTypes;
 
 /**
- * De blogs uit config/blogs.php, de nieuwste eerst.
+ * De artikelen van de blog, uit het CMS (#20, optie B).
  *
- * Dit is de tijdelijke bron. In #20 komen de blogs uit het CMS en geeft
- * een striptype ze via with() aan de strook. De strip-views krijgen ze
- * nu al zo, als $strip->blog of $strip->blogs, en blijven dan gelijk.
+ * Een artikel is een gepubliceerde pagina direct onder /blog met een
+ * zichtbare strook artikel-kop. Daar komen de titel, de intro, het
+ * onderwerp, de leestijd en de foto vandaan. Een pagina onder /blog
+ * zonder artikelkop, zoals het archief, is geen artikel.
+ *
+ * De nieuwste staat eerst: de pagina die het laatst is aangemaakt
+ * (besluit Menno, 2026-11-14). Het package bewaart alleen de laatste
+ * publicatie, en die verschuift bij elke correctie.
+ *
+ * Het overzicht en het archief tonen de gepubliceerde artikelen, ook in
+ * de bewerkmodus. Alleen de artikelkop van de pagina zelf volgt daar de
+ * werkversie, zoals de stroken van die pagina.
+ *
+ * Elke instantie leest de artikelen één keer. Vraag hem per render op
+ * (app(Blogs::class)), zodat een nieuw artikel nooit ontbreekt.
  */
 final class Blogs
 {
     /**
-     * @return list<Blog>
-     *
-     * @throws InvalidArgumentException als een blog een onbekende categorie heeft
+     * Het adres van de blog, de ouder van de artikelen.
      */
-    public static function alle(): array
-    {
-        return array_map(self::maak(...), array_values(config('blogs', [])));
-    }
+    public const string ADRES = '/blog';
 
     /**
-     * De blogs die online staan, voor het archief.
-     *
-     * @return list<Blog>
+     * Het adres van het archief, met een onderwerp als anker
+     * (/blog/archief#planning).
      */
-    public static function gepubliceerd(): array
-    {
-        return array_values(array_filter(self::alle(), fn (Blog $blog): bool => $blog->isGepubliceerd()));
-    }
+    public const string ARCHIEF = '/blog/archief';
+
+    private const string KOP = 'artikel-kop';
 
     /**
-     * De nieuwste blog die online staat, groot op /blog.
+     * @var list<Blog>|null
      */
-    public static function uitgelicht(): ?Blog
-    {
-        return self::gepubliceerd()[0] ?? null;
-    }
+    private ?array $artikelen = null;
+
+    public function __construct(private readonly StripTypes $types) {}
 
     /**
-     * De kaarten onder de uitgelichte blog: de eerste blogs van de lijst
-     * zonder de uitgelichte, ook wat binnenkort komt.
+     * Elk gepubliceerd artikel, het nieuwste eerst.
      *
      * @return list<Blog>
      */
-    public static function laatste(int $aantal = 3): array
+    public function artikelen(): array
     {
-        $blogs = self::alle();
-        $uitgelicht = array_find_key($blogs, fn (Blog $blog): bool => $blog->isGepubliceerd());
+        return $this->artikelen ??= $this->lees();
+    }
 
-        if ($uitgelicht !== null) {
-            unset($blogs[$uitgelicht]);
+    /**
+     * Het nieuwste artikel, groot op /blog.
+     */
+    public function uitgelicht(): ?Blog
+    {
+        return $this->artikelen()[0] ?? null;
+    }
+
+    /**
+     * De artikelen na het uitgelichte, als kaart op /blog.
+     *
+     * @return list<Blog>
+     */
+    public function laatste(int $aantal = 3): array
+    {
+        return array_slice($this->artikelen(), 1, $aantal);
+    }
+
+    /**
+     * Of de pagina een artikel is: direct onder /blog, met een zichtbare
+     * artikelkop.
+     */
+    public function isArtikel(Page $page): bool
+    {
+        return $this->artikelkop($page) !== null;
+    }
+
+    /**
+     * Het artikel op de pagina, uit haar artikelkop. Null voor een pagina
+     * die geen artikel is, of waarvan de artikelkop nog geen titel of
+     * onderwerp heeft.
+     */
+    public function vanPagina(Page $page): ?Blog
+    {
+        $kop = $this->artikelkop($page);
+
+        if ($kop === null) {
+            return null;
         }
 
-        return array_slice(array_values($blogs), 0, $aantal);
+        $type = $this->types->find(self::KOP);
+
+        return Blog::uitVelden($type->render($kop, FindMedia::run($type->media($kop))), url((string) $page->route?->path));
     }
 
     /**
-     * De blog die online staat op dit adres.
+     * @return list<Blog>
      */
-    public static function metSlug(string $slug): ?Blog
+    private function lees(): array
     {
-        return array_find(self::gepubliceerd(), fn (Blog $blog): bool => $blog->slug === $slug);
+        $blog = Page::query()->atPath(PagePath::fromString(self::ADRES))->first();
+
+        if ($blog === null || ! $this->types->has(self::KOP)) {
+            return [];
+        }
+
+        $koppen = [];
+
+        foreach (Page::query()->published()->childrenOf($blog)->with('route')->orderByDesc('created_at')->orderByDesc('id')->get() as $pagina) {
+            $kop = $this->kopIn($pagina->strips);
+
+            if ($kop !== null && $pagina->route !== null) {
+                $koppen[] = ['waarden' => $kop, 'url' => url($pagina->route->path)];
+            }
+        }
+
+        $type = $this->types->find(self::KOP);
+        $media = FindMedia::run(array_merge(...array_map(fn (array $kop): array => $type->media($kop['waarden']), $koppen)));
+        $artikelen = [];
+
+        foreach ($koppen as $kop) {
+            $artikel = Blog::uitVelden($type->render($kop['waarden'], $media), $kop['url']);
+
+            if ($artikel !== null) {
+                $artikelen[] = $artikel;
+            }
+        }
+
+        return $artikelen;
     }
 
     /**
-     * @param  array{titel: string, intro: string, categorie: string, leestijd: ?int, afbeelding: string, alt: string, slug: ?string, binnenkort: bool}  $gegevens
+     * De opgeslagen waarden van de artikelkop van een pagina direct onder
+     * /blog. In de bewerkmodus is dat de werkversie.
+     *
+     * @return array<string, mixed>|null
      */
-    private static function maak(array $gegevens): Blog
+    private function artikelkop(Page $page): ?array
     {
-        $categorie = Blogcategorie::tryFrom($gegevens['categorie'])
-            ?? throw new InvalidArgumentException("De blog [{$gegevens['titel']}] heeft een onbekende categorie [{$gegevens['categorie']}]; kies planning, locaties, budget, inspiratie of achter-de-schermen.");
+        $adres = $page->route?->path;
 
-        return new Blog(
-            titel: $gegevens['titel'],
-            intro: $gegevens['intro'],
-            categorie: $categorie,
-            leestijd: $gegevens['leestijd'],
-            afbeelding: Vite::asset($gegevens['afbeelding']),
-            alt: $gegevens['alt'],
-            slug: $gegevens['slug'],
-            binnenkort: $gegevens['binnenkort'],
-        );
+        if ($adres === null || Str::beforeLast($adres, '/') !== self::ADRES || ! $this->types->has(self::KOP)) {
+            return null;
+        }
+
+        return $this->kopIn(app(EditMode::class)->active ? ($page->draft_strips ?? $page->strips) : $page->strips);
+    }
+
+    /**
+     * De waarden van de eerste zichtbare artikelkop in de stroken.
+     *
+     * @param  list<array<string, mixed>>  $stroken
+     * @return array<string, mixed>|null
+     */
+    private function kopIn(array $stroken): ?array
+    {
+        foreach (PageStrips::fromArray($stroken)->strips as $strip) {
+            if ($strip->type === self::KOP && $strip->visible) {
+                return $strip->values;
+            }
+        }
+
+        return null;
     }
 }

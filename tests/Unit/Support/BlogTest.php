@@ -14,14 +14,15 @@ test('the line above the title names the topic with the reading time, or soon fo
     'binnenkort met leestijd' => [Blogcategorie::Locaties, 4, true, 'Locaties in Zuid-Holland · binnenkort'],
 ]);
 
-test('a blog is only published with an address and when it is not still to come', function (?string $slug, bool $binnenkort, bool $gepubliceerd) {
-    $blog = new Blog('Titel', 'Intro', Blogcategorie::Planning, 6, '/foto.jpg', 'Foto', $slug, $binnenkort);
+test('a blog is only published with an address and when it is not still to come', function (?string $url, bool $binnenkort, bool $gepubliceerd) {
+    $blog = new Blog('Titel', 'Intro', Blogcategorie::Planning, 6, '/foto.jpg', 'Foto', $url, $binnenkort);
 
-    expect($blog->isGepubliceerd())->toBe($gepubliceerd);
+    expect($blog->isGepubliceerd())->toBe($gepubliceerd)
+        ->and($blog->url())->toBe($gepubliceerd ? $url : null);
 })->with([
-    'met adres' => ['een-blog', false, true],
+    'met adres' => ['https://vertrouwdag.nl/blog/een-blog', false, true],
     'zonder adres' => [null, false, false],
-    'binnenkort met adres' => ['een-blog', true, false],
+    'binnenkort met adres' => ['https://vertrouwdag.nl/blog/een-blog', true, false],
 ]);
 
 test('the plain title leaves out the asterisks of the accent', function () {

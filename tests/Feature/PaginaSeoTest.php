@@ -1,10 +1,10 @@
 <?php
 
-use App\Support\Blogs;
 use Database\Seeders\PaginasSeeder;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as Router;
 use Illuminate\Support\Facades\Vite;
+use Made\CmsPackage\Content\Models\Media;
 use Made\CmsPackage\Content\Models\Page;
 
 /**
@@ -102,20 +102,10 @@ test('the pages above cover every page of the site, so a new page cannot skip th
             continue;
         }
 
-        if ($route->getName() === 'blog.artikel') {
-            foreach (Blogs::gepubliceerd() as $blog) {
-                if ($blog->slug !== null) {
-                    $adressen[] = parse_url(route('blog.artikel', $blog->slug), PHP_URL_PATH);
-                }
-            }
-
-            continue;
-        }
-
         $adressen[] = '/'.ltrim($route->uri(), '/');
     }
 
-    // Een pagina uit het CMS op het adres van een vaste route, zoals /blog tot #20, is voor bezoekers de vaste pagina.
+    // Een pagina uit het CMS op het adres van een vaste route is voor bezoekers de vaste pagina.
     foreach (Page::query()->published()->with('route')->get() as $page) {
         if (! in_array($page->route->path, $adressen, true)) {
             $adressen[] = $page->route->path;
@@ -127,4 +117,21 @@ test('the pages above cover every page of the site, so a new page cannot skip th
     sort($gedekt);
 
     expect($adressen)->toBe($gedekt);
+});
+
+test('an article outside the list above takes its title, description and photo from its article heading', function () {
+    $foto = Media::factory()->create();
+    artikelOnderBlog('trouwen-in-de-winter', [
+        'titel' => 'Trouwen in de *winter*',
+        'intro' => 'Kort licht, warme kleuren en een feest binnen.',
+        'foto' => $foto->id,
+    ]);
+
+    $document = documentVoor('/blog/trouwen-in-de-winter');
+
+    expect(tekstenVan($document->querySelectorAll('title')))->toBe(['Trouwen in de winter | vertrouwdag'])
+        ->and($document->querySelector('meta[name="description"]')?->getAttribute('content'))->toBe('Kort licht, warme kleuren en een feest binnen.')
+        ->and($document->querySelector('meta[property="og:title"]')?->getAttribute('content'))->toBe('Trouwen in de winter · vertrouwdag')
+        ->and($document->querySelector('meta[property="og:type"]')?->getAttribute('content'))->toBe('article')
+        ->and($document->querySelector('meta[property="og:image"]')?->getAttribute('content'))->toEndWith("/storage/{$foto->path}");
 });

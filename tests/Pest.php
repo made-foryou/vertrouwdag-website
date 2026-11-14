@@ -4,9 +4,14 @@ use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\NodeList;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Made\CmsPackage\Content\Actions\PublishPage;
 use Made\CmsPackage\Content\Actions\UpdateStrip;
+use Made\CmsPackage\Content\Actions\UploadMedia;
 use Made\CmsPackage\Content\Data\PagePath;
+use Made\CmsPackage\Content\Data\UploadedMedia;
+use Made\CmsPackage\Content\Models\Media;
 use Made\CmsPackage\Content\Models\Page;
 use Tests\TestCase;
 
@@ -23,8 +28,24 @@ use Tests\TestCase;
 
 // Elk onbekend adres zoekt een pagina in de database van het CMS (Route::madeCms). Lazily migreert alleen voor een test
 // die de database echt gebruikt.
+//
+// De seeders van de blog zetten foto's in de Media-bibliotheek (#20). Die schrijft naar een nep-schijf, nooit naar
+// storage/app/public. Een foto echt uploaden verkleint hem en maakt een thumbnail, ongeveer 0,1 s per foto, en
+// PaginasSeeder doet dat vier keer in elke test die hem draait. Daarom zet UploadMedia hier alleen een bestand in de
+// bibliotheek, met de naam die het package het geeft. De actie is final, dus geen mock: UploadMedia::run() haalt hem
+// uit de container. Een test die de echte upload nodig heeft, roept echteUploads() aan.
 pest()->extend(TestCase::class)
     ->use(LazilyRefreshDatabase::class)
+    ->beforeEach(function () {
+        Storage::fake('public');
+        app()->instance(UploadMedia::class, new class
+        {
+            public function handle(UploadedMedia $upload): Media
+            {
+                return Media::factory()->create(['name' => Str::slug(pathinfo($upload->filename, PATHINFO_FILENAME))]);
+            }
+        });
+    })
     ->in('Feature');
 
 /*
@@ -83,14 +104,15 @@ function documentVoor(string $url): HTMLDocument
  * De types van de stroken in <main>, van boven naar beneden. Een strook uit
  * het CMS heeft een uuid als id; de gepubliceerde pagina op het adres zegt
  * van welk type hij is. Een strook die niet van die pagina is, wordt null.
+ * Van een artikel staan de stroken in <article> (selector main > article > *).
  *
  * @return list<?string>
  */
-function striptypenOp(string $adres, HTMLDocument $document): array
+function striptypenOp(string $adres, HTMLDocument $document, string $selector = 'main > *'): array
 {
     $typen = array_column(Page::query()->published()->atPath(PagePath::fromString($adres))->sole()->strips, 'type', 'id');
 
-    return array_map(fn (?string $id): ?string => $typen[$id] ?? null, attributenVan($document->querySelectorAll('main > *'), 'data-cms-strip'));
+    return array_map(fn (?string $id): ?string => $typen[$id] ?? null, attributenVan($document->querySelectorAll($selector), 'data-cms-strip'));
 }
 
 /**
@@ -175,23 +197,55 @@ function platteTekst(?Element $element): ?string
 }
 
 /**
- * Een blog zoals hij in config/blogs.php staat: een gepubliceerde blog
- * zonder adres, tenzij de test andere velden geeft.
+ * Een strook artikel-kop zoals het CMS hem opslaat, met een foto uit de
+ * Media-bibliotheek, tenzij de test andere velden geeft.
  *
  * @param  array<string, mixed>  $velden
- * @return array{titel: string, intro: string, categorie: string, leestijd: ?int, afbeelding: string, alt: string, slug: ?string, binnenkort: bool}
+ * @return array{id: string, type: string, visible: bool, values: array<string, mixed>}
  */
-function blogInDeConfig(array $velden = []): array
+function artikelkop(array $velden = [], bool $zichtbaar = true): array
 {
     return [
-        'titel' => 'Een blog',
-        'intro' => 'Een korte intro.',
-        'categorie' => 'planning',
-        'leestijd' => 5,
-        'afbeelding' => 'resources/images/ringen-goud.jpg',
-        'alt' => 'Twee gouden trouwringen',
-        'slug' => null,
-        'binnenkort' => false,
-        ...$velden,
+        'id' => (string) Str::uuid(),
+        'type' => 'artikel-kop',
+        'visible' => $zichtbaar,
+        'values' => [
+            'titel' => 'Een blog',
+            'intro' => 'Een korte intro.',
+            'categorie' => 'planning',
+            'leestijd' => '5',
+            'foto' => Media::factory()->withAlt('Twee gouden trouwringen')->create()->id,
+            ...$velden,
+        ],
     ];
+}
+
+/**
+ * De pagina /blog in het CMS, gepubliceerd en zonder stroken, als ouder
+ * van de artikelen. Staat ze er al, dan is het die.
+ */
+function blogpagina(): Page
+{
+    return Page::query()->atPath(PagePath::fromString('/blog'))->first()
+        ?? Page::factory()->published()->at('/blog')->create(['title' => 'Blog']);
+}
+
+/**
+ * Een gepubliceerd artikel onder /blog, zoals Romy het maakt: een pagina
+ * met een artikelkop. De velden zijn die van de artikelkop.
+ *
+ * @param  array<string, mixed>  $velden
+ */
+function artikelOnderBlog(string $slug, array $velden = []): Page
+{
+    return Page::factory()->published()->under(blogpagina())->at("/blog/{$slug}")->withStrips([artikelkop($velden)])->create(['title' => $slug]);
+}
+
+/**
+ * Laat UploadMedia een foto weer echt in de Media-bibliotheek zetten, met het verkleinen en de thumbnail, in plaats van
+ * het snelle bestand uit Pest.php.
+ */
+function echteUploads(): void
+{
+    app()->forgetInstance(UploadMedia::class);
 }

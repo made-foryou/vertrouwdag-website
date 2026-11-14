@@ -5,8 +5,8 @@
 
     Velden: kop (alleen voor schermlezers, zodat de h3's van de kaarten
     na de h1 een h2 hebben), leeg (de melding zonder blogs) en knop (tekst
-    en url). De blogs zijn extra data: blogs, een lijst van
-    App\Support\Blog.
+    en url). De artikelen zijn extra data (with()): blogs, een lijst van
+    App\Support\Blog uit App\Support\Blogs, het nieuwste eerst.
 --}}
 <section class="band" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec">

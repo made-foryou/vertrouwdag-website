@@ -1,72 +1,102 @@
 <?php
 
+use Database\Seeders\PaginasSeeder;
+use Illuminate\Support\Str;
+use Made\CmsPackage\Content\Models\Media;
+use Made\CmsPackage\Content\Models\Page;
+
 beforeEach(function () {
     $this->withoutVite();
 });
 
-test('every section of the archive is a strip, in the order of the design', function () {
-    $document = documentVoor('/blog/archief');
+/**
+ * Het archief onder /blog in het CMS, met de kop en de strook met alle artikelen, met hun standaardwaarden. Op /blog
+ * staat een blog die binnenkort komt.
+ */
+function blogarchief(): Page
+{
+    $blog = Page::factory()->published()->at('/blog')->withStrips([
+        ['id' => (string) Str::uuid(), 'type' => 'blog-laatste', 'visible' => true, 'values' => [
+            'binnenkort' => [['titel' => 'Komt nog', 'intro' => 'Binnenkort.', 'categorie' => 'locaties', 'foto' => Media::factory()->create()->id]],
+        ]],
+    ])->create(['title' => 'Blog']);
 
-    expect(attributenVan($document->querySelectorAll('main > *'), 'data-cms-strip'))->toBe([
-        'hero-archief',
-        'blog-archief',
-        'cta',
-    ]);
+    return Page::factory()->published()->under($blog)->at('/blog/archief')->withStrips([
+        ['id' => (string) Str::uuid(), 'type' => 'hero-archief', 'visible' => true, 'values' => []],
+        ['id' => (string) Str::uuid(), 'type' => 'blog-archief', 'visible' => true, 'values' => []],
+    ])->create(['title' => 'Archief']);
+}
+
+test('the archive comes from the cms, with every section as a strip in the order of the design', function () {
+    $this->seed(PaginasSeeder::class);
+
+    $response = $this->get('/blog/archief');
+
+    $response->assertOk()->assertViewIs('page');
+    expect(striptypenOp('/blog/archief', documentVoor('/blog/archief')))->toBe(['hero-archief', 'blog-archief', 'cta']);
 });
 
-test('the archive shows every published blog with a link and its topic, without the blogs to come', function () {
-    config(['blogs' => [
-        blogInDeConfig(['titel' => 'Komt nog', 'binnenkort' => true, 'slug' => 'komt-nog']),
-        blogInDeConfig(['titel' => 'Over planning', 'categorie' => 'planning', 'slug' => 'planning']),
-        blogInDeConfig(['titel' => 'Zonder adres']),
-        blogInDeConfig(['titel' => 'Over budget', 'categorie' => 'budget', 'slug' => 'budget']),
-    ]]);
+test('the archive shows every article, the newest first, with a link and its topic, without the blogs to come', function () {
+    blogarchief();
+    artikelOnderBlog('planning', ['titel' => 'Over planning', 'categorie' => 'planning']);
+    artikelOnderBlog('budget', ['titel' => 'Over budget', 'categorie' => 'budget']);
 
     $document = documentVoor('/blog/archief');
-    $kaarten = $document->querySelectorAll('[data-cms-strip="blog-archief"] .posts > .pol');
+    $kaarten = $document->querySelectorAll('main .posts > .pol');
 
-    expect(tekstenVan($document->querySelectorAll('[data-cms-strip="blog-archief"] .posts > .pol h3')))->toBe(['Over planning', 'Over budget'])
-        ->and(attributenVan($kaarten, 'href'))->toBe([route('blog.artikel', 'planning'), route('blog.artikel', 'budget')])
-        ->and(attributenVan($kaarten, 'data-cat'))->toBe(['planning', 'budget'])
+    expect(tekstenVan($document->querySelectorAll('main .posts > .pol h3')))->toBe(['Over budget', 'Over planning'])
+        ->and(attributenVan($kaarten, 'href'))->toBe([url('/blog/budget'), url('/blog/planning')])
+        ->and(attributenVan($kaarten, 'data-cat'))->toBe(['budget', 'planning'])
         ->and(attributenVan($kaarten, 'data-post'))->each->toBe('');
 });
 
 test('the archive has a breadcrumb to the homepage and the blog', function () {
-    $kruimelpad = documentVoor('/blog/archief')->querySelector('[data-cms-strip="hero-archief"] nav.crumbs');
+    blogarchief();
+
+    $kruimelpad = documentVoor('/blog/archief')->querySelector('main nav.crumbs');
 
     expect(platteTekst($kruimelpad))->toBe('Home · Blog · Archief')
-        ->and(attributenVan($kruimelpad?->querySelectorAll('a'), 'href'))->toBe([url('/'), route('blog')]);
+        ->and(attributenVan($kruimelpad?->querySelectorAll('a'), 'href'))->toBe([url('/'), url('/blog')]);
 });
 
 test('the archive filters on every topic with all blogs shown at first', function () {
-    $chips = documentVoor('/blog/archief')->querySelectorAll('[data-cms-strip="hero-archief"] .chips[role="group"] button.chip');
+    blogarchief();
+
+    $chips = documentVoor('/blog/archief')->querySelectorAll('main .chips[role="group"] button.chip');
 
     expect(attributenVan($chips, 'data-filter'))->toBe(['alles', 'planning', 'locaties', 'budget', 'inspiratie', 'achter-de-schermen'])
         ->and(attributenVan($chips, 'aria-pressed'))->toBe(['true', 'false', 'false', 'false', 'false', 'false'])
         ->and(tekstenVan($chips))->toBe(['Alles', 'Planning', 'Locaties in Zuid-Holland', 'Budget', 'Inspiratie & styling', 'Achter de schermen']);
 });
 
-test('the archive only shows its empty message when there is no published blog', function (array $blogs, bool $verborgen) {
-    config(['blogs' => $blogs]);
+test('the archive only shows its empty message when there is no article', function (bool $metArtikel, bool $verborgen) {
+    blogarchief();
 
-    $melding = documentVoor('/blog/archief')->querySelector('[data-cms-strip="blog-archief"] .posts__empty');
+    if ($metArtikel) {
+        artikelOnderBlog('een-blog');
+    }
+
+    $melding = documentVoor('/blog/archief')->querySelector('main .posts__empty');
 
     expect($melding?->hasAttribute('hidden'))->toBe($verborgen)
         ->and($melding?->textContent)->toBe('Over dit onderwerp heb ik nog geen blog geschreven. Binnenkort meer!');
 })->with([
-    'met blogs' => [[blogInDeConfig(['slug' => 'een-blog'])], true],
-    'zonder blogs' => [[blogInDeConfig(['binnenkort' => true])], false],
+    'met een artikel' => [true, true],
+    'zonder artikelen' => [false, false],
 ]);
 
 test('the archive links back to the blog', function () {
-    $knop = documentVoor('/blog/archief')->querySelector('[data-cms-strip="blog-archief"] a.btn');
+    blogarchief();
 
-    expect($knop?->getAttribute('href'))->toBe(route('blog'))
+    $knop = documentVoor('/blog/archief')->querySelector('main .posts ~ .center a.btn');
+
+    expect($knop?->getAttribute('href'))->toBe('/blog')
         ->and(trim($knop?->textContent))->toBe('Terug naar de blog');
 });
 
 test('the archive gives its cards a heading for screen readers, so no heading skips a level', function () {
-    config(['blogs' => [blogInDeConfig(['slug' => 'een-blog'])]]);
+    blogarchief();
+    artikelOnderBlog('een-blog');
 
     $document = documentVoor('/blog/archief');
 
@@ -78,5 +108,5 @@ test('the archive gives its cards a heading for screen readers, so no heading sk
 
     expect($niveaus[0] ?? null)->toBe(1)
         ->and($sprongen)->toBe([])
-        ->and(platteTekst($document->querySelector('[data-cms-strip="blog-archief"] h2.sr-only')))->toBe('Alle artikelen');
+        ->and(platteTekst($document->querySelector('main h2.sr-only')))->toBe('Alle artikelen');
 });
