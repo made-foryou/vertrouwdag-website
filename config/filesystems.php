@@ -55,9 +55,14 @@ return [
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
+            // Map in de bucket waaronder alle bestanden komen, bijvoorbeeld storage. Leeg is de hoofdmap.
+            'root' => env('AWS_ROOT', ''),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            // De media van het CMS staan hier (DigitalOcean Spaces) en moeten voor bezoekers te openen zijn. Het CMS
+            // geeft bij het opslaan geen visibility mee, dus zonder deze regel wordt elk bestand privé en geeft 403.
+            'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],
