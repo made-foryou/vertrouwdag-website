@@ -14,8 +14,9 @@ use Made\CmsPackage\Content\Strips\StripType;
  * resources/views/strips/hero.blade.php.
  *
  * De eerste knop is de kennismaking uit config/vertrouwdag.php; de tweede
- * is het veld knop. De foto's, het zegel en de plek van de sticker liggen
- * vast tot #21. Het label herlaadt het frame na het opslaan in plaats van
+ * is het veld knop. De foto's in de boog en op de polaroid zijn te kiezen;
+ * leeg is de foto uit het ontwerp (#21). Het zegel en de plek van de
+ * sticker liggen vast. Het label herlaadt het frame na het opslaan in plaats van
  * mee te kijken: het laatste woord staat in een eigen element, zodat
  * "Zuid-Holland" niet bij het streepje afbreekt.
  */
@@ -51,6 +52,10 @@ final class Hero extends StripType
                 ->label('Tweede knop')
                 ->default(['text' => 'Bekijk de diensten', 'link' => ['url' => '/diensten']])
                 ->hint('Naast de knop naar de kennismaking.'),
+            Velden::foto('foto_boog', 'Staand: de boog snijdt hem bij.')
+                ->label('Foto in de boog'),
+            Velden::foto('foto_polaroid', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de polaroid'),
             Text::make('bijschrift')
                 ->label('Bijschrift bij de polaroid')
                 ->default('ja, wij doen het'),

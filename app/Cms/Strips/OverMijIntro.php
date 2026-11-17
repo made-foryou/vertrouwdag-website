@@ -13,8 +13,9 @@ use Made\CmsPackage\Content\Strips\StripType;
  * met haar foto in een boog, een polaroid en een knop naar haar verhaal.
  * Hij rendert met de view resources/views/strips/over-mij-intro.blade.php.
  *
- * De tekst is opgemaakte tekst: een of meer alinea's. De foto's liggen
- * vast tot #21.
+ * De tekst is opgemaakte tekst: een of meer alinea's. De foto's in de
+ * boog en op de polaroid zijn te kiezen; leeg is de foto uit het ontwerp
+ * (#21).
  */
 final class OverMijIntro extends StripType
 {
@@ -46,6 +47,10 @@ final class OverMijIntro extends StripType
                 ->default('<p>Ik begon als stagiaire bij een creatief bureau en werk daar nu als General Manager. Plannen, overzicht houden en op de details letten zit in mijn hoofd en in mijn hart.</p><p>Met vertrouwdag doe ik dat voor jullie. Zodat jullie op jullie dag alleen maar hoeven te genieten.</p>'),
             Button::make('knop')
                 ->default(['text' => 'Lees mijn verhaal', 'link' => ['url' => '/over-mij']]),
+            Velden::foto('foto_boog', 'Staand: de boog snijdt hem bij.')
+                ->label('Foto in de boog'),
+            Velden::foto('foto_polaroid', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de polaroid'),
             Text::make('bijschrift')
                 ->label('Bijschrift bij de polaroid')
                 ->default('oog voor detail'),

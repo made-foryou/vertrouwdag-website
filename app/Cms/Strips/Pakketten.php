@@ -23,10 +23,12 @@ use Made\CmsPackage\Content\Strips\StripType;
  * een heel bedrag uit (App\Support\Prijs::uitTekst) en rekent zelf het
  * bedrag inclusief btw uit.
  *
- * Het veld dienst legt de kleur, de foto en het anker van de map vast
- * (App\Support\Dienst). Het anker volgt de naam niet, dus links naar
- * #dagcoordinatie, #partial-planning en #full-service blijven werken als
- * een redacteur een dienst hernoemt. De prijs, de kenmerken en een keuze
+ * Het veld dienst legt de kleur en het anker van de map vast
+ * (App\Support\Dienst), en de foto zolang er geen gekozen is (#21). Het
+ * anker volgt de naam niet, dus links naar #dagcoordinatie,
+ * #partial-planning en #full-service blijven werken als een redacteur een
+ * dienst hernoemt. De foto van een pakket staat niet op de homepage: de
+ * strook diensten heeft een eigen foto per dienst. De prijs, de kenmerken en een keuze
  * herladen het frame na het opslaan: ze staan niet als tekst in de view.
  */
 final class Pakketten extends StripType
@@ -69,7 +71,7 @@ final class Pakketten extends StripType
                 ])
                     ->required()
                     ->default(Dienst::Dag->value)
-                    ->hint('Bepaalt de kleur, de foto en het anker van de map. De homepage vindt de prijs via deze keuze.'),
+                    ->hint('Bepaalt de kleur en het anker van de map, en de foto zolang er geen gekozen is. De homepage vindt de prijs via deze keuze.'),
                 Text::make('soort')
                     ->required()
                     ->hint('Korte regel boven de titel.'),
@@ -78,6 +80,7 @@ final class Pakketten extends StripType
                 LongText::make('kenmerken')
                     ->label('Wat erin zit')
                     ->hint('Eén punt per regel.'),
+                Velden::foto('foto', 'Vierkant op de polaroid, liggend op het mapje op mobiel. Sfeer, dus zonder alt-tekst op de site.'),
                 Text::make('bijschrift')
                     ->label('Bijschrift bij de polaroid'),
                 Text::make('prijs')

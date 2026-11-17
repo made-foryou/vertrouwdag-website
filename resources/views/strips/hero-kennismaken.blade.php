@@ -4,9 +4,10 @@
     van Romy.
 
     Velden: label, kop (met accent), tekst, stappen (lijst met tekst),
-    opmerking (optioneel, de schuine regel onder de stappen) en
-    bijschrift (onder de polaroid). Het nummer van een stap volgt de
-    volgorde. De kleur hoort bij de plek en begint na de derde opnieuw.
+    opmerking (optioneel, de schuine regel onder de stappen), foto (op de
+    polaroid) en bijschrift (onder de polaroid). Het nummer van een stap
+    volgt de volgorde. De kleur hoort bij de plek en begint na de derde
+    opnieuw. Zonder foto staat de foto uit het ontwerp (<x-foto>).
 
     De agenda ligt vast. Zonder toestemming voor marketing laadt de pagina
     niets van Calendly: er staat alleen een poort met "Agenda tonen" en
@@ -41,7 +42,7 @@
 
     <div class="meet__cal" data-reveal>
         <div class="polaroid tilt meet__pol" style="transform:rotate(-8deg)">
-            <img src="{{ Vite::asset('resources/images/romy.jpg') }}" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" width="1100" height="1571">
+            <x-foto :foto="$strip->foto" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto" />
             <span style="font-size:17px;bottom:7px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
         </div>
         <div class="cal-box" id="agenda">

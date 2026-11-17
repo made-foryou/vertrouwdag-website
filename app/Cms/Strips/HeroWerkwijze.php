@@ -14,7 +14,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  * resources/views/strips/hero-werkwijze.blade.php.
  *
  * De eerste knop is de kennismaking uit config/vertrouwdag.php; de tweede
- * is het veld knop. De foto's liggen vast tot #21.
+ * is het veld knop. De foto's op de polaroids zijn te kiezen; leeg is de
+ * foto uit het ontwerp (#21).
  */
 final class HeroWerkwijze extends StripType
 {
@@ -48,6 +49,10 @@ final class HeroWerkwijze extends StripType
                 ->label('Tweede knop')
                 ->default(['text' => 'Bekijk de pakketten', 'link' => ['url' => '/diensten']])
                 ->hint('Naast de knop naar de kennismaking.'),
+            Velden::foto('foto_boven', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de bovenste polaroid'),
+            Velden::foto('foto_onder', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de onderste polaroid'),
             Text::make('bijschrift_boven')
                 ->label('Bijschrift bij de bovenste polaroid')
                 ->default('stap voor stap'),

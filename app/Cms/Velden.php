@@ -2,6 +2,7 @@
 
 namespace App\Cms;
 
+use Made\CmsPackage\Content\Strips\Fields\Image;
 use Made\CmsPackage\Content\Strips\Fields\Text;
 
 /**
@@ -24,5 +25,20 @@ final class Velden
     {
         return Text::make($key)
             ->hint('Zet het accent tussen sterretjes, zoals: Jullie dag in *vertrouwde* handen.');
+    }
+
+    /**
+     * Een foto uit de Media-bibliotheek op een plek waar het ontwerp al een
+     * foto had (#21). Zolang het veld leeg is, toont de view die vaste foto
+     * (<x-foto>). Daarom is het veld nooit verplicht: een strook van voor
+     * #21 heeft geen foto en blijft zo op te slaan en te publiceren.
+     *
+     * vorm zegt hoe de plek de foto bijsnijdt, zoals "Staand: de boog
+     * snijdt hem bij." Het focuspunt blijft daarbij in beeld.
+     */
+    public static function foto(string $key, string $vorm): Image
+    {
+        return Image::make($key)
+            ->hint("{$vorm} Het focuspunt blijft in beeld. Leeg: de foto uit het ontwerp.");
     }
 }

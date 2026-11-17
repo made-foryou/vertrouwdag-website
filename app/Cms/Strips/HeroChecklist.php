@@ -13,8 +13,9 @@ use Made\CmsPackage\Content\Strips\StripType;
  * aanmeldformulier met trouwdatum. Hij rendert met de view
  * resources/views/strips/hero-checklist.blade.php.
  *
- * De visual en het formulier liggen vast, net als in checklist-aanmelding
- * (#16). Na het versturen toont het formulier de strook checklist-bedankt.
+ * Het papiertje, het bijschrift van de polaroid en het formulier liggen
+ * vast, net als in checklist-aanmelding (#16). De foto op de polaroid is
+ * te kiezen; leeg is de foto uit het ontwerp (#21). Na het versturen toont het formulier de strook checklist-bedankt.
  */
 final class HeroChecklist extends StripType
 {
@@ -44,6 +45,8 @@ final class HeroChecklist extends StripType
                 ->default('Wat regel je *wanneer?*'),
             LongText::make('tekst')
                 ->default('De checklist die ik zelf gebruik. Maand voor maand, in de juiste volgorde, met ruimte voor jullie eigen notities.'),
+            Velden::foto('foto', 'Vierkant: de polaroid snijdt hem bij. Decoratie, dus zonder alt-tekst op de site.')
+                ->label('Foto op de polaroid'),
         ];
     }
 }

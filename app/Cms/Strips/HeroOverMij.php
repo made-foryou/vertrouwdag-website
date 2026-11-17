@@ -13,7 +13,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  * een boog, het zegel en een polaroid, en de kop, tekst en één knop. Hij
  * rendert met de view resources/views/strips/hero-over-mij.blade.php.
  *
- * De foto's en het zegel liggen vast tot #21.
+ * De foto's in de boog en op de polaroid zijn te kiezen; leeg is de foto
+ * uit het ontwerp (#21). Het zegel ligt vast.
  */
 final class HeroOverMij extends StripType
 {
@@ -45,6 +46,10 @@ final class HeroOverMij extends StripType
                 ->default('De planner achter vertrouwdag. Ik woon in Zuid-Holland, houd van een goed gedekte tafel en word blij van een planning die klopt.'),
             Button::make('knop')
                 ->default(['text' => 'Maak kennis met mij', 'link' => ['url' => '/kennismaken']]),
+            Velden::foto('foto_boog', 'Staand: de boog snijdt hem bij.')
+                ->label('Foto in de boog'),
+            Velden::foto('foto_polaroid', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de polaroid'),
             Text::make('bijschrift')
                 ->label('Bijschrift bij de polaroid')
                 ->default('hier word ik blij van'),

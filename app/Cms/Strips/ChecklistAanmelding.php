@@ -13,7 +13,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  * Hij rendert met de view resources/views/strips/checklist-aanmelding.blade.php.
  *
  * De visual (het bijschrift van de polaroid en het papiertje) is
- * decoratie en ligt vast (besluit Menno, 2026-11-11, zie #16). Het
+ * decoratie en ligt vast (besluit Menno, 2026-11-11, zie #16). De foto op
+ * de polaroid is te kiezen; leeg is de foto uit het ontwerp (#21). Het
  * formulier is hetzelfde als op /checklist; het versturen komt in #25.
  */
 final class ChecklistAanmelding extends StripType
@@ -44,6 +45,8 @@ final class ChecklistAanmelding extends StripType
                 ->default('Wat regel je *wanneer?*'),
             LongText::make('tekst')
                 ->default('De checklist die ik zelf gebruik, van twaalf maanden ervoor tot de week zelf.'),
+            Velden::foto('foto', 'Liggend, 4 bij 3: de polaroid snijdt hem bij. Decoratie, dus zonder alt-tekst op de site.')
+                ->label('Foto op de polaroid'),
         ];
     }
 }

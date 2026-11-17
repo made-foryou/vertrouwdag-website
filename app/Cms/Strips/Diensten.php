@@ -19,10 +19,11 @@ use Made\CmsPackage\Content\Strips\StripType;
  * resources/views/strips/diensten.blade.php.
  *
  * Het veld dienst kiest een van de drie diensten uit App\Support\Dienst.
- * Dat bepaalt de prijs, de kleur, de foto en het anker op /diensten, dus
- * verandert de volgorde, dan schuift de prijs mee met de dienst. De
- * prijzen staan in de strook pakketten op /diensten (#17); with() geeft
- * ze als prijzen, per dienst.
+ * Dat bepaalt de prijs, de kleur en het anker op /diensten, dus verandert
+ * de volgorde, dan schuift de prijs mee met de dienst. De prijzen staan in
+ * de strook pakketten op /diensten (#17); with() geeft ze als prijzen, per
+ * dienst. De foto van een mapje is te kiezen; leeg is de foto van de dienst
+ * uit het ontwerp (App\Support\Dienst::foto(), #21).
  */
 final class Diensten extends StripType
 {
@@ -60,12 +61,13 @@ final class Diensten extends StripType
                 ])
                     ->required()
                     ->default(Dienst::Dag->value)
-                    ->hint('Bepaalt de kleur, de foto en de map op Diensten. De prijs komt uit de pakketten op Diensten.'),
+                    ->hint('Bepaalt de kleur en de map op Diensten, en de foto zolang er geen gekozen is. De prijs komt uit de pakketten op Diensten.'),
                 Text::make('soort')
                     ->required()
                     ->hint('Korte regel boven de titel.'),
                 Text::make('titel')->required(),
                 LongText::make('omschrijving')->required(),
+                Velden::foto('foto', 'Liggend, 4 bij 3: het mapje snijdt hem bij. Sfeer, dus zonder alt-tekst op de site.'),
             ])
                 ->min(1)
                 ->max(3)

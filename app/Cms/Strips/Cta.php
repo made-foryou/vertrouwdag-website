@@ -10,8 +10,9 @@ use Made\CmsPackage\Content\Strips\StripType;
 /**
  * De strook cta in het CMS: het afsluitende blok met foto, kop, tekst en
  * de knop naar de kennismaking. Hij rendert met de view
- * resources/views/strips/cta.blade.php. De foto en de knop komen nog uit
- * de site zelf (#21 en config/vertrouwdag.php).
+ * resources/views/strips/cta.blade.php. De foto is te kiezen; leeg is
+ * Romy aan tafel, de foto uit het ontwerp (#21). De knop komt uit
+ * config/vertrouwdag.php.
  *
  * De standaardwaarden zijn die van de homepage. Op de blog en het archief
  * staat de strook zonder tekst.
@@ -42,6 +43,7 @@ final class Cta extends StripType
             LongText::make('tekst')
                 ->default('Een half uur, online en vrijblijvend. Jullie vertellen over jullie plannen, ik vertel hoe ik kan helpen.')
                 ->hint('Eén of twee korte zinnen onder de kop. Mag leeg blijven.'),
+            Velden::foto('foto', 'Vult de helft naast de tekst.'),
             Choice::make('variant', [
                 'groot' => 'Groot, zoals op Diensten',
                 'eenvoudig' => 'Eenvoudig, zoals op Werkwijze en Over mij',

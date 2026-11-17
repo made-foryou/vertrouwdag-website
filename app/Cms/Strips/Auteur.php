@@ -2,6 +2,7 @@
 
 namespace App\Cms\Strips;
 
+use App\Cms\Velden;
 use Made\CmsPackage\Content\Strips\Fields\Button;
 use Made\CmsPackage\Content\Strips\Fields\LongText;
 use Made\CmsPackage\Content\Strips\Fields\Text;
@@ -10,7 +11,8 @@ use Made\CmsPackage\Content\Strips\StripType;
 /**
  * De strook auteur in het CMS: wie een blog schreef, met een polaroid van
  * Romy en een link naar meer over haar. Hij rendert met de view
- * resources/views/strips/auteur.blade.php. De foto ligt vast tot #21.
+ * resources/views/strips/auteur.blade.php. De foto is te kiezen; leeg is
+ * de foto uit het ontwerp (#21).
  */
 final class Auteur extends StripType
 {
@@ -41,6 +43,8 @@ final class Auteur extends StripType
             Button::make('link')
                 ->default(['text' => 'Meer over mij', 'link' => ['url' => '/over-mij']])
                 ->hint('Direct na de tekst.'),
+            Velden::foto('foto', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de polaroid'),
         ];
     }
 }

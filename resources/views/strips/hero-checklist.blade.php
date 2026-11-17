@@ -3,14 +3,16 @@
     met de eerste punten van de checklist, en rechts de kop, de tekst en
     het aanmeldformulier met trouwdatum.
 
-    Velden: label, kop (met accent) en tekst. De visual is decoratie voor
-    schermlezers (aria-hidden) en ligt vast. Na het versturen toont het
-    formulier de strook checklist-bedankt (#bedankt).
+    Velden: label, kop (met accent), tekst en foto (op de polaroid). De
+    visual is decoratie voor schermlezers (aria-hidden), dus de foto heeft
+    een lege alt. Zonder foto staat de foto uit het ontwerp (<x-foto>);
+    het bijschrift en het papiertje liggen vast. Na het versturen toont
+    het formulier de strook checklist-bedankt (#bedankt).
 --}}
 <section class="wrap hero" style="gap:64px;padding-bottom:var(--sec)" data-cms-strip="{{ $strip->id }}">
     <div class="hero__media cl-media" data-reveal aria-hidden="true">
         <div class="polaroid tilt" style="left:6%;top:4%;width:58%;padding:10px 10px 42px;transform:rotate(-7deg);z-index:1">
-            <img src="{{ Vite::asset('resources/images/ringen-pioenen.jpg') }}" alt="" width="1100" height="733" fetchpriority="high">
+            <x-foto :foto="$strip->foto" terugval="resources/images/ringen-pioenen.jpg" :breedte="1100" :hoogte="733" decoratief veld="foto" fetchpriority="high" />
             <span style="font-size:19px;bottom:10px">nog 12 maanden</span>
         </div>
         <div class="cl-paper">

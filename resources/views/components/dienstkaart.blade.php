@@ -16,9 +16,12 @@
     Zonder href is de omschrijving opgemaakte tekst uit het CMS, met een
     eigen alinea. Daarom staat ze dan in een div en niet in een p.
 
-    De foto is sfeer en heeft daarom een lege alt: de titel, omschrijving
-    en prijs zeggen al wat de dienst is. Zo blijft ook de naam van de
-    linkkaart kort (besluit Menno, 2026-11-10, zie #12).
+    foto is de foto uit het CMS ({url, alt, width, height, focal}) of
+    null; zonder foto staat de foto van de dienst uit het ontwerp
+    (App\Support\Dienst::foto()). De foto is sfeer en heeft daarom altijd
+    een lege alt: de titel, omschrijving en prijs zeggen al wat de dienst
+    is. Zo blijft ook de naam van de linkkaart kort (besluit Menno,
+    2026-11-10, zie #12).
 
     De slots soort (eyebrow), titel en omschrijving geven hun attributen
     door aan hun element, bijvoorbeeld data-cms-field.
@@ -27,7 +30,7 @@
     'kleur',
     'dienst',
     'prijs' => null,
-    'foto',
+    'foto' => null,
     'href' => null,
     'draaiing' => 0,
     'gespiegeld' => false,
@@ -38,10 +41,11 @@
 ])
 @php
     $stijl = \App\Support\Dienstkleur::tryFrom($kleur) ?? throw new \InvalidArgumentException("De dienstkaart kent geen kleur [{$kleur}]; kies lila, cream of groen.");
+    $welkeDienst = \App\Support\Dienst::tryFrom($dienst) ?? throw new \InvalidArgumentException("De dienstkaart kent geen dienst [{$dienst}]; kies dag, partial of full.");
     $element = $href !== null ? 'a' : 'article';
 @endphp
 <{{ $element }} @if ($href !== null) href="{{ $href }}" @endif {{ $attributes->class(['folder', 'folder--r' => $gespiegeld, 'f-'.$kleur]) }}>
-    <img class="folder__peek" src="{{ $foto }}" alt="" width="1100" height="825" loading="lazy" style="transform:rotate({{ $draaiing }}deg)">
+    <x-foto :foto="$foto" :terugval="$welkeDienst->foto()" :breedte="1100" :hoogte="825" decoratief veld="foto" class="folder__peek" loading="lazy" style="transform:rotate({{ $draaiing }}deg)" />
     <div class="folder__body">
         <span class="folder__tab" aria-hidden="true"></span>
         <p {{ $soort->attributes->class(array_filter(['eb', 'eb--sm', $stijl->eyebrowKlasse()])) }}>{{ $soort }}</p>
