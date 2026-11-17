@@ -25,6 +25,10 @@
     zelf, zonder srcset, zodat de bewerkschil een andere foto meteen toont.
     De overige attributen, zoals loading, fetchpriority, class en style,
     gaan door naar de <img>.
+
+    data-foto: de foto faadt in zodra hij geladen is, op een plaatshouder
+    van het element eromheen (fotos-laden.js, #39). Dat element heeft
+    daarom de kleur --plaatshouder als achtergrond.
 --}}
 @props([
     'foto' => null,
@@ -48,4 +52,4 @@
         $positie === null ? null : "object-position:{$positie}",
     ]));
 @endphp
-<img src="{{ $uitCms ? $foto['url'] : Vite::asset($terugval) }}" alt="{{ $decoratief ? '' : ($uitCms ? $foto['alt'] : $alt) }}" width="{{ $uitCms ? ($foto['width'] ?? $breedte) : $breedte }}" height="{{ $uitCms ? ($foto['height'] ?? $hoogte) : $hoogte }}" @if ($stijl !== '') style="{{ $stijl }}" @endif {{ $attributes->except('style') }} data-cms-field="{{ $veld }}">
+<img src="{{ $uitCms ? $foto['url'] : Vite::asset($terugval) }}" alt="{{ $decoratief ? '' : ($uitCms ? $foto['alt'] : $alt) }}" width="{{ $uitCms ? ($foto['width'] ?? $breedte) : $breedte }}" height="{{ $uitCms ? ($foto['height'] ?? $hoogte) : $hoogte }}" @if ($stijl !== '') style="{{ $stijl }}" @endif {{ $attributes->except('style') }} data-cms-field="{{ $veld }}" data-foto>

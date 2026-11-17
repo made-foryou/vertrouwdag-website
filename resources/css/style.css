@@ -26,6 +26,7 @@
   --salie-2:#E9EBE1;
   --mos:#E3E6D8;
   --zand:#EFE9DC;
+  --plaatshouder:var(--salie-2); /* op de plek van een foto, tot hij geladen is (#39) */
   --grijs:#626655;        /* rustige tekst; iets donkerder dan het ontwerp (#6b6f5e), zodat hij ook op salie, zand en mos 4,5:1 haalt (#12) */
   --lijn:rgba(64,72,48,.12);
   --schaduw:0 18px 48px rgba(45,51,31,.10);
@@ -123,9 +124,10 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .hero h1{font-size:clamp(48px,7vw,96px);line-height:.98;letter-spacing:-.015em}
 .hero__media{flex:1 1 460px;min-width:0;position:relative;aspect-ratio:1/1.02}
 .hero__media--d{flex-basis:400px;aspect-ratio:1/.92}
-.arch{position:absolute;overflow:hidden;border-radius:999px 999px 28px 28px;background:var(--salie-2)}
+.arch{position:absolute;overflow:hidden;border-radius:999px 999px 28px 28px;background:var(--plaatshouder)}
 .arch img{width:100%;height:100%;object-fit:cover}
-.polaroid{position:absolute;background:var(--papier);padding:12px 12px 46px;box-shadow:0 18px 48px rgba(45,51,31,.14);border-radius:6px}
+/* de foto vult de content-box; de plaatshouder ligt daar 1px binnen, zodat hij niet buiten de afgeronde hoeken van de foto valt (#39) */
+.polaroid{position:absolute;background:linear-gradient(var(--plaatshouder) 0 0) center/calc(100% - 2px) calc(100% - 2px) no-repeat content-box,var(--papier);padding:12px 12px 46px;box-shadow:0 18px 48px rgba(45,51,31,.14);border-radius:6px}
 .polaroid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:3px}
 .polaroid--wide img{aspect-ratio:4/3}
 .polaroid span{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:20px;font-style:italic;color:var(--aubergine);line-height:1.2}
@@ -152,7 +154,7 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 
 /* Hart én hoofd */
 .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.split__photo{position:relative;min-height:560px;display:flex;align-items:center;justify-content:center;padding:56px 24px}
+.split__photo{position:relative;min-height:560px;display:flex;align-items:center;justify-content:center;padding:56px 24px;background:var(--plaatshouder)}
 .split__photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .card-float{position:relative;max-width:360px;background:var(--papier);border-radius:28px;padding:44px 36px;text-align:center;display:flex;flex-direction:column;gap:14px;box-shadow:var(--schaduw)}
 .card-float h3{font-size:40px}
@@ -162,7 +164,8 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .folders{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px 28px;align-items:stretch}
 .folder{position:relative;display:flex;flex-direction:column;padding-top:150px;text-decoration:none;transition:transform .42s var(--ease)}
 a.folder:hover{transform:translateY(-4px)}
-.folder__peek{position:absolute;top:0;left:28px;width:68%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;box-shadow:0 8px 24px rgba(45,51,31,.14);transition:transform .52s var(--ease)}
+.folder__peek{position:absolute;top:0;left:28px;width:68%;aspect-ratio:4/3;overflow:hidden;border-radius:16px;background:var(--plaatshouder);box-shadow:0 8px 24px rgba(45,51,31,.14);transition:transform .52s var(--ease)}
+.folder__peek img{width:100%;height:100%;object-fit:cover}
 .folder--r .folder__peek{left:auto;right:28px}
 .folder:hover .folder__peek{transform:rotate(-1deg) translateY(-14px)!important}
 .folder__body{position:relative;z-index:1;flex-grow:1;border-radius:0 28px 28px 28px;padding:34px 30px 30px;display:flex;flex-direction:column;gap:12px;min-height:230px}
@@ -237,7 +240,7 @@ a.folder:hover{transform:translateY(-4px)}
 
 /* Afsluitende CTA */
 .cta-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.cta-split__photo{min-height:520px;position:relative}
+.cta-split__photo{min-height:520px;position:relative;background:var(--plaatshouder)}
 .cta-split__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
 .cta-split__txt{background:var(--aubergine);color:var(--cream);padding:88px clamp(24px,5vw,56px);display:flex;flex-direction:column;justify-content:center;gap:24px}
 .cta-split__txt h2{color:var(--cream);font-size:clamp(40px,5.4vw,76px);line-height:1}
@@ -398,6 +401,22 @@ a.folder:hover{transform:translateY(-4px)}
    ========================================================== */
 .js [data-reveal],.js [data-reveal-group]>*,.js [data-reveal-inner]>*{opacity:0;translate:0 28px;transition:opacity .8s var(--ease) var(--d,0s),translate .8s var(--ease) var(--d,0s),transform .5s var(--ease),box-shadow .5s,padding .3s var(--ease)}
 .js [data-reveal].is-in,.js [data-reveal-group].is-in>*,.js [data-reveal-inner].is-in>*{opacity:1;translate:none}
+
+/* ==========================================================
+   Foto's laden (#39)
+   Een foto met data-foto blijft onzichtbaar op de plaatshouder
+   van het element eromheen tot hij geladen is, en faadt dan in
+   (fotos-laden.js). Alleen met JavaScript en zonder reduced
+   motion. Een animatie en geen transition, zodat het inzoomen
+   bij hover zijn eigen transition houdt. De foto van het eerste
+   scherm (fetchpriority="high") is de LCP en begint nooit
+   onzichtbaar (#34, besluit 5).
+   ========================================================== */
+@keyframes foto-in{from{opacity:0}}
+@media (prefers-reduced-motion:no-preference){
+  .js img[data-foto]:not([fetchpriority="high"],.is-geladen){opacity:0}
+  .js img[data-foto].is-infaden:not([fetchpriority="high"]){animation:foto-in .6s var(--ease)}
+}
 
 /* ==========================================================
    Extra mobiele correcties
@@ -571,7 +590,7 @@ a.folder:hover{transform:translateY(-4px)}
 .chip[aria-pressed="true"]{background:var(--aubergine);color:var(--cream);border-color:var(--aubergine)}
 .feature{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));border-radius:28px;overflow:hidden;text-decoration:none;background:var(--lila);color:var(--aubergine)}
 .feature:hover{color:var(--aubergine)}
-.feature__img{min-height:420px;position:relative;overflow:hidden}
+.feature__img{min-height:420px;position:relative;overflow:hidden;background:var(--plaatshouder)}
 .feature__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
 .feature:hover .feature__img img{transform:scale(1.05)}
 .feature__txt{padding:56px clamp(24px,4vw,48px);display:flex;flex-direction:column;justify-content:center;gap:18px}
@@ -580,8 +599,10 @@ a.folder:hover{transform:translateY(-4px)}
 .pill-tag{background:var(--aubergine);color:var(--cream);padding:7px 12px;border-radius:999px}
 .pill-tag--lila{background:var(--lila);color:var(--aubergine);padding:8px 14px}
 .posts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:56px 36px}
-.pol{display:flex;flex-direction:column;gap:14px;text-decoration:none;color:var(--groen);background:var(--papier);padding:14px 14px 28px;border-radius:8px;box-shadow:0 18px 48px rgba(45,51,31,.10);transition:transform .52s var(--ease)}
-.pol img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px}
+.pol{position:relative;display:flex;flex-direction:column;gap:14px;text-decoration:none;color:var(--groen);background:var(--papier);padding:14px 14px 28px;border-radius:8px;box-shadow:0 18px 48px rgba(45,51,31,.10);transition:transform .52s var(--ease)}
+/* de plaatshouder op de plek van de foto (#39); de foto ligt erboven */
+.pol::before{content:"";position:absolute;top:14px;left:14px;right:14px;aspect-ratio:4/3;border-radius:4px;background:var(--plaatshouder)}
+.pol img{position:relative;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px}
 .pol__txt{padding:4px 8px 0;display:flex;flex-direction:column;gap:10px}
 .pol__txt h3{font-size:28px;line-height:1.15}
 .pol__txt p{font-size:18px;line-height:1.55}
@@ -595,7 +616,7 @@ a.folder:hover{transform:translateY(-4px)}
 .art-head h1{font-size:clamp(38px,5.6vw,72px);line-height:1.02;letter-spacing:-.01em}
 .crumbs{font-size:17px;color:var(--grijs)}
 .art-hero{max-width:1080px;margin:0 auto;padding:0 16px 72px;position:relative}
-.art-hero__img{border-radius:400px 400px 28px 28px;overflow:hidden;aspect-ratio:16/9}
+.art-hero__img{border-radius:400px 400px 28px 28px;overflow:hidden;aspect-ratio:16/9;background:var(--plaatshouder)}
 .art-hero__img img{width:100%;height:100%;object-fit:cover}
 .art-hero__sticker{right:4px;bottom:36px;width:110px;height:110px;font-size:18px;transform:rotate(12deg)}
 .art-prose{max-width:712px;margin:0 auto;padding:0 16px;gap:0}
@@ -870,7 +891,7 @@ a.folder:hover{transform:translateY(-4px)}
   .js .tf__panel.is-active .tf__pol{animation:none}
   /* foto als smalle strook bovenaan */
   .tf__media{display:block;height:120px;overflow:hidden}
-  .tf__pol{width:100%!important;height:100%;padding:0!important;transform:none!important;box-shadow:none;border-radius:0;background:none}
+  .tf__pol{width:100%!important;height:100%;padding:0!important;transform:none!important;box-shadow:none;border-radius:0;background:var(--plaatshouder)}
   .tf__pol img{width:100%;height:100%;aspect-ratio:auto;object-fit:cover;border-radius:0}
   .tf__pol span{display:none}
   .tf__body{padding:20px 20px 22px;gap:10px}
