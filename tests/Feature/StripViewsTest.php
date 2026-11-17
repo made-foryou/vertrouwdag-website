@@ -33,6 +33,21 @@ test('the last word of the hero label does not wrap', function (string $label, s
     'één woord' => ['Weddingplanner', 'Weddingplanner'],
 ]);
 
+test('the first button of the hero is the one from the cms, and the button to the acquaintance when it is empty', function (?array $knop, string $tekst, string $url) {
+    config(['vertrouwdag.cta' => ['pad' => '/kennismaken', 'label' => 'Plan een kennismaking']]);
+
+    $document = renderStrip('hero', ['kop' => 'Kop', 'eerste_knop' => $knop]);
+
+    $eersteKnop = $document->querySelector('.hero .row a.btn');
+
+    expect($eersteKnop?->getAttribute('data-cms-field'))->toBe('eerste_knop')
+        ->and(platteTekst($eersteKnop))->toBe($tekst)
+        ->and($eersteKnop?->getAttribute('href'))->toBe($url);
+})->with([
+    'uit het cms' => [['text' => 'Bel me even', 'url' => '/contact'], 'Bel me even', '/contact'],
+    'leeg' => [null, 'Plan een kennismaking', '/kennismaken'],
+]);
+
 test('the services strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving']];
 
