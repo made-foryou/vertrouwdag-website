@@ -1052,3 +1052,20 @@ a.folder:hover{transform:translateY(-4px)}
 }
 .persoonlijk__txt h2{font-size:clamp(36px,4.4vw,58px);line-height:1.05}
 @media (max-width:860px){.persoonlijk__fotos{padding-right:4px}.persoonlijk__fotos .polaroid{width:52%}}
+
+/* Tekst en tekst met afbeelding: algemene stroken, voor elke pagina */
+.tekst{display:flex;flex-direction:column;gap:28px;max-width:860px}
+.tekst>h2,.tekst-foto__txt>h2{font-size:clamp(38px,4.6vw,60px);line-height:1.06}
+.tekst .prose,.tekst-foto .prose{flex:none;max-width:68ch}
+.tekst .prose :is(ul,ol),.tekst-foto .prose :is(ul,ol){margin:0;padding-left:1.2em;font-size:21px;line-height:1.75}
+.tekst-foto{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:72px;align-items:center}
+.tekst-foto--rechts{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.tekst-foto--rechts .tekst-foto__media{order:2}
+.tekst-foto__media{aspect-ratio:4/5;overflow:hidden;border:10px solid var(--papier);border-radius:999px 999px 28px 28px;background:var(--plaatshouder) padding-box;box-shadow:var(--schaduw)}
+.tekst-foto__media img{width:100%;height:100%;object-fit:cover}
+.tekst-foto__txt{display:flex;flex-direction:column;gap:22px}
+@media (max-width:860px){
+  .tekst-foto,.tekst-foto--rechts{grid-template-columns:minmax(0,1fr);gap:40px}
+  .tekst-foto--rechts .tekst-foto__media{order:0}
+  .tekst-foto__media{width:100%;max-width:440px;justify-self:center}
+}

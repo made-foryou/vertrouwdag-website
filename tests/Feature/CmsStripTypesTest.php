@@ -97,6 +97,8 @@ test('the catalogue of the cms builds with the strip types of the pages in the c
     'pakketten',
     'reviews',
     'stappen',
+    'tekst',
+    'tekst-met-afbeelding',
     'tijdlijn',
     'trouwdag',
     'twee-kolommen',
