@@ -459,3 +459,37 @@ test('a column without a photo from the cms gets the photo of the design for its
     )
         ->and(attributenVan($fotos, 'alt'))->toBe(['Twee gouden trouwringen', 'Lange gedekte feesttafel met bloemen']);
 });
+
+test('a text strip shows its heading only when it has one', function (string $type, ?string $kop, array $koppen) {
+    $document = renderStrip($type, ['kop' => $kop, 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+
+    expect(tekstenVan($document->querySelectorAll('h2[data-cms-field="kop"]')))->toBe($koppen)
+        ->and(tekstenVan($document->querySelectorAll('[data-cms-field="tekst"] p')))->toBe(['Alinea.']);
+})->with([
+    'tekst' => ['tekst'],
+    'tekst met afbeelding' => ['tekst-met-afbeelding'],
+])->with([
+    'met kop' => ['Een kop met *accent*', ['Een kop met accent']],
+    'zonder kop' => [null, []],
+]);
+
+test('the text with an image puts its image on the right only when asked', function (?string $positie, string $klasse) {
+    $document = renderStrip('tekst-met-afbeelding', ['kop' => 'Kop', 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
+
+    expect($document->querySelector('section[data-cms-strip]')?->getAttribute('class'))->toBe($klasse);
+})->with([
+    'links' => ['links', 'wrap sec tekst-foto'],
+    'rechts' => ['rechts', 'wrap sec tekst-foto tekst-foto--rechts'],
+    'leeg' => [null, 'wrap sec tekst-foto'],
+]);
+
+test('the text with an image rejects an unknown position', function () {
+    expect(fn () => renderStrip('tekst-met-afbeelding', ['kop' => 'Kop', 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
+        ->toThrow(ViewException::class, 'De strook tekst-met-afbeelding kent geen positie [midden]');
+});
+
+test('the image of a text with an image has the alt text of its file', function () {
+    $document = renderStrip('tekst-met-afbeelding', ['kop' => 'Kop', 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+
+    expect($document->querySelector('.tekst-foto__media img[data-cms-field="afbeelding"]')?->getAttribute('alt'))->toBe('Twee gouden trouwringen');
+});
