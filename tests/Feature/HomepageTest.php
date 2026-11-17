@@ -10,6 +10,7 @@ use Made\CmsPackage\Content\Actions\PublishPage;
 use Made\CmsPackage\Content\Actions\UpdateStrip;
 use Made\CmsPackage\Content\Data\NewPage;
 use Made\CmsPackage\Content\Data\PagePath;
+use Made\CmsPackage\Content\Models\Media;
 use Made\CmsPackage\Content\Models\Page;
 
 beforeEach(function () {
@@ -227,4 +228,15 @@ test('the seeded homepage comes first in the tree and stays out of the menu', fu
 
     expect(Page::query()->roots()->inMenuOrder()->pluck('title')->all())->toBe(['Home', 'Welkom'])
         ->and(geseedeHomepagina()->in_menu)->toBeFalse();
+});
+
+test('the seeder fills the photos of the homepage with those of the design, a column with that of its place and a service with that of its service', function () {
+    $this->seed(HomepaginaSeeder::class);
+
+    $stroken = collect(geseedeHomepagina()->strips)->keyBy('type');
+    $namen = fn (array $ids): array => array_map(fn (int $id): ?string => Media::query()->whereKey($id)->value('name'), $ids);
+
+    expect($namen([$stroken['hero']['values']['foto_boog'], $stroken['hero']['values']['foto_polaroid'], $stroken['cta']['values']['foto']]))->toBe(['romy-portret', 'ringen-boeket', 'romy-gesprek'])
+        ->and($namen(array_column($stroken['twee-kolommen']['values']['kolommen'], 'foto')))->toBe(['paar-landschap', 'feesttafel'])
+        ->and($namen(array_column($stroken['diensten']['values']['diensten'], 'foto')))->toBe(['schoenen-boeket', 'hand-in-hand-paar', 'sleep-jurk']);
 });

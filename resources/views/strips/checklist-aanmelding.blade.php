@@ -2,14 +2,16 @@
     Strook: de gratis checklist, met links een polaroid en een papiertje
     met vinkjes en rechts het aanmeldformulier, zonder trouwdatum.
 
-    Velden: label, kop (met accent) en tekst. De visual is decoratie voor
-    schermlezers (aria-hidden) en ligt vast.
+    Velden: label, kop (met accent), tekst en foto (op de polaroid). De
+    visual is decoratie voor schermlezers (aria-hidden), dus de foto heeft
+    een lege alt. Zonder foto staat de foto uit het ontwerp (<x-foto>);
+    het bijschrift en het papiertje liggen vast.
 --}}
 <section class="wrap sec" id="checklist" data-cms-strip="{{ $strip->id }}">
     <div class="checklist" data-reveal>
         <div class="checklist__media" aria-hidden="true">
             <div class="polaroid polaroid--wide tilt" style="left:6%;top:0;width:70%;padding:10px 10px 40px;transform:rotate(-6deg);z-index:1">
-                <img src="{{ Vite::asset('resources/images/hand-in-hand.jpg') }}" alt="" width="1100" height="733" loading="lazy">
+                <x-foto :foto="$strip->foto" terugval="resources/images/hand-in-hand.jpg" :breedte="1100" :hoogte="733" decoratief veld="foto" loading="lazy" />
                 <span style="font-size:18px;bottom:9px">12 maanden te gaan</span>
             </div>
             <div class="paper">

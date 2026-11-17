@@ -5,6 +5,7 @@ use Dom\HTMLDocument;
 use Dom\NodeList;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\Str;
 use Made\CmsPackage\Content\Actions\PublishPage;
 use Made\CmsPackage\Content\Actions\UpdateStrip;
@@ -248,4 +249,25 @@ function artikelOnderBlog(string $slug, array $velden = []): Page
 function echteUploads(): void
 {
     app()->forgetInstance(UploadMedia::class);
+}
+
+/**
+ * Laat Vite::asset() weer de url van een foto uit de gebouwde manifest geven, ook als de Vite-devserver lokaal draait,
+ * zodat een test ziet welke foto uit het ontwerp er staat.
+ */
+function metGebouwdeFotos(): void
+{
+    test()->withVite();
+    Vite::useHotFile(storage_path('framework/testing/geen-vite-devserver'));
+}
+
+/**
+ * Een foto zoals een veld Afbeelding hem rendert, met deze velden in plaats van de standaard.
+ *
+ * @param  array<string, mixed>  $velden
+ * @return array{url: string, alt: string, width: int|null, height: int|null, focal: array{x: float, y: float}}
+ */
+function fotoUitCms(array $velden = []): array
+{
+    return ['url' => '/storage/media/ringen.webp', 'alt' => 'Twee gouden trouwringen', 'width' => 1920, 'height' => 1280, 'focal' => ['x' => 0.25, 'y' => 0.8], ...$velden];
 }

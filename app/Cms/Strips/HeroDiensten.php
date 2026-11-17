@@ -15,7 +15,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  * resources/views/strips/hero-diensten.blade.php.
  *
  * De eerste knop is de kennismaking uit config/vertrouwdag.php; de tweede
- * is het veld knop. De foto's liggen vast tot #21.
+ * is het veld knop. De foto's in de boog en op de polaroid zijn te kiezen;
+ * leeg is de foto uit het ontwerp (#21).
  */
 final class HeroDiensten extends StripType
 {
@@ -49,6 +50,10 @@ final class HeroDiensten extends StripType
                 ->label('Tweede knop')
                 ->default(['text' => 'Vergelijk de pakketten', 'link' => ['url' => '#vergelijk']])
                 ->hint('Naast de knop naar de kennismaking. #vergelijk springt naar de vergelijking.'),
+            Velden::foto('foto_boog', 'Staand: de boog snijdt hem bij.')
+                ->label('Foto in de boog'),
+            Velden::foto('foto_polaroid', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de polaroid'),
             Text::make('bijschrift')
                 ->label('Bijschrift bij de polaroid')
                 ->default('alles geregeld'),

@@ -3,9 +3,10 @@
     rechts twee polaroids: het paar in het landschap en de gouden ringen.
 
     Velden: label, kop (met accent), tekst, knop (tekst en url, op deze
-    pagina naar /diensten), bijschrift_boven (onder de bovenste polaroid)
-    en bijschrift_onder (onder de onderste). De eerste knop is de
-    kennismaking uit de config. De foto's liggen vast tot #21.
+    pagina naar /diensten), foto_boven en foto_onder (op de polaroids),
+    bijschrift_boven (onder de bovenste polaroid) en bijschrift_onder
+    (onder de onderste). De eerste knop is de kennismaking uit de config.
+    Zonder foto staat de foto uit het ontwerp (<x-foto>).
 --}}
 <section class="wrap hero" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal style="gap:24px">
@@ -21,11 +22,11 @@
     </div>
     <div class="hero__media hero__media--d ww-media" data-reveal style="aspect-ratio:1/.86">
         <div class="polaroid tilt" style="left:8%;top:4%;width:54%;padding:10px 10px 42px;transform:rotate(-5deg)">
-            <img src="{{ Vite::asset('resources/images/paar-landschap.jpg') }}" alt="Bruidspaar wandelt door een weids landschap" width="1100" height="733" fetchpriority="high">
+            <x-foto :foto="$strip->foto_boven" terugval="resources/images/paar-landschap.jpg" alt="Bruidspaar wandelt door een weids landschap" :breedte="1100" :hoogte="733" veld="foto_boven" fetchpriority="high" />
             <span style="font-size:19px;bottom:10px" data-cms-field="bijschrift_boven">{{ $strip->bijschrift_boven }}</span>
         </div>
         <div class="polaroid tilt" style="right:8%;bottom:2%;width:48%;padding:10px 10px 42px;transform:rotate(6deg)">
-            <img src="{{ Vite::asset('resources/images/ringen-goud.jpg') }}" alt="Twee gouden trouwringen" width="1100" height="733">
+            <x-foto :foto="$strip->foto_onder" terugval="resources/images/ringen-goud.jpg" alt="Twee gouden trouwringen" :breedte="1100" :hoogte="733" veld="foto_onder" />
             <span style="font-size:19px;bottom:10px" data-cms-field="bijschrift_onder">{{ $strip->bijschrift_onder }}</span>
         </div>
     </div>

@@ -2,9 +2,9 @@
     Strook: "Hart én hoofd", een grote kop met een inleiding en twee
     kolommen met een foto en een zwevende kaart erop.
 
-    Velden: kop (met accent), tekst en kolommen (lijst met label, kop met
-    accent en tekst). De foto hoort bij de plek van de kolom en ligt vast
-    tot #21.
+    Velden: kop (met accent), tekst en kolommen (lijst met foto, label,
+    kop met accent en tekst). Een kolom zonder foto krijgt de foto uit het
+    ontwerp die bij zijn plek hoort (<x-foto>).
 --}}
 @php
     $fotos = [
@@ -17,9 +17,9 @@
     <p class="center" data-reveal style="margin:22px auto 56px;max-width:46ch;padding:0 24px;font-size:21px" data-cms-field="tekst">{{ $strip->tekst }}</p>
     <div class="split" data-reveal-group data-cms-items="kolommen">
         @foreach ($strip->kolommen as $kolom)
-            @php($foto = $fotos[$loop->index % count($fotos)])
+            @php($terugval = $fotos[$loop->index % count($fotos)])
             <div class="split__photo">
-                <img src="{{ Vite::asset($foto['src']) }}" alt="{{ $foto['alt'] }}" width="1100" height="733" loading="lazy">
+                <x-foto :foto="$kolom['foto'] ?? null" :terugval="$terugval['src']" :alt="$terugval['alt']" :breedte="1100" :hoogte="733" veld="foto" loading="lazy" />
                 <div class="card-float">
                     <p class="eb eb--grijs" data-cms-field="label">{{ $kolom['label'] }}</p>
                     <h3 data-cms-field="kop"><x-accent :tekst="$kolom['kop']" /></h3>

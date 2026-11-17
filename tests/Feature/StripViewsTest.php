@@ -427,3 +427,20 @@ test('the thank-you block leaves out the question it does not have', function ()
     expect($document->querySelector('[data-cms-field="vraag"]'))->toBeNull()
         ->and($document->querySelector('#bedankt a.btn'))->not->toBeNull();
 });
+
+test('a column without a photo from the cms gets the photo of the design for its place', function () {
+    metGebouwdeFotos();
+    $kolommen = [
+        ['id' => 'k1', 'foto' => fotoUitCms(), 'label' => 'Het hart van', 'kop' => '*een goede* vriendin', 'tekst' => 'Tekst'],
+        ['id' => 'k2', 'foto' => null, 'label' => 'Het hoofd van', 'kop' => '*een* projectmanager', 'tekst' => 'Tekst'],
+    ];
+
+    $document = renderStrip('twee-kolommen', ['kop' => 'Hart *én* hoofd', 'tekst' => 'Tekst', 'kolommen' => $kolommen]);
+    $fotos = $document->querySelectorAll('[data-cms-items="kolommen"] img[data-cms-field="foto"]');
+
+    expect(array_map(fn (string $src): string => basename($src), attributenVan($fotos, 'src')))->sequence(
+        fn ($src) => $src->toBe('ringen.webp'),
+        fn ($src) => $src->toStartWith('feesttafel-'),
+    )
+        ->and(attributenVan($fotos, 'alt'))->toBe(['Twee gouden trouwringen', 'Lange gedekte feesttafel met bloemen']);
+});

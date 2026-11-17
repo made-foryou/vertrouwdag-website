@@ -1,10 +1,16 @@
 <?php
 
+use App\Cms\Strips\ChecklistAanmelding;
+use App\Cms\Strips\Diensten;
+use App\Cms\Strips\HeroChecklist;
+use App\Cms\Strips\Pakketten;
 use Database\Seeders\DienstenpaginaSeeder;
 use Dom\Element;
 use Illuminate\Support\Str;
+use Made\CmsPackage\Content\Models\Media;
 use Made\CmsPackage\Content\Models\Page;
 use Made\CmsPackage\Content\Strips\Fields\Choice;
+use Made\CmsPackage\Content\Strips\Fields\Image;
 use Made\CmsPackage\Content\Strips\Fields\Items;
 use Made\CmsPackage\Content\Strips\StripType;
 use Made\CmsPackage\Content\Strips\StripTypes;
@@ -165,3 +171,104 @@ test('the edit frame finds every field of a strip type in its view', function (s
         }
     }
 })->with('striptypes');
+
+/**
+ * De fotovelden van een striptype: per veld de lijst waar het in staat (null voor een veld van de strook zelf) en zijn
+ * key.
+ *
+ * @return list<array{0: ?string, 1: string}>
+ */
+function fotoveldenVan(StripType $type): array
+{
+    $fotovelden = [];
+
+    foreach ($type->fields() as $veld) {
+        if ($veld instanceof Image) {
+            $fotovelden[] = [null, $veld->getKey()];
+        }
+
+        if ($veld instanceof Items) {
+            foreach ($veld->getFields() as $itemveld) {
+                if ($itemveld instanceof Image) {
+                    $fotovelden[] = [$veld->getKey(), $itemveld->getKey()];
+                }
+            }
+        }
+    }
+
+    return $fotovelden;
+}
+
+/**
+ * Elk striptype in app/Cms/Strips met een fotoveld (#21). De dataset leest de broncode, want hij ontstaat voordat de app
+ * er is, en de velden van sommige types lezen de config.
+ *
+ * Niet blog-laatste: de blogs die binnenkort komen zijn kaarten (x-blogkaart) zonder data-cms-field, dus het frame
+ * herlaadt na een wijziging (zie de test van het frame hierboven).
+ */
+dataset('striptypes met fotos', fn (): array => array_values(array_map(
+    fn (string $bestand): string => 'App\\Cms\\Strips\\'.basename($bestand, '.php'),
+    array_filter(glob(__DIR__.'/../../app/Cms/Strips/*.php'), fn (string $bestand): bool => basename($bestand) !== 'BlogLaatste.php' && preg_match('/Image::make\(|Velden::foto\(/', file_get_contents($bestand)) === 1),
+)));
+
+/**
+ * Zet een pagina met één strook van het type in het CMS, met zijn standaardwaarden en in elk fotoveld de foto, ook in
+ * elk item van een lijst, en geeft elke <img> van een fotoveld zoals de bezoeker hem krijgt, per veld.
+ *
+ * @return array<string, list<Element>>
+ */
+function fotosMetGekozenFoto(StripType $type, Media $foto): array
+{
+    $waarden = $type->defaults();
+
+    foreach (fotoveldenVan($type) as [$lijst, $key]) {
+        if ($lijst === null) {
+            $waarden[$key] = $foto->id;
+        } else {
+            $waarden[$lijst] = array_map(fn (array $item): array => [...$item, $key => $foto->id], $waarden[$lijst]);
+        }
+    }
+
+    $id = (string) Str::uuid();
+    Page::factory()->published()->at('/strook')->withStrips([['id' => $id, 'type' => $type->key(), 'visible' => true, 'values' => $type->normalize($waarden)]])->create();
+    $strook = documentVoor('/strook')->querySelector("main [data-cms-strip=\"{$id}\"]");
+
+    $fotos = [];
+
+    foreach (fotoveldenVan($type) as [$lijst, $key]) {
+        $fotos[$lijst === null ? $key : "{$lijst}.{$key}"] = $lijst === null
+            ? buitenLijsten($strook, "img[data-cms-field=\"{$key}\"]")
+            : iterator_to_array($strook->querySelectorAll("[data-cms-items=\"{$lijst}\"] img[data-cms-field=\"{$key}\"]"));
+    }
+
+    return $fotos;
+}
+
+test('every photo field of a strip type shows the photo chosen in the cms', function (string $striptype) {
+    $foto = Media::factory()->withAlt('Twee gouden trouwringen')->create();
+
+    $fotos = fotosMetGekozenFoto(new $striptype, $foto);
+
+    foreach ($fotos as $veld => $elementen) {
+        expect($elementen)->not->toBeEmpty("Het fotoveld {$veld} staat niet als <img> in de view.");
+
+        foreach ($elementen as $element) {
+            expect($element->getAttribute('src'))->toEndWith("/storage/{$foto->path}", "Het fotoveld {$veld} toont de gekozen foto niet.");
+        }
+    }
+})->with('striptypes met fotos');
+
+test('a decorative photo has an empty alt text, also when its file has one', function (string $striptype) {
+    $foto = Media::factory()->withAlt('Twee gouden trouwringen')->create();
+
+    $fotos = fotosMetGekozenFoto(new $striptype, $foto);
+
+    $alts = array_map(fn (Element $foto): string => $foto->getAttribute('alt'), array_merge(...array_values($fotos)));
+
+    expect($alts)->not->toBeEmpty()->each->toBe('');
+})->with([
+    'diensten' => Diensten::class,
+    'pakketten' => Pakketten::class,
+    'hero-checklist' => HeroChecklist::class,
+    'checklist-aanmelding' => ChecklistAanmelding::class,
+]);

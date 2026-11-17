@@ -15,7 +15,8 @@ use Made\CmsPackage\Content\Strips\StripType;
  *
  * De agenda ligt vast: de poort met "Agenda tonen", het vangnet en hun
  * teksten (#10). De Calendly-link staat in config/vertrouwdag.php. Het
- * nummer van een stap volgt de volgorde, de kleur hoort bij de plek.
+ * nummer van een stap volgt de volgorde, de kleur hoort bij de plek. De
+ * foto op de polaroid is te kiezen; leeg is de foto uit het ontwerp (#21).
  */
 final class HeroKennismaken extends StripType
 {
@@ -59,6 +60,8 @@ final class HeroKennismaken extends StripType
                 ->label('Regel onder de stappen')
                 ->default('Liever fysiek afspreken? Dat kan ook. Laat het weten in het bericht.')
                 ->hint('Mag leeg blijven.'),
+            Velden::foto('foto', 'Vierkant: de polaroid snijdt hem bij.')
+                ->label('Foto op de polaroid'),
             Text::make('bijschrift')
                 ->label('Bijschrift bij de polaroid')
                 ->default('tot zo, Romy'),

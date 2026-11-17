@@ -25,6 +25,58 @@ beforeEach(function () {
     $this->withoutVite();
 });
 
+describe('foto', function () {
+    test('a photo from the cms shows its file with its alt text and size, and its focal point instead of the position of the design', function () {
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/romy-portret.jpg" alt="Romy" :breedte="1100" :hoogte="1527" positie="50% 18%" veld="foto_boog" loading="lazy" />', ['foto' => fotoUitCms()]);
+        $img = $document->querySelector('img');
+
+        expect($img?->getAttribute('src'))->toBe('/storage/media/ringen.webp')
+            ->and($img?->getAttribute('alt'))->toBe('Twee gouden trouwringen')
+            ->and($img?->getAttribute('width'))->toBe('1920')
+            ->and($img?->getAttribute('height'))->toBe('1280')
+            ->and($img?->getAttribute('style'))->toBe('object-position:25% 80%')
+            ->and($img?->getAttribute('data-cms-field'))->toBe('foto_boog')
+            ->and($img?->getAttribute('loading'))->toBe('lazy');
+    });
+
+    test('without a photo from the cms it shows the photo of the design with its own alt text, size and position', function () {
+        metGebouwdeFotos();
+
+        $document = renderComponent('<x-foto :foto="null" terugval="resources/images/romy-portret.jpg" alt="Romy" :breedte="1100" :hoogte="1527" positie="50% 18%" veld="foto_boog" />');
+        $img = $document->querySelector('img');
+
+        expect(basename((string) $img?->getAttribute('src')))->toStartWith('romy-portret-')
+            ->and($img?->getAttribute('alt'))->toBe('Romy')
+            ->and($img?->getAttribute('width'))->toBe('1100')
+            ->and($img?->getAttribute('height'))->toBe('1527')
+            ->and($img?->getAttribute('style'))->toBe('object-position:50% 18%')
+            ->and($img?->getAttribute('data-cms-field'))->toBe('foto_boog');
+    });
+
+    test('a photo from the cms without a size, like an svg, keeps the size of the photo of the design', function () {
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" veld="foto" />', ['foto' => fotoUitCms(['width' => null, 'height' => null])]);
+        $img = $document->querySelector('img');
+
+        expect($img?->getAttribute('width'))->toBe('1100')
+            ->and($img?->getAttribute('height'))->toBe('733');
+    });
+
+    test('a photo from the cms keeps the style it was given and adds its focal point', function () {
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" veld="foto" style="transform:rotate(-4deg);" />', ['foto' => fotoUitCms()]);
+
+        expect($document->querySelector('img')?->getAttribute('style'))->toBe('transform:rotate(-4deg);object-position:25% 80%');
+    });
+
+    test('a decorative photo has an empty alt text, also when its file has one', function (?array $foto) {
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/hand-in-hand.jpg" alt="Bruidspaar hand in hand" :breedte="1100" :hoogte="733" decoratief veld="foto" />', ['foto' => $foto]);
+
+        expect($document->querySelector('img')?->getAttribute('alt'))->toBe('');
+    })->with([
+        'foto uit het cms' => [fotoUitCms()],
+        'foto uit het ontwerp' => [null],
+    ]);
+});
+
 describe('knop', function () {
     test('a button with a href is a link with the class of its variant', function (string $variant, string $klassen) {
         $document = renderComponent('<x-knop href="/diensten" :variant="$variant">Bekijk</x-knop>', ['variant' => $variant]);
@@ -52,7 +104,7 @@ describe('knop', function () {
 describe('dienstkaart', function () {
     test('a service card with a href is a link with the description, price and icon in that order', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijs" href="/diensten#dagcoordinatie" foto="/foto.jpg" :draaiing="-4">
+            <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijs" href="/diensten#dagcoordinatie" :draaiing="-4">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel data-cms-field="titel">De Dag in handen</x-slot:titel>
                 <x-slot:omschrijving>Ik neem het zes weken ervoor over.</x-slot:omschrijving>
@@ -70,7 +122,7 @@ describe('dienstkaart', function () {
 
     test('a service card without a href is an article with the price before the description, the features and a button', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijs" foto="/foto.jpg" data-for="dagcoordinatie" :kenmerken="['Draaiboek', 'Afstemming met leveranciers']">
+            <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijs" data-for="dagcoordinatie" :kenmerken="['Draaiboek', 'Afstemming met leveranciers']">
                 <x-slot:soort>Dagcoördinatie</x-slot:soort>
                 <x-slot:titel>De Dag in handen</x-slot:titel>
                 <x-slot:omschrijving><p><strong>Voor stellen</strong> die zelf plannen.</p></x-slot:omschrijving>
@@ -90,7 +142,7 @@ describe('dienstkaart', function () {
 
     test('the colour of a service card sets the eyebrow, the dimmed price and the button', function (string $kleur, string $eyebrow, int $gedempt, string $knop, string $hart) {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart :kleur="$kleur" dienst="dag" :prijs="$prijs" foto="/foto.jpg" :kenmerken="['Draaiboek']">
+            <x-dienstkaart :kleur="$kleur" dienst="dag" :prijs="$prijs" :kenmerken="['Draaiboek']">
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
@@ -110,7 +162,7 @@ describe('dienstkaart', function () {
 
     test('a service card without a price has no price line', function (?string $href) {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" :href="$href" foto="/foto.jpg">
+            <x-dienstkaart kleur="lila" dienst="dag" :href="$href">
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
@@ -126,7 +178,7 @@ describe('dienstkaart', function () {
 
     test('a mirrored service card has its tab and photo on the right', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="cream" dienst="partial" href="/diensten" foto="/foto.jpg" gespiegeld>
+            <x-dienstkaart kleur="cream" dienst="partial" href="/diensten" gespiegeld>
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
@@ -138,15 +190,35 @@ describe('dienstkaart', function () {
 
     test('the photo of a service card is decorative, so the link is named by its text only', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-dienstkaart kleur="lila" dienst="dag" href="/diensten" foto="/foto.jpg">
+            <x-dienstkaart kleur="lila" dienst="dag" href="/diensten" :foto="$foto">
                 <x-slot:soort>Soort</x-slot:soort>
                 <x-slot:titel>Titel</x-slot:titel>
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
             </x-dienstkaart>
-            BLADE);
+            BLADE, ['foto' => fotoUitCms()]);
+        $foto = $document->querySelector('a.folder img.folder__peek[data-cms-field="foto"]');
 
-        expect($document->querySelector('a.folder img')?->getAttribute('alt'))->toBe('');
+        expect($foto?->getAttribute('src'))->toBe('/storage/media/ringen.webp')
+            ->and($foto?->getAttribute('alt'))->toBe('');
     });
+
+    test('a service card without a photo from the cms shows the photo of its service from the design', function (string $dienst, string $foto) {
+        metGebouwdeFotos();
+
+        $document = renderComponent(<<<'BLADE'
+            <x-dienstkaart kleur="lila" :dienst="$dienst" href="/diensten">
+                <x-slot:soort>Soort</x-slot:soort>
+                <x-slot:titel>Titel</x-slot:titel>
+                <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
+            </x-dienstkaart>
+            BLADE, ['dienst' => $dienst]);
+
+        expect(basename((string) $document->querySelector('img.folder__peek')?->getAttribute('src')))->toStartWith("{$foto}-");
+    })->with([
+        'dag' => ['dag', 'schoenen-boeket'],
+        'partial' => ['partial', 'hand-in-hand-paar'],
+        'full' => ['full', 'sleep-jurk'],
+    ]);
 });
 
 describe('stapkaart', function () {
@@ -486,11 +558,12 @@ describe('checklist-formulier', function () {
     });
 });
 
-test('a component rejects an unknown variant or colour and names it', function (string $template, string $melding) {
+test('a component rejects an unknown variant, colour or service and names it', function (string $template, string $melding) {
     expect(fn () => $this->blade($template))->toThrow(ViewException::class, $melding);
 })->with([
     'knop' => ['<x-knop variant="roze">Bekijk</x-knop>', 'De knop kent geen variant [roze]'],
-    'dienstkaart' => ['<x-dienstkaart kleur="roze" dienst="dag" foto="/foto.jpg" />', 'De dienstkaart kent geen kleur [roze]'],
+    'dienstkaart' => ['<x-dienstkaart kleur="roze" dienst="dag" />', 'De dienstkaart kent geen kleur [roze]'],
+    'dienstkaart zonder bekende dienst' => ['<x-dienstkaart kleur="lila" dienst="goud" />', 'De dienstkaart kent geen dienst [goud]'],
     'stapkaart' => ['<x-stapkaart nummer="1" kleur="roze" />', 'De stapkaart kent geen kleur [roze]'],
     'briefje' => ['<x-briefje kleur="roze">Tekst</x-briefje>', 'Het briefje kent geen kleur [roze]'],
 ]);

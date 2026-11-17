@@ -3,15 +3,16 @@
     de zwart-witpolaroid, en rechts de kop, tekst en één knop. Op mobiel
     staat de tekst boven de foto's.
 
-    Velden: label, kop (met accent), tekst, knop (tekst en url) en
-    bijschrift (onder de polaroid). De foto's liggen vast tot #21.
+    Velden: label, kop (met accent), tekst, knop (tekst en url),
+    foto_boog, foto_polaroid en bijschrift (onder de polaroid). Zonder
+    foto staat de foto uit het ontwerp (<x-foto>). Het zegel ligt vast.
 --}}
 <section class="wrap hero" style="flex-wrap:wrap-reverse;padding-bottom:96px" data-cms-strip="{{ $strip->id }}">
     <div class="hero__media about-hero" data-reveal>
-        <div class="arch" style="left:6%;top:0;width:76%;height:100%;border:10px solid var(--papier);box-shadow:var(--schaduw)"><img src="{{ Vite::asset('resources/images/romy.jpg') }}" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" width="1100" height="1571" fetchpriority="high"></div>
+        <div class="arch" style="left:6%;top:0;width:76%;height:100%;border:10px solid var(--papier);box-shadow:var(--schaduw)"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto_boog" fetchpriority="high" /></div>
         <div class="stamp tilt" style="left:0;top:6%;width:112px;height:132px;transform:rotate(-9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" style="width:72px;height:72px"></div>
         <div class="polaroid tilt" style="right:0;bottom:6%;width:42%;padding:10px 10px 40px;transform:rotate(7deg)">
-            <img src="{{ Vite::asset('resources/images/kus-zwartwit.jpg') }}" alt="Zwart-witfoto van een bruidspaar" width="1100" height="641">
+            <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/kus-zwartwit.jpg" alt="Zwart-witfoto van een bruidspaar" :breedte="1100" :hoogte="641" veld="foto_polaroid" />
             <span style="font-size:18px;bottom:9px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
         </div>
     </div>

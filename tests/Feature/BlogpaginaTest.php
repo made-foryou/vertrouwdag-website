@@ -167,7 +167,31 @@ test('the seeder puts the blog page in the cms, published and in the menu, with 
 test('the seeders put a photo that two pages use in the library once', function () {
     $this->seed(PaginasSeeder::class);
 
-    expect(Media::query()->orderBy('name')->pluck('name')->all())->toBe(['ceremonie-buiten', 'feesttafel', 'paar-landschap', 'ringen-goud']);
+    expect(Media::query()->orderBy('name')->pluck('name')->all())->toBe([
+        'bruid-rozen',
+        'ceremonie-buiten',
+        'feesttafel',
+        'hand-in-hand',
+        'hand-in-hand-paar',
+        'kus-zwartwit',
+        'paar-landschap',
+        'ringen-boeket',
+        'ringen-goud',
+        'ringen-pioenen',
+        'romy',
+        'romy-gesprek',
+        'romy-klein',
+        'romy-portret',
+        'romy-samen',
+        'schoenen-boeket',
+        'sleep-jurk',
+    ]);
+});
+
+test('the seeders give every photo in the library an alt text', function () {
+    $this->seed(PaginasSeeder::class);
+
+    expect(Media::query()->withoutAlt()->pluck('name')->all())->toBe([]);
 });
 
 test('the seeder gives the empty blog page from before the strips of the design', function () {

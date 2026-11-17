@@ -3,9 +3,9 @@
     /diensten openen. Op mobiel zijn de mapjes een swipe-stapel.
 
     Velden: label, kop (met accent), knop (tekst en url) en diensten
-    (lijst met dienst, soort, titel en omschrijving). dienst (dag, partial
-    of full) bepaalt via App\Support\Dienst de kleur, de foto en het anker
-    op /diensten. prijzen (van App\Cms\Strips\Diensten::with()) geeft per
+    (lijst met dienst, soort, titel, omschrijving en foto). dienst (dag,
+    partial of full) bepaalt via App\Support\Dienst de kleur en het anker
+    op /diensten, en de foto zolang er geen gekozen is (x-dienstkaart). prijzen (van App\Cms\Strips\Diensten::with()) geeft per
     dienst de prijs uit de strook pakketten op /diensten; een dienst
     zonder prijs heeft geen prijsregel. Hoe de foto draait en of de kaart
     gespiegeld is, hoort bij deze stapel.
@@ -27,7 +27,7 @@
         <div class="folders" data-deck data-reveal-group data-cms-items="diensten">
             @foreach ($strip->diensten as $dienst)
                 @php($welkeDienst = Dienst::tryFrom($dienst['dienst']) ?? throw new InvalidArgumentException("De strook diensten kent geen dienst [{$dienst['dienst']}]; kies dag, partial of full."))
-                <x-dienstkaart :kleur="$welkeDienst->kleur()->value" :dienst="$welkeDienst->value" :prijs="$strip->prijzen[$welkeDienst->value] ?? null" :href="url(\App\Support\Aanbod::ADRES).'#'.$welkeDienst->anker()" :foto="Vite::asset($welkeDienst->foto())" :draaiing="$plaatsing[$welkeDienst->value]['draaiing']" :gespiegeld="$plaatsing[$welkeDienst->value]['gespiegeld']">
+                <x-dienstkaart :kleur="$welkeDienst->kleur()->value" :dienst="$welkeDienst->value" :prijs="$strip->prijzen[$welkeDienst->value] ?? null" :href="url(\App\Support\Aanbod::ADRES).'#'.$welkeDienst->anker()" :foto="$dienst['foto'] ?? null" :draaiing="$plaatsing[$welkeDienst->value]['draaiing']" :gespiegeld="$plaatsing[$welkeDienst->value]['gespiegeld']">
                     <x-slot:soort data-cms-field="soort">{{ $dienst['soort'] }}</x-slot:soort>
                     <x-slot:titel data-cms-field="titel">{{ $dienst['titel'] }}</x-slot:titel>
                     <x-slot:omschrijving data-cms-field="omschrijving">{{ $dienst['omschrijving'] }}</x-slot:omschrijving>
