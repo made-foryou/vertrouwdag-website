@@ -76,7 +76,8 @@ test('the homepage comes from the cms with every strip in the order of the desig
  * De uitzonderingen staan als lijst in #16. Wat er niet onder valt, moet een redacteur kunnen wijzigen:
  * - [aria-hidden]: decoratie, zoals de checklist-visual en de hartjes. De lopende band is ook aria-hidden, maar zijn
  *   teksten zijn een lijst die het frame herlaadt;
- * - de knop naar de kennismaking: uit de config, net als in de header;
+ * - de knop naar de kennismaking: uit de config, net als in de header. In de hero is hij een veld met een relatief pad,
+ *   dus valt hij niet onder de uitzondering;
  * - .price: de prijs uit de strook pakketten op /diensten (#17) met "vanaf", "incl. btw" en "excl. btw";
  * - .step__nr: het nummer van een stap volgt de volgorde;
  * - de velden, de toestemming en de knop van het checklistformulier, dat ook op /checklist staat.
@@ -203,7 +204,7 @@ test('the homepage links its buttons to the right pages', function () {
 
     $document = documentVoor('/');
 
-    expect(attributenVan($document->querySelectorAll('main > :first-child a.btn'), 'href'))->toBe([url('/kennismaken'), '/diensten'])
+    expect(attributenVan($document->querySelectorAll('main > :first-child a.btn'), 'href'))->toBe(['/kennismaken', '/diensten'])
         ->and($document->querySelector('.folders ~ * a.btn')?->getAttribute('href'))->toBe('/diensten')
         ->and($document->querySelector('.steps')?->parentElement?->querySelector('a.btn')?->getAttribute('href'))->toBe('/werkwijze')
         ->and($document->querySelector('.about a.btn')?->getAttribute('href'))->toBe('/over-mij');

@@ -3,12 +3,12 @@
     rechts het portret van Romy, de polaroid met de ringen, het zegel en
     de sticker.
 
-    Velden: label, kop (met accent), tekst, knop (tekst en url),
-    foto_boog (het portret), foto_polaroid, bijschrift (onder de
-    polaroid) en sticker (meerdere regels). De eerste knop is de
-    kennismaking uit de config. Zonder foto staat de foto uit het ontwerp
-    (<x-foto>); het portret dan met het gezicht van Romy in beeld. Het
-    zegel ligt vast.
+    Velden: label, kop (met accent), tekst, eerste_knop en knop (tekst en
+    url), foto_boog (het portret), foto_polaroid, bijschrift (onder de
+    polaroid) en sticker (meerdere regels). Zonder eerste knop staat de
+    knop naar de kennismaking uit de config, zoals in de header. Zonder
+    foto staat de foto uit het ontwerp (<x-foto>); het portret dan met het
+    gezicht van Romy in beeld. Het zegel ligt vast.
 
     Het laatste woord van het label breekt niet af, zodat "Zuid-Holland"
     op mobiel niet bij het streepje wordt gesplitst. Daardoor staat er een
@@ -19,6 +19,7 @@
     $label = (string) $strip->label;
     $labelBegin = str_contains($label, ' ') ? Str::beforeLast($label, ' ').' ' : '';
     $labelEind = Str::afterLast($label, ' ');
+    $eersteKnop = $strip->eerste_knop ?? ['text' => config('vertrouwdag.cta.label'), 'url' => config('vertrouwdag.cta.pad')];
 @endphp
 <section class="wrap hero" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal>
@@ -26,7 +27,7 @@
         <h1 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
         <p class="lead" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="row">
-            <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
+            <x-knop :href="$eersteKnop['url']" data-cms-field="eerste_knop">{{ $eersteKnop['text'] }}</x-knop>
             @if ($strip->knop)
                 <x-knop :href="$strip->knop['url']" variant="secundair" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop>
             @endif

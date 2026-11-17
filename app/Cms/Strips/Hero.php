@@ -13,8 +13,11 @@ use Made\CmsPackage\Content\Strips\StripType;
  * twee knoppen, en rechts het portret van Romy. Hij rendert met de view
  * resources/views/strips/hero.blade.php.
  *
- * De eerste knop is de kennismaking uit config/vertrouwdag.php; de tweede
- * is het veld knop. De foto's in de boog en op de polaroid zijn te kiezen;
+ * Beide knoppen zijn velden. De eerste begint als de knop naar de
+ * kennismaking uit config/vertrouwdag.php, en is dat ook weer als hij leeg
+ * is; anders dan in de header en de andere stroken kan Romy hem hier dus
+ * aanpassen. Een hero van vóór dit veld krijgt bij het renderen de
+ * standaardwaarde. De foto's in de boog en op de polaroid zijn te kiezen;
  * leeg is de foto uit het ontwerp (#21). Het zegel en de plek van de
  * sticker liggen vast. Het label herlaadt het frame na het opslaan in plaats van
  * mee te kijken: het laatste woord staat in een eigen element, zodat
@@ -48,10 +51,17 @@ final class Hero extends StripType
                 ->default('Jullie dag in *vertrouwde* handen'),
             LongText::make('tekst')
                 ->default('Jullie werken allebei hard. Ik neem het overzicht over, zodat jullie en jullie familie op de dag zelf alleen maar hoeven te genieten.'),
+            Button::make('eerste_knop')
+                ->label('Eerste knop')
+                ->default([
+                    'text' => config('vertrouwdag.cta.label'),
+                    'link' => ['url' => config('vertrouwdag.cta.pad')],
+                ])
+                ->hint('Leeg: de knop naar de kennismaking, zoals in de header.'),
             Button::make('knop')
                 ->label('Tweede knop')
                 ->default(['text' => 'Bekijk de diensten', 'link' => ['url' => '/diensten']])
-                ->hint('Naast de knop naar de kennismaking.'),
+                ->hint('Naast de eerste knop.'),
             Velden::foto('foto_boog', 'Staand: de boog snijdt hem bij.')
                 ->label('Foto in de boog'),
             Velden::foto('foto_polaroid', 'Vierkant: de polaroid snijdt hem bij.')
