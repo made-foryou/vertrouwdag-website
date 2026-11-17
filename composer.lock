@@ -2785,12 +2785,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:made-foryou/made-cms-package.git",
-                "reference": "da1c5186e940ce94b498b23417408a945fabb2af"
+                "reference": "803f8e25cddec5ef24153a06dda675fef58bcec3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/da1c5186e940ce94b498b23417408a945fabb2af",
-                "reference": "da1c5186e940ce94b498b23417408a945fabb2af",
+                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/803f8e25cddec5ef24153a06dda675fef58bcec3",
+                "reference": "803f8e25cddec5ef24153a06dda675fef58bcec3",
                 "shasum": ""
             },
             "require": {
@@ -2831,7 +2831,8 @@
                 "pestphp/pest-plugin-browser": "^4.3||^5.0",
                 "pestphp/pest-plugin-laravel": "^4.1||^5.0",
                 "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
-                "phpstan/extension-installer": "^1.4"
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "<2.3.6"
             },
             "suggest": {
                 "ext-exif": "Turns uploaded photos from a phone or camera upright by their EXIF orientation.",
@@ -2922,7 +2923,7 @@
                 "made-cms-package",
                 "made-foryou"
             ],
-            "time": "2026-11-13T12:51:10+00:00"
+            "time": "2026-11-16T15:34:52+00:00"
         },
         {
             "name": "monolog/monolog",
