@@ -114,7 +114,7 @@ describe('dienstkaart', function () {
         $body = $kaart?->querySelector('.folder__body');
 
         expect($kaart?->getAttribute('href'))->toBe('/diensten#dagcoordinatie')
-            ->and($kaart?->querySelector('img.folder__peek')?->getAttribute('style'))->toBe('transform:rotate(-4deg)')
+            ->and($kaart?->querySelector('.folder__peek')?->getAttribute('style'))->toBe('transform:rotate(-4deg)')
             ->and($body?->querySelector('h3[data-cms-field="titel"]')?->textContent)->toBe('De Dag in handen')
             ->and(klassenVan($document->querySelectorAll('.folder__body > p, .folder__body > svg')))->toBe(['eb eb--sm', 'folder__desc', 'price', 'folder__icon'])
             ->and($body->querySelector('.btn'))->toBeNull();
@@ -196,7 +196,7 @@ describe('dienstkaart', function () {
                 <x-slot:omschrijving>Omschrijving</x-slot:omschrijving>
             </x-dienstkaart>
             BLADE, ['foto' => fotoUitCms()]);
-        $foto = $document->querySelector('a.folder img.folder__peek[data-cms-field="foto"]');
+        $foto = $document->querySelector('a.folder .folder__peek > img[data-cms-field="foto"]');
 
         expect($foto?->getAttribute('src'))->toBe('/storage/media/ringen.webp')
             ->and($foto?->getAttribute('alt'))->toBe('');
@@ -213,7 +213,7 @@ describe('dienstkaart', function () {
             </x-dienstkaart>
             BLADE, ['dienst' => $dienst]);
 
-        expect(basename((string) $document->querySelector('img.folder__peek')?->getAttribute('src')))->toStartWith("{$foto}-");
+        expect(basename((string) $document->querySelector('.folder__peek > img')?->getAttribute('src')))->toStartWith("{$foto}-");
     })->with([
         'dag' => ['dag', 'schoenen-boeket'],
         'partial' => ['partial', 'hand-in-hand-paar'],

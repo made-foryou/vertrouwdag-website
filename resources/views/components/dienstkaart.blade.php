@@ -21,7 +21,8 @@
     (App\Support\Dienst::foto()). De foto is sfeer en heeft daarom altijd
     een lege alt: de titel, omschrijving en prijs zeggen al wat de dienst
     is. Zo blijft ook de naam van de linkkaart kort (besluit Menno,
-    2026-11-10, zie #12).
+    2026-11-10, zie #12). De foto staat in een eigen vlak (.folder__peek)
+    met de plaatshouder als achtergrond, zodat hij erop kan infaden (#39).
 
     De slots soort (eyebrow), titel en omschrijving geven hun attributen
     door aan hun element, bijvoorbeeld data-cms-field.
@@ -45,7 +46,7 @@
     $element = $href !== null ? 'a' : 'article';
 @endphp
 <{{ $element }} @if ($href !== null) href="{{ $href }}" @endif {{ $attributes->class(['folder', 'folder--r' => $gespiegeld, 'f-'.$kleur]) }}>
-    <x-foto :foto="$foto" :terugval="$welkeDienst->foto()" :breedte="1100" :hoogte="825" decoratief veld="foto" class="folder__peek" loading="lazy" style="transform:rotate({{ $draaiing }}deg)" />
+    <span class="folder__peek" style="transform:rotate({{ $draaiing }}deg)"><x-foto :foto="$foto" :terugval="$welkeDienst->foto()" :breedte="1100" :hoogte="825" decoratief veld="foto" loading="lazy" /></span>
     <div class="folder__body">
         <span class="folder__tab" aria-hidden="true"></span>
         <p {{ $soort->attributes->class(array_filter(['eb', 'eb--sm', $stijl->eyebrowKlasse()])) }}>{{ $soort }}</p>
