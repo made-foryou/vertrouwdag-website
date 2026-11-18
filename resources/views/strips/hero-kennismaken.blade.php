@@ -3,7 +3,7 @@
     stappen van het gesprek, en rechts de Calendly-agenda met de polaroid
     van Romy.
 
-    Velden: label, kop (met accent), tekst, stappen (lijst met tekst),
+    Velden: label, kop (Kop met nadruk), tekst, stappen (lijst met tekst),
     opmerking (optioneel, de schuine regel onder de stappen), foto (op de
     polaroid) en bijschrift (onder de polaroid). Het nummer van een stap
     volgt de volgorde. De kleur hoort bij de plek en begint na de derde
@@ -28,7 +28,7 @@
 <section class="wrap meet" data-cms-strip="{{ $strip->id }}">
     <div class="meet__txt" data-reveal>
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         <p style="font-size:21px;line-height:1.65;max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <ol class="mini-steps" data-cms-items="stappen">
             @foreach ($strip->stappen ?? [] as $stap)

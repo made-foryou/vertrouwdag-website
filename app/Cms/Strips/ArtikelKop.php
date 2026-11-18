@@ -45,6 +45,7 @@ final class ArtikelKop extends StripType
     {
         return [
             Velden::kopMetAccent('titel')
+                ->tag('h1')
                 ->label('Titel')
                 ->required(),
             LongText::make('intro')

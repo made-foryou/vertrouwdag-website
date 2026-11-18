@@ -3,7 +3,7 @@
     met de eerste punten van de checklist, en rechts de kop, de tekst en
     het aanmeldformulier met trouwdatum.
 
-    Velden: label, kop (met accent), tekst en foto (op de polaroid). De
+    Velden: label, kop (Kop met nadruk), tekst en foto (op de polaroid). De
     visual is decoratie voor schermlezers (aria-hidden), dus de foto heeft
     een lege alt. Zonder foto staat de foto uit het ontwerp (<x-foto>);
     het bijschrift en het papiertje liggen vast. Na het versturen toont
@@ -26,7 +26,7 @@
     </div>
     <div class="hero__txt" data-reveal style="gap:20px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         <p style="font-size:21px;max-width:36ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <x-checklist-formulier class="cl-form" trouwdatum />
     </div>

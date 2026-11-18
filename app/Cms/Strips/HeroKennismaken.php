@@ -42,6 +42,7 @@ final class HeroKennismaken extends StripType
                 ->default('Kennismaken')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Zullen we *kennismaken?*'),
             LongText::make('tekst')

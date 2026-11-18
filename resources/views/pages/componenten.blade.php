@@ -233,13 +233,11 @@
     </section>
 
     {{-- CTA-blokken (index.html en diensten.html) --}}
-    <x-cta-split hart>
-        <x-slot:kop>Zullen we <em>kennismaken?</em></x-slot:kop>
+    <x-cta-split :kop="['text' => 'Zullen we *kennismaken?*', 'tag' => 'h2']" hart>
         <x-slot:tekst>Een half uur, online en vrijblijvend. Jullie vertellen over jullie plannen, ik vertel hoe ik kan helpen.</x-slot:tekst>
     </x-cta-split>
 
-    <x-cta-split :foto-hoogte="480" groot>
-        <x-slot:kop>Twijfelen jullie <em>welk pakket?</em></x-slot:kop>
+    <x-cta-split :kop="['text' => 'Twijfelen jullie *welk pakket?*', 'tag' => 'h2']" :foto-hoogte="480" groot>
         <x-slot:tekst>Dat zoeken we samen uit, in een vrijblijvend gesprek van een half uur.</x-slot:tekst>
     </x-cta-split>
 </x-layouts::site>

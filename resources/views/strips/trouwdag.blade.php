@@ -4,7 +4,7 @@
 
     Velden: nummer (het nummer van de fase; leeg of iets anders dan een
     positief heel getal geeft geen boogje, want in het CMS is het tekst),
-    label, kop (met accent), briefjes (lijst met wie en tekst) en
+    label, kop (Kop met nadruk), briefjes (lijst met wie en tekst) en
     slotzin. Kleur en draaiing horen bij de plek van het briefje en
     beginnen na het vierde opnieuw. Het boogje krijgt geen
     data-cms-field, omdat het cijfer in een eigen span staat; een
@@ -25,7 +25,7 @@
             <x-fasenummer :nummer="$nummer" groot data-reveal />
         @endif
         <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
         <div class="notes" data-deck data-reveal-group data-cms-items="briefjes">
             @foreach ($strip->briefjes as $briefje)
                 @php($plek = $briefjes[$loop->index % count($briefjes)])

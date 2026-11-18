@@ -28,7 +28,7 @@ class AlgemeneVoorwaardenSeeder extends PaginaSeeder
     {
         return [
             ['juridisch', [
-                'kop' => 'Algemene *voorwaarden*',
+                'kop' => ['text' => 'Algemene *voorwaarden*'],
                 'inleiding' => '<p>[Plak hier je algemene voorwaarden, Romy.]</p>',
                 'secties' => [],
                 'cookieknop' => null,

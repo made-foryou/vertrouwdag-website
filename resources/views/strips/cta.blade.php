@@ -2,7 +2,7 @@
     Strook: het afsluitende blok met foto, kop, tekst en de knop naar de
     kennismaking uit de config.
 
-    Velden: kop (met accent), tekst (optioneel), foto en variant. Zonder
+    Velden: kop (Kop met nadruk), tekst (optioneel), foto en variant. Zonder
     foto staat Romy aan tafel, de foto uit het ontwerp (x-cta-split).
     - Leeg: een hartje boven de kop, zoals op de homepage.
     - groot: ruimere tekst, een foto van minstens 480px en geen hartje,
@@ -25,8 +25,7 @@
         default => throw new InvalidArgumentException("De strook cta kent geen variant [{$strip->variant}]; laat hem leeg of kies groot, eenvoudig, middel of compact."),
     };
 @endphp
-<x-cta-split :foto="$strip->foto" :hart="$opmaak['hart']" :groot="$opmaak['groot']" :foto-hoogte="$opmaak['fotoHoogte']" data-cms-strip="{{ $strip->id }}">
-    <x-slot:kop data-cms-field="kop"><x-accent :tekst="$strip->kop" /></x-slot:kop>
+<x-cta-split :kop="$strip->kop" :foto="$strip->foto" :hart="$opmaak['hart']" :groot="$opmaak['groot']" :foto-hoogte="$opmaak['fotoHoogte']" data-cms-strip="{{ $strip->id }}">
     @if (filled($strip->tekst))
         <x-slot:tekst data-cms-field="tekst">{{ $strip->tekst }}</x-slot:tekst>
     @endif

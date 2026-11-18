@@ -60,7 +60,7 @@ test('a page of the cms at an address of the fixed list takes its title and desc
 test('a page made, filled and published in the cms is at its address', function () {
     $page = CreatePage::run(new NewPage(title: 'Testpagina', slug: 'testpagina', parentId: null));
     $strip = AddStrip::run($page, 'cta', 0);
-    UpdateStrip::run($page, $strip->id, ['kop' => 'Tot *snel*', 'variant' => 'compact'], chooseLevels: false);
+    UpdateStrip::run($page, $strip->id, ['kop' => ['text' => 'Tot *snel*'], 'variant' => 'compact'], chooseLevels: false);
 
     PublishPage::run($page);
 

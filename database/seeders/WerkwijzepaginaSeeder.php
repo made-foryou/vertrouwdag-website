@@ -38,7 +38,7 @@ class WerkwijzepaginaSeeder extends PaginaSeeder
                 ],
             ]],
             ['cta', [
-                'kop' => 'Het begint met *een gesprek*',
+                'kop' => ['text' => 'Het begint met *een gesprek*'],
                 'tekst' => 'Een half uur, online en vrijblijvend.',
                 'variant' => 'eenvoudig',
             ]],

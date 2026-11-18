@@ -2,7 +2,7 @@
     Strook: een korte kennismaking met Romy, met haar foto in een boog,
     een polaroid en een knop naar haar verhaal.
 
-    Velden: label, kop (met accent), tekst (opgemaakte tekst, een of meer
+    Velden: label, kop (Kop met nadruk), tekst (opgemaakte tekst, een of meer
     alinea's), knop (tekst en url), foto_boog, foto_polaroid en
     bijschrift (onder de polaroid). De tekst staat in een element met
     display:contents, zodat de alinea's de ruimte van .about__txt houden.
@@ -19,7 +19,7 @@
         </div>
         <div class="about__txt" data-reveal>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             <div style="display:contents" data-cms-field="tekst">{!! $strip->tekst !!}</div>
             @if ($strip->knop)
                 <div class="row" style="padding-top:6px"><x-knop :href="$strip->knop['url']" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop></div>

@@ -41,7 +41,7 @@ class BlogartikelSeeder extends PaginaSeeder
     {
         return [
             ['artikel-kop', [
-                'titel' => 'Wanneer schakel je een weddingplanner in? *(En waarom eerder dan je denkt)*',
+                'titel' => ['text' => 'Wanneer schakel je een weddingplanner in? *(En waarom eerder dan je denkt)*'],
                 'intro' => 'De meeste stellen bellen pas als het al druk is. Waarom een vroeg begin juist rust oplevert.',
                 'categorie' => 'planning',
                 'leestijd' => '6',
@@ -53,7 +53,7 @@ class BlogartikelSeeder extends PaginaSeeder
                 'tekst' => '<p>Jullie zijn net verloofd, de champagne is op, en dan komt de vraag: waar beginnen we? Vaak is het antwoord: met een locatie zoeken, in de avonduren, naast een volle werkweek.</p>',
             ]],
             ['artikel-tekst', [
-                'kop' => 'Het begin *bepaalt de rest*',
+                'kop' => ['text' => 'Het begin *bepaalt de rest*'],
                 'tekst' => '<p>In de eerste maanden kiezen jullie de datum, de locatie en het budget. Dat zijn de keuzes waar alles aan vastzit. Een planner die dan al meedenkt, voorkomt dat jullie later moeten schuiven, of meer betalen dan nodig.</p>',
             ]],
             ['artikel-fotos', [
@@ -69,7 +69,7 @@ class BlogartikelSeeder extends PaginaSeeder
                 'citaat' => 'Hoe eerder jullie hulp vragen, hoe meer van de voorbereiding ook echt leuk blijft.',
             ]],
             ['artikel-tekst', [
-                'kop' => 'Drie signalen *dat het tijd is*',
+                'kop' => ['text' => 'Drie signalen *dat het tijd is*'],
                 'tekst' => '<p>Jullie merken dat de bruiloft elke avond het gesprek is. Jullie familie biedt aan om dingen te regelen, en jullie weten niet goed hoe je dat vriendelijk afslaat. Of jullie hebben al drie offertes liggen en geen idee hoe je ze vergelijkt.</p><p>[Hier verder schrijven, Romy.]</p>',
             ]],
             ['auteur'],

@@ -25,7 +25,7 @@ class VeelgesteldeVragenpaginaSeeder extends PaginaSeeder
             ['hero-faq'],
             ['faq'],
             ['cta', [
-                'kop' => 'Nog een *vraag?*',
+                'kop' => ['text' => 'Nog een *vraag?*'],
                 'tekst' => 'Die beantwoord ik graag in een vrijblijvend gesprek.',
                 'variant' => 'middel',
             ]],

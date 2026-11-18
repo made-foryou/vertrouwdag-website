@@ -1,6 +1,6 @@
 {{--
     De kaart van een foutpagina (resources/views/errors): een label, de kop
-    met accent, een tekst en knoppen. De kaart staat op de streepjes van
+    met nadruk tussen sterretjes, een tekst en knoppen. De kaart staat op de streepjes van
     de reviews, met het monogram als zegel. De 404 zet hem in de layout
     van de site, de 500 in een eigen, kale pagina.
 
@@ -16,7 +16,7 @@
         <div class="review review--groot" style="transform:rotate(-1.5deg)">
             <svg width="30" height="27" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg>
             <p class="eb">{{ $label }}</p>
-            <h1 class="h1"><x-accent :tekst="$kop" /></h1>
+            <h1 class="h1"><x-made-cms::emphasis :text="$kop" /></h1>
             <p style="font-size:20px;max-width:40ch">{{ $slot }}</p>
             <div class="row" style="justify-content:center">{{ $knoppen }}</div>
             <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="">

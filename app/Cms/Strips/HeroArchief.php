@@ -37,6 +37,7 @@ final class HeroArchief extends StripType
                 ->default('Blogarchief')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Alle *blogs*'),
             LongText::make('tekst')

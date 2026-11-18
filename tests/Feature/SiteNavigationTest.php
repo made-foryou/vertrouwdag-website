@@ -130,7 +130,7 @@ test('a deleted page disappears from the menu', function () {
 test('a published page with changes in its draft stays in the menu', function () {
     $this->seed(PaginasSeeder::class);
 
-    wijzigStrook('/werkwijze', 'cta', fn (array $waarden): array => ['kop' => 'Nog niet *af*'], publiceren: false);
+    wijzigStrook('/werkwijze', 'cta', fn (array $waarden): array => ['kop' => ['text' => 'Nog niet *af*']], publiceren: false);
 
     expect(menulabels(documentVoor('/')))->toBe(['Diensten', 'Werkwijze', 'Over mij', 'Blog', 'Veelgestelde vragen']);
 });

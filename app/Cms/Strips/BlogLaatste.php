@@ -2,7 +2,6 @@
 
 namespace App\Cms\Strips;
 
-use App\Cms\Velden;
 use App\Support\Blog;
 use App\Support\Blogcategorie;
 use App\Support\Blogs;
@@ -11,6 +10,7 @@ use Made\CmsPackage\Content\Strips\Fields\Choice;
 use Made\CmsPackage\Content\Strips\Fields\Image;
 use Made\CmsPackage\Content\Strips\Fields\Items;
 use Made\CmsPackage\Content\Strips\Fields\LongText;
+use Made\CmsPackage\Content\Strips\Fields\Text;
 use Made\CmsPackage\Content\Strips\StripType;
 
 /**
@@ -24,6 +24,10 @@ use Made\CmsPackage\Content\Strips\StripType;
  * daarom in de lijst binnenkort van deze strook (besluit Menno,
  * 2026-11-14, zie #20). Staat het artikel online, dan haalt Romy het
  * kaartje weg.
+ *
+ * De titel van een kaartje is een tekst met nadruk en geen Kop: het
+ * kaartje staat in één raster met de artikelkaarten, dus de kaart bepaalt
+ * het niveau (een h3), niet de redacteur (#22).
  *
  * De standaardwaarden zijn de kaartjes uit het ontwerp, zonder foto: een
  * foto heeft geen standaardwaarde.
@@ -49,7 +53,8 @@ final class BlogLaatste extends StripType
     {
         return [
             Items::make('binnenkort', [
-                Velden::kopMetAccent('titel')
+                Text::make('titel')
+                    ->emphasis()
                     ->label('Titel')
                     ->required(),
                 LongText::make('intro')

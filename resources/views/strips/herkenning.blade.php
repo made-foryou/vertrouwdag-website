@@ -2,7 +2,7 @@
     Strook: "Klinkt dit bekend?" met citaten van bruidsparen als
     briefjes. Op mobiel zijn de briefjes een swipe-stapel.
 
-    Velden: label, kop (met accent), citaten (lijst met tekst) en slotzin.
+    Velden: label, kop (Kop met nadruk), citaten (lijst met tekst) en slotzin.
     De knop is de kennismaking uit de config. Kleur, draaiing en icoon
     horen bij de plek van het briefje en beginnen na het vierde opnieuw.
 --}}
@@ -17,7 +17,7 @@
 <section class="band--aub" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:22px;text-align:center">
         <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
         <div class="notes" data-deck data-reveal-group data-cms-items="citaten">
             @foreach ($strip->citaten as $citaat)
                 @php($briefje = $briefjes[$loop->index % count($briefjes)])

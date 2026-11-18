@@ -1,7 +1,7 @@
 {{--
     Strook: lopende tekst van een artikel, in een smalle kolom.
 
-    Velden: kop (optioneel, een tussenkop met accent), inleiding
+    Velden: kop (optioneel, een tussenkop: Kop met nadruk), inleiding
     (optioneel, groter) en tekst (opgemaakte tekst: alinea's, een accent
     als <em>). Opgemaakte tekst kent geen tussenkoppen, dus begint een
     tussenkop een nieuwe strook (#20). Kop en inleiding staan er alleen
@@ -13,9 +13,7 @@
     van .art-prose houden.
 --}}
 <div class="prose art-prose" data-cms-strip="{{ $strip->id }}">
-    @if (filled($strip->kop))
-        <h2 class="h3" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
-    @endif
+    <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h3" />
     @if (filled($strip->inleiding))
         <p class="art-lead" data-cms-field="inleiding">{{ $strip->inleiding }}</p>
     @endif

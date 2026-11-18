@@ -42,6 +42,7 @@ final class HeroDiensten extends StripType
                 ->default('Diensten en prijzen')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Zoveel hulp *als jullie* nodig hebben'),
             LongText::make('tekst')

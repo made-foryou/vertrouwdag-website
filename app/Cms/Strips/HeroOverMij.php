@@ -40,6 +40,7 @@ final class HeroOverMij extends StripType
                 ->default('Over mij')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Hoi, ik ben *Romy*'),
             LongText::make('tekst')

@@ -47,6 +47,7 @@ final class Hero extends StripType
                 ->default('Weddingplanner in Zuid-Holland')
                 ->hint('Korte regel boven de kop. Het laatste woord breekt niet af.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Jullie dag in *vertrouwde* handen'),
             LongText::make('tekst')

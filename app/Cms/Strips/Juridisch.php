@@ -49,6 +49,7 @@ final class Juridisch extends StripType
                 ->default('Goed om te weten')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Cookie*beleid*'),
             Text::make('bijgewerkt')

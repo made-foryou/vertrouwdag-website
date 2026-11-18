@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Support\Facades\Vite;
+use Made\CmsPackage\Content\Strips\Emphasis;
 
 /**
  * Eén blog, zoals de kaarten, de uitgelichte blog en de kop van een
@@ -12,8 +13,8 @@ use Illuminate\Support\Facades\Vite;
  * de strook artikel-kop van die pagina (#20). Een blog die binnenkort
  * komt, staat als kaartje in de strook blog-laatste en heeft geen adres.
  *
- * De titel heeft het accent tussen sterretjes, zoals elke kop op de site
- * (<x-accent>). De afbeelding is een url.
+ * De titel heeft de nadruk tussen sterretjes, zoals elke kop op de site
+ * (<x-made-cms::emphasis>). De afbeelding is een url.
  */
 final readonly class Blog
 {
@@ -37,15 +38,18 @@ final readonly class Blog
 
     /**
      * De blog uit de velden van een strook, zoals het CMS ze rendert: de
-     * artikelkop van een artikel, of een kaartje dat binnenkort komt. Een
-     * foto is {url, alt, …} of null. Null zolang de titel of het onderwerp
-     * ontbreekt, zoals in een concept.
+     * artikelkop van een artikel, of een kaartje dat binnenkort komt. De
+     * titel is een Kop ({text, tag}) in de artikelkop en een tekst in een
+     * kaartje; de blog houdt alleen de tekst, want een kaart bepaalt zelf
+     * het niveau. Een foto is {url, alt, …} of null. Null zolang de titel
+     * of het onderwerp ontbreekt, zoals in een concept.
      *
      * @param  array<string, mixed>  $velden
      */
     public static function uitVelden(array $velden, ?string $url = null, bool $binnenkort = false): ?self
     {
         $titel = $velden['titel'] ?? null;
+        $titel = is_array($titel) ? ($titel['text'] ?? null) : $titel;
         $categorie = is_string($velden['categorie'] ?? null) ? Blogcategorie::tryFrom($velden['categorie']) : null;
         $foto = is_array($velden['foto'] ?? null) ? $velden['foto'] : null;
 
@@ -95,10 +99,10 @@ final readonly class Blog
     }
 
     /**
-     * De titel zonder de sterretjes van het accent, voor zoekmachines.
+     * De titel zonder de sterretjes van de nadruk, voor zoekmachines.
      */
     public function platteTitel(): string
     {
-        return str_replace('*', '', $this->titel);
+        return Emphasis::plain($this->titel);
     }
 }

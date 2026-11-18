@@ -37,7 +37,7 @@ final class ArtikelTekst extends StripType
     {
         return [
             Velden::kopMetAccent()
-                ->hint('Tussenkop boven de tekst. Mag leeg blijven. Zet het accent tussen sterretjes, zoals: Het begin *bepaalt de rest*.'),
+                ->hint('Tussenkop boven de tekst. Mag leeg blijven.'),
             LongText::make('inleiding')
                 ->hint('Groter, boven de tekst. Meestal alleen in de eerste tekst van een blog. Mag leeg blijven.'),
             RichText::make('tekst')

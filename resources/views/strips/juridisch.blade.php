@@ -2,7 +2,7 @@
     Strook: een juridische pagina (privacyverklaring, cookiebeleid,
     algemene voorwaarden) in een smalle kolom met lopende tekst.
 
-    Velden: label, kop (met accent), bijgewerkt (de datum achter "Laatst
+    Velden: label, kop (Kop met nadruk), bijgewerkt (de datum achter "Laatst
     bijgewerkt", optioneel), inleiding (opgemaakte tekst, optioneel),
     secties (lijst met kop en tekst, optioneel), cookieknop (de tekst van
     een knop die de cookie-instellingen opent, optioneel) en afsluiting
@@ -17,7 +17,7 @@
 --}}
 <section class="wrap legal" data-cms-strip="{{ $strip->id }}">
     <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-    <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+    <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
     @if (filled($strip->bijgewerkt))
         <p class="legal__meta">Laatst bijgewerkt: <span data-cms-field="bijgewerkt">{{ $strip->bijgewerkt }}</span></p>
     @endif

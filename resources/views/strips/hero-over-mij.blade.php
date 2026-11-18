@@ -3,7 +3,7 @@
     de zwart-witpolaroid, en rechts de kop, tekst en één knop. Op mobiel
     staat de tekst boven de foto's.
 
-    Velden: label, kop (met accent), tekst, knop (tekst en url),
+    Velden: label, kop (Kop met nadruk), tekst, knop (tekst en url),
     foto_boog, foto_polaroid en bijschrift (onder de polaroid). Zonder
     foto staat de foto uit het ontwerp (<x-foto>). Het zegel ligt vast.
 --}}
@@ -18,7 +18,7 @@
     </div>
     <div class="hero__txt" data-reveal style="gap:24px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         <p class="lead" style="max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         @if ($strip->knop)
             <div class="row"><x-knop :href="$strip->knop['url']" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop></div>

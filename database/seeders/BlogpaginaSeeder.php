@@ -60,7 +60,7 @@ class BlogpaginaSeeder extends PaginaSeeder
                 ],
             ]],
             ['cta', [
-                'kop' => 'Liever direct *persoonlijk advies?*',
+                'kop' => ['text' => 'Liever direct *persoonlijk advies?*'],
                 'tekst' => null,
                 'variant' => 'compact',
             ]],
