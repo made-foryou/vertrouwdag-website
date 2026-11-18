@@ -15,7 +15,7 @@
 <div class="prose art-prose" data-cms-strip="{{ $strip->id }}">
     <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h3" />
     @if (filled($strip->inleiding))
-        <p class="art-lead" data-cms-field="inleiding">{{ $strip->inleiding }}</p>
+        <p class="art-lead" data-cms-field="inleiding"><x-regels :tekst="$strip->inleiding" /></p>
     @endif
     <div style="display:contents" data-cms-field="tekst">{!! $strip->tekst !!}</div>
 </div>

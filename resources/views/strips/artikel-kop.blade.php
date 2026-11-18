@@ -57,7 +57,7 @@
     <div class="art-hero" data-reveal>
         <div class="art-hero__img"><img src="{{ $foto['url'] }}" alt="{{ $foto['alt'] }}" width="{{ $foto['width'] ?? 1100 }}" height="{{ $foto['height'] ?? 733 }}" fetchpriority="high" data-cms-field="foto" data-foto></div>
         @if (filled($strip->sticker))
-            <div class="sticker sticker--aub art-hero__sticker" aria-hidden="true" data-cms-field="sticker">{!! nl2br(e($strip->sticker)) !!}</div>
+            <div class="sticker sticker--aub art-hero__sticker" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
         @endif
     </div>
 </header>

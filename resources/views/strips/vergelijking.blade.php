@@ -32,7 +32,7 @@
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
         @if ($strip->sticker)
-            <div class="sticker sticker--aub" style="right:8px;top:-20px;transform:rotate(10deg)" aria-hidden="true" data-cms-field="sticker">{!! nl2br(e($strip->sticker)) !!}</div>
+            <div class="sticker sticker--aub" style="right:8px;top:-20px;transform:rotate(10deg)" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
         @endif
     </div>
     @if (count($kolommen) > 0)

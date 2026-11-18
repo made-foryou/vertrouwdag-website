@@ -13,7 +13,7 @@
     <div class="hero__txt" style="gap:24px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-        <p class="lead" style="max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        <p class="lead" style="max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         <div class="row">
             <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
             @if ($strip->knop)
@@ -27,6 +27,6 @@
             <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/bruid-rozen.jpg" alt="Bruid met boeket van perzikkleurige rozen" :breedte="1100" :hoogte="1650" veld="foto_polaroid" />
             <span style="font-size:19px;bottom:10px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
         </div>
-        <div class="sticker" style="right:0;top:6%;width:96px;height:96px;transform:rotate(12deg)" data-cms-field="sticker">{!! nl2br(e($strip->sticker)) !!}</div>
+        <div class="sticker" style="right:0;top:6%;width:96px;height:96px;transform:rotate(12deg)" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
     </div>
 </section>

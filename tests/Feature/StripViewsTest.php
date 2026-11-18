@@ -482,3 +482,11 @@ test('the image of a text with an image has the alt text of its file', function 
 
     expect($document->querySelector('.tekst-foto__media img[data-cms-field="afbeelding"]')?->getAttribute('alt'))->toBe('Twee gouden trouwringen');
 });
+
+test('the latest blog shows the line breaks of its intro', function () {
+    $blog = new Blog('Titel', "Eerste regel\nTweede regel", Blogcategorie::Budget, 6, '/foto.jpg', 'Foto', url('/blog/titel'));
+
+    $document = renderStrip('blog-uitgelicht', ['label' => 'Nieuwste blog', 'link_tekst' => 'Lees verder', 'blog' => $blog]);
+
+    expect($document->querySelectorAll('.feature__txt p br'))->toHaveCount(1);
+});

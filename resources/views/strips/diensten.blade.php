@@ -30,7 +30,7 @@
                 <x-dienstkaart :kleur="$welkeDienst->kleur()->value" :dienst="$welkeDienst->value" :prijs="$strip->prijzen[$welkeDienst->value] ?? null" :href="url(\App\Support\Aanbod::ADRES).'#'.$welkeDienst->anker()" :foto="$dienst['foto'] ?? null" :draaiing="$plaatsing[$welkeDienst->value]['draaiing']" :gespiegeld="$plaatsing[$welkeDienst->value]['gespiegeld']">
                     <x-slot:soort data-cms-field="soort">{{ $dienst['soort'] }}</x-slot:soort>
                     <x-slot:titel data-cms-field="titel">{{ $dienst['titel'] }}</x-slot:titel>
-                    <x-slot:omschrijving data-cms-field="omschrijving">{{ $dienst['omschrijving'] }}</x-slot:omschrijving>
+                    <x-slot:omschrijving data-cms-field="omschrijving"><x-regels :tekst="$dienst['omschrijving']" /></x-slot:omschrijving>
                 </x-dienstkaart>
             @endforeach
         </div>

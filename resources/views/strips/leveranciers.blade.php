@@ -10,7 +10,7 @@
         <div class="stack" style="gap:12px;max-width:600px">
             <p class="eb eb--lila" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
-            <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
+            <p style="font-size:20px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         </div>
         <div class="stack founding__acties">
             <x-mail-link onderwerp="Samenwerking met vertrouwdag" class="btn btn--l" data-cms-field="knop_tekst">{{ $strip->knop_tekst }}</x-mail-link>

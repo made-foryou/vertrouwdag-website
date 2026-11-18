@@ -12,7 +12,7 @@
 <section class="band--aub" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:18px;text-align:center">
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
-        <p data-reveal style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        <p data-reveal style="font-size:20px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         <div class="contact-notes" data-reveal-group>
             <x-briefje kleur="lila" :draaiing="-4" :href="Contact::whatsappUrl()" target="_blank" rel="noopener"><span class="eb eb--sm">WhatsApp</span><span class="contact-notes__big" data-cms-field="app_tekst">{{ $strip->app_tekst }}</span></x-briefje>
             <x-briefje kleur="cream" :draaiing="3" :href="Contact::mailUrl()"><span class="eb eb--sm">E-mail</span><span class="contact-notes__big">{{ config('vertrouwdag.email') }}</span></x-briefje>

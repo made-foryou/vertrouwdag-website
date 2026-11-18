@@ -23,7 +23,7 @@
                 @php($briefje = $briefjes[$loop->index % count($briefjes)])
                 <x-briefje :kleur="$briefje['kleur']" :draaiing="$briefje['draaiing']">
                     {!! $briefje['icoon'] !!}
-                    <p data-cms-field="tekst">{{ $citaat['tekst'] }}</p>
+                    <p data-cms-field="tekst"><x-regels :tekst="$citaat['tekst']" /></p>
                 </x-briefje>
             @endforeach
         </div>

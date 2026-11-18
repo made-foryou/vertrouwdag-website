@@ -30,7 +30,7 @@
         <x-checklist-formulier>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
-            <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
+            <p style="font-size:20px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         </x-checklist-formulier>
     </div>
 </section>

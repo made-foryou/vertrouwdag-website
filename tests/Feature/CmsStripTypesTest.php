@@ -12,6 +12,7 @@ use Made\CmsPackage\Content\Models\Page;
 use Made\CmsPackage\Content\Strips\Fields\Choice;
 use Made\CmsPackage\Content\Strips\Fields\Image;
 use Made\CmsPackage\Content\Strips\Fields\Items;
+use Made\CmsPackage\Content\Strips\Fields\LongText;
 use Made\CmsPackage\Content\Strips\StripType;
 use Made\CmsPackage\Content\Strips\StripTypes;
 
@@ -274,3 +275,81 @@ test('a decorative photo has an empty alt text, also when its file has one', fun
     'hero-checklist' => HeroChecklist::class,
     'checklist-aanmelding' => ChecklistAanmelding::class,
 ]);
+
+/**
+ * Elk striptype met een tekstvak (LongText), ook in een lijst. Gefilterd op de broncode, want een dataset draait
+ * voordat de app opstart en fields() van een type kan config() lezen.
+ *
+ * Niet blog-laatste: de intro van een blog die binnenkort komt staat op de blogkaart (zie de test daarvan). En niet
+ * pakketten: de kenmerken van een pakket zijn een lijstje met één kenmerk per regel.
+ */
+dataset('striptypes met tekstvakken', fn (): array => array_values(array_map(
+    fn (string $bestand): string => 'App\\Cms\\Strips\\'.basename($bestand, '.php'),
+    array_filter(glob(__DIR__.'/../../app/Cms/Strips/*.php'), fn (string $bestand): bool => ! in_array(basename($bestand), ['BlogLaatste.php', 'Pakketten.php'], true) && str_contains(file_get_contents($bestand), 'LongText::make(')),
+)));
+
+/**
+ * De tekstvakken van een striptype: per veld de lijst waar het in staat (null voor een veld van de strook zelf) en zijn
+ * key.
+ *
+ * @return list<array{0: ?string, 1: string}>
+ */
+function tekstvakkenVan(StripType $type): array
+{
+    $tekstvakken = [];
+
+    foreach ($type->fields() as $veld) {
+        if ($veld instanceof LongText) {
+            $tekstvakken[] = [null, $veld->getKey()];
+        }
+
+        if ($veld instanceof Items) {
+            foreach ($veld->getFields() as $itemveld) {
+                if ($itemveld instanceof LongText) {
+                    $tekstvakken[] = [$veld->getKey(), $itemveld->getKey()];
+                }
+            }
+        }
+    }
+
+    return $tekstvakken;
+}
+
+/**
+ * Een enter in een tekstvak is op de site een nieuwe regel, ook in elk item van een lijst. Niet hier de intro van een
+ * artikel: die staat op de blogkaart (zie de test daarvan).
+ */
+test('every text area of a strip type shows its line breaks on the site', function (string $striptype) {
+    /** @var StripType $type */
+    $type = new $striptype;
+    $tekstvakken = array_values(array_filter(tekstvakkenVan($type), fn (array $tekstvak): bool => $tekstvak !== [null, 'intro'] || $type->key() !== 'artikel-kop'));
+    $waarden = $type->defaults();
+
+    foreach ($tekstvakken as [$lijst, $key]) {
+        if ($lijst === null) {
+            $waarden[$key] = "Eerste regel\nTweede regel";
+        } else {
+            $waarden[$lijst] = array_map(fn (array $item): array => [...$item, $key => "Eerste regel\nTweede regel"], $waarden[$lijst]);
+        }
+    }
+
+    $id = (string) Str::uuid();
+    Page::factory()->published()->at('/strook')->withStrips([['id' => $id, 'type' => $type->key(), 'visible' => true, 'values' => $type->normalize($waarden)]])->create();
+    $strook = documentVoor('/strook')->querySelector("main [data-cms-strip=\"{$id}\"]");
+
+    expect($tekstvakken)->not->toBeEmpty();
+
+    foreach ($tekstvakken as [$lijst, $key]) {
+        $veld = $lijst === null ? $key : "{$lijst}.{$key}";
+        $elementen = $lijst === null
+            ? buitenLijsten($strook, "[data-cms-field=\"{$key}\"]")
+            : iterator_to_array($strook->querySelectorAll("[data-cms-items=\"{$lijst}\"] [data-cms-field=\"{$key}\"]"));
+
+        expect($elementen)->not->toBeEmpty("Het tekstvak {$veld} staat niet in de view.");
+
+        foreach ($elementen as $element) {
+            expect($element->querySelectorAll('br'))->toHaveCount(1, "Het tekstvak {$veld} toont zijn enter niet.")
+                ->and($element->textContent)->toContain('Tweede regel');
+        }
+    }
+})->with('striptypes met tekstvakken');

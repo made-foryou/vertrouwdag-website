@@ -25,7 +25,7 @@
     <div class="hero__txt" data-reveal>
         <p class="eb" style="display:flex;align-items:center;gap:10px"><svg width="14" height="13" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg><span data-cms-field="label">{{ $labelBegin }}<span style="white-space:nowrap">{{ $labelEind }}</span></span></p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-        <p class="lead" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        <p class="lead" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         <div class="row">
             <x-knop :href="$eersteKnop['url']" data-cms-field="eerste_knop">{{ $eersteKnop['text'] }}</x-knop>
             @if ($strip->knop)
@@ -40,6 +40,6 @@
             <span data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
         </div>
         <div class="stamp tilt" style="left:10%;top:4%;transform:rotate(9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt=""></div>
-        <div class="sticker" style="right:-6px;bottom:16%;transform:rotate(-12deg)" data-cms-field="sticker">{!! nl2br(e($strip->sticker)) !!}</div>
+        <div class="sticker" style="right:-6px;bottom:16%;transform:rotate(-12deg)" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
     </div>
 </section>

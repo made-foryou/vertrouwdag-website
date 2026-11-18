@@ -397,6 +397,14 @@ describe('blogkaart', function () {
             ->and($kaart?->querySelector('.pol__txt p')?->textContent)->toBe('Een vroeg begin geeft rust.');
     });
 
+    test('the intro of a blog shows its line breaks', function () {
+        $blog = new Blog('Titel', "Eerste regel\nTweede regel", Blogcategorie::Budget, null, '/foto.jpg', 'Foto');
+
+        $document = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog]);
+
+        expect($document->querySelectorAll('.pol__txt p br'))->toHaveCount(1);
+    });
+
     test('a blog to come is a card without a link and with a duller photo', function () {
         $blog = new Blog('Locaties', 'Binnenkort.', Blogcategorie::Locaties, null, '/foto.jpg', 'Foto', binnenkort: true);
 
