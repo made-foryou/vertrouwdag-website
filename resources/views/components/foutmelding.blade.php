@@ -16,7 +16,7 @@
         <div class="review review--groot" style="transform:rotate(-1.5deg)">
             <svg width="30" height="27" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg>
             <p class="eb">{{ $label }}</p>
-            <h1 style="font-size:clamp(40px,5.4vw,68px)"><x-accent :tekst="$kop" /></h1>
+            <h1 class="h1"><x-accent :tekst="$kop" /></h1>
             <p style="font-size:20px;max-width:40ch">{{ $slot }}</p>
             <div class="row" style="justify-content:center">{{ $knoppen }}</div>
             <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="">

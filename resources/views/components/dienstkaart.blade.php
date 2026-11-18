@@ -50,7 +50,7 @@
     <div class="folder__body">
         <span class="folder__tab" aria-hidden="true"></span>
         <p {{ $soort->attributes->class(array_filter(['eb', 'eb--sm', $stijl->eyebrowKlasse()])) }}>{{ $soort }}</p>
-        <h3 {{ $titel->attributes }}>{{ $titel }}</h3>
+        <h3 {{ $titel->attributes->class(['h3']) }}>{{ $titel }}</h3>
         @if ($href !== null)
             <p {{ $omschrijving->attributes->class(['folder__desc'])->merge(['style' => 'flex-grow:1']) }}>{{ $omschrijving }}</p>
             <x-prijsregel :prijs="$prijs" :dienst="$dienst" :gedempt="$stijl->isGedempt()" />

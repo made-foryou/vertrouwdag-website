@@ -11,7 +11,7 @@
 @use('App\Support\Contact')
 <section class="band--aub" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:18px;text-align:center">
-        <h2 data-reveal style="font-size:clamp(34px,4.4vw,56px)" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         <p data-reveal style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="contact-notes" data-reveal-group>
             <x-briefje kleur="lila" :draaiing="-4" :href="Contact::whatsappUrl()" target="_blank" rel="noopener"><span class="eb eb--sm">WhatsApp</span><span class="contact-notes__big" data-cms-field="app_tekst">{{ $strip->app_tekst }}</span></x-briefje>

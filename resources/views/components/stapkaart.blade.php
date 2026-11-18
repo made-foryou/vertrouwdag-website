@@ -20,4 +20,4 @@
         default => throw new \InvalidArgumentException("De stapkaart kent geen kleur [{$kleur}]; kies lila, mos, zand of groen."),
     };
 @endphp
-<li {{ $attributes->class(['step'])->merge(['style' => $stijl['kaart']]) }}><span class="step__nr" @if ($stijl['nummer']) style="{{ $stijl['nummer'] }}" @endif>{{ $nummer }}</span><h3 {{ $titel->attributes }}>{{ $titel }}</h3><p {{ $stijl['tekst'] ? $tekst->attributes->merge(['style' => $stijl['tekst']]) : $tekst->attributes }}>{{ $tekst }}</p></li>
+<li {{ $attributes->class(['step'])->merge(['style' => $stijl['kaart']]) }}><span class="step__nr" @if ($stijl['nummer']) style="{{ $stijl['nummer'] }}" @endif>{{ $nummer }}</span><h3 {{ $titel->attributes->class(['h3']) }}>{{ $titel }}</h3><p {{ $stijl['tekst'] ? $tekst->attributes->merge(['style' => $stijl['tekst']]) : $tekst->attributes }}>{{ $tekst }}</p></li>

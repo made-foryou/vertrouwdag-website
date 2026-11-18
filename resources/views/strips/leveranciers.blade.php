@@ -9,7 +9,7 @@
     <div class="founding founding--lev" data-reveal>
         <div class="stack" style="gap:12px;max-width:600px">
             <p class="eb eb--lila" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
             <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
         </div>
         <div class="stack founding__acties">

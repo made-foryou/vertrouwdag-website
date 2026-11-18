@@ -13,7 +13,7 @@
     <div class="wrap sec" style="display:flex;justify-content:center">
         <div class="review review--groot" style="transform:rotate(-1.5deg);align-items:center">
             <svg width="30" height="27" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg>
-            <h2 style="font-size:clamp(34px,4.2vw,52px)" tabindex="-1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" tabindex="-1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
             <p style="font-size:20px;max-width:40ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
             @if (filled($strip->vraag))
                 <p style="font-size:22px;font-style:italic;color:var(--aubergine)" data-cms-field="vraag">{{ $strip->vraag }}</p>

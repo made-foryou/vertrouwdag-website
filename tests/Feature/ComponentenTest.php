@@ -438,7 +438,7 @@ describe('cta-split', function () {
             ->and(platteTekst($knop))->toBe(config('vertrouwdag.cta.label'));
     });
 
-    test('the large closing block has a taller photo, a heart, a text and a bigger heading', function () {
+    test('the large closing block has a taller photo, a heart, a text and a heading the size of every h2', function () {
         $document = renderComponent(<<<'BLADE'
             <x-cta-split :foto-hoogte="480" hart groot>
                 <x-slot:kop>Twijfelen jullie <em>welk pakket?</em></x-slot:kop>
@@ -449,7 +449,8 @@ describe('cta-split', function () {
         expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:480px')
             ->and($document->querySelector('.cta-split__txt > svg'))->not->toBeNull()
             ->and($document->querySelector('.cta-split__txt > p')?->textContent)->toBe('Dat zoeken we samen uit.')
-            ->and($document->querySelector('.cta-split__txt h2')?->getAttribute('style'))->toBe('font-size:clamp(40px,5vw,68px)');
+            ->and($document->querySelector('.cta-split__txt h2')?->getAttribute('class'))->toBe('h2')
+            ->and($document->querySelector('.cta-split__txt h2')?->hasAttribute('style'))->toBeFalse();
     });
 });
 

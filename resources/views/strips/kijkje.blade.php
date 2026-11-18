@@ -10,7 +10,7 @@
 <section class="wrap persoonlijk" data-cms-strip="{{ $strip->id }}">
     <div class="persoonlijk__txt" data-reveal>
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h2 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         <p class="lead" data-cms-field="tekst">{{ $strip->tekst }}</p>
     </div>
     <div class="persoonlijk__fotos" data-reveal-group>

@@ -19,7 +19,7 @@
 <section class="wrap hero" style="padding-top:72px;padding-bottom:72px;gap:48px" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal style="flex-basis:460px;gap:22px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 style="font-size:clamp(46px,6.4vw,88px)" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
         <p class="lead" style="max-width:34ch"><span data-cms-field="tekst">{{ $strip->tekst }}</span> <x-whatsapp-link data-cms-field="app_tekst">{{ $strip->app_tekst }}</x-whatsapp-link>.</p>
     </div>
     <div class="faq-notes" data-reveal-group aria-hidden="true" data-cms-items="briefjes">

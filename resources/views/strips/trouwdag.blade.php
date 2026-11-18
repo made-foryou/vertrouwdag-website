@@ -25,7 +25,7 @@
             <x-fasenummer :nummer="$nummer" groot data-reveal />
         @endif
         <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <h2 data-reveal style="font-size:clamp(38px,5vw,66px)" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         <div class="notes" data-deck data-reveal-group data-cms-items="briefjes">
             @foreach ($strip->briefjes as $briefje)
                 @php($plek = $briefjes[$loop->index % count($briefjes)])

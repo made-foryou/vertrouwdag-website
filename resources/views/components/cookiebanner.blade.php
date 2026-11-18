@@ -23,7 +23,7 @@
     <div class="cookie__box" role="dialog" aria-modal="false" aria-labelledby="ck-title" aria-describedby="ck-tekst" tabindex="-1">
         <div class="cookie__main">
             <div class="cookie__txt">
-                <p class="cookie__title" id="ck-title">{{ $cookies['titel'] }}</p>
+                <p class="cookie__title h4" id="ck-title">{{ $cookies['titel'] }}</p>
                 <p id="ck-tekst">{!! str_replace(':cookiebeleid', $link, e($cookies['tekst'])) !!}</p>
             </div>
             <div class="row" style="gap:10px">

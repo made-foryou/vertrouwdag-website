@@ -5,14 +5,15 @@
     Velden: kop (met accent), tekst (optioneel), foto en variant. Zonder
     foto staat Romy aan tafel, de foto uit het ontwerp (x-cta-split).
     - Leeg: een hartje boven de kop, zoals op de homepage.
-    - groot: een grotere kop, een foto van minstens 480px en geen hartje,
+    - groot: ruimere tekst, een foto van minstens 480px en geen hartje,
       zoals op /diensten.
-    - eenvoudig: de gewone kop, een foto van minstens 480px en geen
-      hartje, zoals op /werkwijze en /over-mij.
-    - middel: de gewone kop, een foto van minstens 440px en geen hartje,
-      zoals op /veelgestelde-vragen.
-    - compact: de gewone kop, een foto van minstens 420px en geen hartje,
-      zoals op /blog en het archief.
+    - eenvoudig: een foto van minstens 480px en geen hartje, zoals op
+      /werkwijze en /over-mij.
+    - middel: een foto van minstens 440px en geen hartje, zoals op
+      /veelgestelde-vragen.
+    - compact: een foto van minstens 420px en geen hartje, zoals op /blog
+      en het archief.
+    De kop is in elke variant even groot (.h2).
 --}}
 @php
     $opmaak = match ($strip->variant) {

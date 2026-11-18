@@ -19,7 +19,7 @@
         </div>
         <div class="about__txt" data-reveal>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 style="font-size:clamp(42px,5vw,68px);line-height:1.02" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
             <div style="display:contents" data-cms-field="tekst">{!! $strip->tekst !!}</div>
             @if ($strip->knop)
                 <div class="row" style="padding-top:6px"><x-knop :href="$strip->knop['url']" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop></div>

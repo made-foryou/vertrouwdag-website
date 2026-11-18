@@ -17,7 +17,7 @@
 <section class="band--aub" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:22px;text-align:center">
         <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <h2 data-reveal style="font-size:clamp(36px,4.4vw,58px);line-height:1.1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         <div class="notes" data-deck data-reveal-group data-cms-items="citaten">
             @foreach ($strip->citaten as $citaat)
                 @php($briefje = $briefjes[$loop->index % count($briefjes)])

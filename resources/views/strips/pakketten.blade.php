@@ -49,7 +49,7 @@
     <div class="wrap sec">
         <div class="sec-head" data-reveal style="margin-bottom:40px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h-l" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
             @if ($strip->hint)
                 <p class="tf-hint" data-cms-field="hint">{{ $strip->hint }}</p>
             @endif
@@ -73,7 +73,7 @@
                         </div>
                         <div class="tf__body">
                             <p @class(array_filter(['eb', 'eb--sm', $dienst['kleur']->eyebrowKlasse()])) data-cms-field="soort">{{ $dienst['soort'] }}</p>
-                            <h2 data-cms-field="titel">{{ $dienst['titel'] }}</h2>
+                            <h2 class="h2" data-cms-field="titel">{{ $dienst['titel'] }}</h2>
                             <div class="tf__desc" data-cms-field="omschrijving">{!! $dienst['omschrijving'] !!}</div>
                             @if (count($dienst['kenmerken']) > 0)
                                 <ul class="hl">

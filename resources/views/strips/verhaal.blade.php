@@ -6,6 +6,6 @@
     over-mij-intro.
 --}}
 <section class="wrap sec story" data-cms-strip="{{ $strip->id }}">
-    <h2 data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+    <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
     <div class="prose" data-reveal data-cms-field="tekst">{!! $strip->tekst !!}</div>
 </section>

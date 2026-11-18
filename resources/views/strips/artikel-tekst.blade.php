@@ -14,7 +14,7 @@
 --}}
 <div class="prose art-prose" data-cms-strip="{{ $strip->id }}">
     @if (filled($strip->kop))
-        <h2 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h3" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
     @endif
     @if (filled($strip->inleiding))
         <p class="art-lead" data-cms-field="inleiding">{{ $strip->inleiding }}</p>
