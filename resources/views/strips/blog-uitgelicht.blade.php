@@ -12,7 +12,7 @@
             <div class="feature__txt">
                 <div class="row" style="gap:12px"><span class="eb eb--sm pill-tag" data-cms-field="label">{{ $strip->label }}</span><span class="eb eb--sm">{{ $strip->blog->kenmerk() }}</span></div>
                 <h2 class="h2"><x-made-cms::emphasis :text="$strip->blog->titel" /></h2>
-                <p>{{ $strip->blog->intro }}</p>
+                <p><x-regels :tekst="$strip->blog->intro" /></p>
                 <span class="lnk" data-cms-field="link_tekst">{{ $strip->link_tekst }}</span>
             </div>
         </a>

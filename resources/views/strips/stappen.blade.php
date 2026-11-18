@@ -18,7 +18,7 @@
     </div>
     <ol class="steps" data-reveal-group data-cms-items="stappen">
         @foreach ($strip->stappen as $stap)
-            <x-stapkaart :nummer="$loop->iteration" :kleur="$kleuren[$loop->index % count($kleuren)]"><x-slot:titel data-cms-field="titel">{{ $stap['titel'] }}</x-slot:titel><x-slot:tekst data-cms-field="tekst">{{ $stap['tekst'] }}</x-slot:tekst></x-stapkaart>
+            <x-stapkaart :nummer="$loop->iteration" :kleur="$kleuren[$loop->index % count($kleuren)]"><x-slot:titel data-cms-field="titel">{{ $stap['titel'] }}</x-slot:titel><x-slot:tekst data-cms-field="tekst"><x-regels :tekst="$stap['tekst']" /></x-slot:tekst></x-stapkaart>
         @endforeach
     </ol>
 </section>

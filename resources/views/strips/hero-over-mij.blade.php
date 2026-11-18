@@ -19,7 +19,7 @@
     <div class="hero__txt" data-reveal style="gap:24px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-        <p class="lead" style="max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        <p class="lead" style="max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         @if ($strip->knop)
             <div class="row"><x-knop :href="$strip->knop['url']" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop></div>
         @endif

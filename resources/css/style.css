@@ -180,6 +180,7 @@ a.folder:hover{transform:translateY(-4px)}
 .folder__tab{position:absolute;top:-30px;left:0;width:46%;height:32px;border-radius:16px 16px 0 0;background:inherit}
 .folder--r .folder__tab{left:auto;right:0}
 .folder__desc{font-size:18px;line-height:1.55}
+.folder__desc>:is(p,ul,ol)+:is(p,ul,ol){margin-top:.6em}
 .folder__icon{position:absolute;right:22px;bottom:22px}
 .price{font-size:26px;font-weight:500;line-height:1.2}
 .price small{font-size:16px;font-weight:400}
@@ -774,6 +775,7 @@ a.folder:hover{transform:translateY(-4px)}
 .tf__body{display:flex;flex-direction:column;gap:16px;min-width:0;--kop:currentColor}
 .tf__desc{font-size:19px;line-height:1.55}
 .tf__desc strong{font-weight:600}
+.tf__desc>:is(p,ul,ol)+:is(p,ul,ol){margin-top:.6em}
 .tf__foot{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 28px;border-top:1px dashed currentColor;border-top-color:color-mix(in srgb,currentColor 30%,transparent);padding-top:18px;margin-top:4px}
 .tf__price{font-size:36px;line-height:1.1}
 .tf__price small{font-size:17px}

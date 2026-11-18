@@ -12,7 +12,7 @@
             @if (filled($strip->kop))
                 <x-slot:kop data-cms-field="kop">{{ $strip->kop }}</x-slot:kop>
             @endif
-            <x-slot:citaat data-cms-field="citaat">{{ $strip->citaat }}</x-slot:citaat>
+            <x-slot:citaat data-cms-field="citaat"><x-regels :tekst="$strip->citaat" /></x-slot:citaat>
         </x-review>
     </div>
 </section>

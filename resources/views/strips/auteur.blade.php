@@ -10,7 +10,7 @@
         <div class="polaroid tilt" style="position:relative;flex:none;width:116px;padding:7px 7px 26px;transform:rotate(-6deg)"><x-foto :foto="$strip->foto" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto" loading="lazy" /></div>
         <div class="stack" style="flex:1 1 260px;gap:6px">
             <span class="eb eb--sm" data-cms-field="label">{{ $strip->label }}</span>
-            <span style="font-size:19px;line-height:1.5"><span data-cms-field="tekst">{{ $strip->tekst }}</span>@if ($strip->link) <a href="{{ $strip->link['url'] }}" data-cms-field="link">{{ $strip->link['text'] }}</a>@endif</span>
+            <span style="font-size:19px;line-height:1.5"><span data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></span>@if ($strip->link) <a href="{{ $strip->link['url'] }}" data-cms-field="link">{{ $strip->link['text'] }}</a>@endif</span>
         </div>
     </div>
 </div>

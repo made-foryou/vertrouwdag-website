@@ -14,7 +14,7 @@
 @endphp
 <section class="sec-top" data-cms-strip="{{ $strip->id }}">
     <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2 center wrap" data-reveal />
-    <p class="center" data-reveal style="margin:22px auto 56px;max-width:46ch;padding:0 24px;font-size:21px" data-cms-field="tekst">{{ $strip->tekst }}</p>
+    <p class="center" data-reveal style="margin:22px auto 56px;max-width:46ch;padding:0 24px;font-size:21px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
     <div class="split" data-reveal-group data-cms-items="kolommen">
         @foreach ($strip->kolommen as $kolom)
             @php($terugval = $fotos[$loop->index % count($fotos)])
@@ -23,7 +23,7 @@
                 <div class="card-float">
                     <p class="eb eb--grijs" data-cms-field="label">{{ $kolom['label'] }}</p>
                     <x-made-cms::heading :heading="$kolom['kop']" field="kop" emphasis class="h3" />
-                    <p data-cms-field="tekst">{{ $kolom['tekst'] }}</p>
+                    <p data-cms-field="tekst"><x-regels :tekst="$kolom['tekst']" /></p>
                 </div>
             </div>
         @endforeach

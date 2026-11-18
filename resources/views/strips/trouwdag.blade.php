@@ -31,7 +31,7 @@
                 @php($plek = $briefjes[$loop->index % count($briefjes)])
                 <x-briefje :kleur="$plek['kleur']" :draaiing="$plek['draaiing']" style="min-height:190px">
                     <span class="eb eb--sm" data-cms-field="wie">{{ $briefje['wie'] }}</span>
-                    <p style="font-size:22px" data-cms-field="tekst">{{ $briefje['tekst'] }}</p>
+                    <p style="font-size:22px" data-cms-field="tekst"><x-regels :tekst="$briefje['tekst']" /></p>
                 </x-briefje>
             @endforeach
         </div>

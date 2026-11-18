@@ -18,5 +18,5 @@
 @endphp
 <{{ $element }} @if ($blog->isGepubliceerd()) href="{{ $blog->url() }}" @endif {{ $attributes->class(['pol', 'pol--soon' => $blog->binnenkort])->merge(['style' => $stijl]) }} data-post data-cat="{{ $blog->categorie->value }}">
     <img src="{{ $blog->afbeelding }}" alt="{{ $blog->alt }}" width="1100" height="733" loading="lazy" data-foto>
-    <div class="pol__txt"><span class="eb eb--sm">{{ $blog->kenmerk() }}</span><h3 class="h3"><x-made-cms::emphasis :text="$blog->titel" /></h3><p>{{ $blog->intro }}</p></div>
+    <div class="pol__txt"><span class="eb eb--sm">{{ $blog->kenmerk() }}</span><h3 class="h3"><x-made-cms::emphasis :text="$blog->titel" /></h3><p><x-regels :tekst="$blog->intro" /></p></div>
 </{{ $element }}>

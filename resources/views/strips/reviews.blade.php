@@ -14,7 +14,7 @@
                     @if (filled($review['label']))
                         <x-slot:label data-cms-field="label">{{ $review['label'] }}</x-slot:label>
                     @endif
-                    <x-slot:citaat data-cms-field="citaat">{{ $review['citaat'] }}</x-slot:citaat>
+                    <x-slot:citaat data-cms-field="citaat"><x-regels :tekst="$review['citaat']" /></x-slot:citaat>
                     @if (filled($review['naam']))
                         <x-slot:naam data-cms-field="naam">{{ $review['naam'] }}</x-slot:naam>
                     @endif

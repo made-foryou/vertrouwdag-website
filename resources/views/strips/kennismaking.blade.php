@@ -9,7 +9,7 @@
         <div class="stack" style="gap:12px;flex:1 1 420px">
             <p class="eb eb--lila" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
-            <p style="font-size:19px" data-cms-field="tekst">{{ $strip->tekst }}</p>
+            <p style="font-size:19px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         </div>
         <x-knop :href="url(config('vertrouwdag.cta.pad'))" variant="lila">{{ config('vertrouwdag.cta.label') }}</x-knop>
     </div>

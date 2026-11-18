@@ -17,14 +17,14 @@
 <section class="wrap sec stack" style="align-items:center;gap:22px;text-align:center" data-cms-strip="{{ $strip->id }}">
     <p class="eb" data-reveal data-cms-field="label">{{ $strip->label }}</p>
     <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal style="max-width:18ch" />
-    <p data-reveal style="font-size:21px;line-height:1.65;max-width:48ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
+    <p data-reveal style="font-size:21px;line-height:1.65;max-width:48ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
     <div class="notes notes--licht" data-deck data-reveal-group style="padding-top:32px" data-cms-items="kwaliteiten">
         @foreach ($strip->kwaliteiten as $kwaliteit)
             @php($plek = $briefjes[$loop->index % count($briefjes)])
             <x-briefje :kleur="$plek['kleur']" :draaiing="$plek['draaiing']" style="text-align:left;align-items:flex-start;gap:10px;box-shadow:var(--schaduw)">
                 {!! $plek['icoon'] !!}
                 <h3 class="h3" data-cms-field="titel">{{ $kwaliteit['titel'] }}</h3>
-                <p style="font-style:normal;font-size:18px;line-height:1.45" data-cms-field="tekst">{{ $kwaliteit['tekst'] }}</p>
+                <p style="font-style:normal;font-size:18px;line-height:1.45" data-cms-field="tekst"><x-regels :tekst="$kwaliteit['tekst']" /></p>
             </x-briefje>
         @endforeach
     </div>

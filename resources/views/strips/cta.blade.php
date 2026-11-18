@@ -27,6 +27,6 @@
 @endphp
 <x-cta-split :kop="$strip->kop" :foto="$strip->foto" :hart="$opmaak['hart']" :groot="$opmaak['groot']" :foto-hoogte="$opmaak['fotoHoogte']" data-cms-strip="{{ $strip->id }}">
     @if (filled($strip->tekst))
-        <x-slot:tekst data-cms-field="tekst">{{ $strip->tekst }}</x-slot:tekst>
+        <x-slot:tekst data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></x-slot:tekst>
     @endif
 </x-cta-split>

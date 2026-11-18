@@ -29,7 +29,7 @@
     <div class="meet__txt" data-reveal>
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-        <p style="font-size:21px;line-height:1.65;max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
+        <p style="font-size:21px;line-height:1.65;max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         <ol class="mini-steps" data-cms-items="stappen">
             @foreach ($strip->stappen ?? [] as $stap)
                 <li><span style="{{ $kleuren[$loop->index % count($kleuren)] }}">{{ $loop->iteration }}</span><p data-cms-field="tekst">{{ $stap['tekst'] }}</p></li>
