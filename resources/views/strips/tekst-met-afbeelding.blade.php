@@ -28,7 +28,7 @@
     </div>
     <div class="tekst-foto__txt" data-reveal>
         @if (filled($strip->kop))
-            <h2 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         @endif
         <div class="prose" data-cms-field="tekst">{!! $strip->tekst !!}</div>
     </div>

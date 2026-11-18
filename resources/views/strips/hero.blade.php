@@ -24,7 +24,7 @@
 <section class="wrap hero" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal>
         <p class="eb" style="display:flex;align-items:center;gap:10px"><svg width="14" height="13" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg><span data-cms-field="label">{{ $labelBegin }}<span style="white-space:nowrap">{{ $labelEind }}</span></span></p>
-        <h1 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
         <p class="lead" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="row">
             <x-knop :href="$eersteKnop['url']" data-cms-field="eerste_knop">{{ $eersteKnop['text'] }}</x-knop>

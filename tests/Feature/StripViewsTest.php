@@ -158,11 +158,12 @@ test('the comparison rejects an answer other than yes, no or partly and names th
         ->toThrow(ViewException::class, 'De strook vergelijking kent geen antwoord [misschien] bij [Budgetoverzicht]');
 });
 
-test('the large closing strip has a bigger heading and a taller photo but no heart', function () {
+test('the large closing strip has a taller photo but no heart, and a heading the size of every h2', function () {
     $document = renderStrip('cta', ['kop' => 'Twijfelen jullie *welk pakket?*', 'tekst' => 'Dat zoeken we samen uit.', 'variant' => 'groot']);
 
     expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:480px')
-        ->and($document->querySelector('.cta-split__txt h2')?->getAttribute('style'))->toBe('font-size:clamp(40px,5vw,68px)')
+        ->and($document->querySelector('.cta-split__txt h2')?->getAttribute('class'))->toBe('h2')
+        ->and($document->querySelector('.cta-split__txt h2')?->hasAttribute('style'))->toBeFalse()
         ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull();
 });
 

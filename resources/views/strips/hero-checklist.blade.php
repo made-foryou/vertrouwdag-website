@@ -26,7 +26,7 @@
     </div>
     <div class="hero__txt" data-reveal style="gap:20px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 style="font-size:clamp(44px,5.6vw,76px);line-height:1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
         <p style="font-size:21px;max-width:36ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <x-checklist-formulier class="cl-form" trouwdatum />
     </div>

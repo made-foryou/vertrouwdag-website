@@ -13,7 +13,7 @@
     ];
 @endphp
 <section class="sec-top" data-cms-strip="{{ $strip->id }}">
-    <h2 class="display" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+    <h2 class="h2 center wrap" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
     <p class="center" data-reveal style="margin:22px auto 56px;max-width:46ch;padding:0 24px;font-size:21px" data-cms-field="tekst">{{ $strip->tekst }}</p>
     <div class="split" data-reveal-group data-cms-items="kolommen">
         @foreach ($strip->kolommen as $kolom)
@@ -22,7 +22,7 @@
                 <x-foto :foto="$kolom['foto'] ?? null" :terugval="$terugval['src']" :alt="$terugval['alt']" :breedte="1100" :hoogte="733" veld="foto" loading="lazy" />
                 <div class="card-float">
                     <p class="eb eb--grijs" data-cms-field="label">{{ $kolom['label'] }}</p>
-                    <h3 data-cms-field="kop"><x-accent :tekst="$kolom['kop']" /></h3>
+                    <h3 class="h3" data-cms-field="kop"><x-accent :tekst="$kolom['kop']" /></h3>
                     <p data-cms-field="tekst">{{ $kolom['tekst'] }}</p>
                 </div>
             </div>

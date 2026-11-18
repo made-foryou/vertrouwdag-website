@@ -11,7 +11,7 @@
 --}}
 <section class="wrap sec tekst" data-cms-strip="{{ $strip->id }}">
     @if (filled($strip->kop))
-        <h2 data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h2" data-reveal data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
     @endif
     <div class="prose" data-reveal data-cms-field="tekst">{!! $strip->tekst !!}</div>
 </section>

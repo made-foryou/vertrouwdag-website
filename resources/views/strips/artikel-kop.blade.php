@@ -52,7 +52,7 @@
                 @endif
             </div>
         @endif
-        <h1 data-cms-field="titel"><x-accent :tekst="$strip->titel" /></h1>
+        <h1 class="h1" data-cms-field="titel"><x-accent :tekst="$strip->titel" /></h1>
     </div>
     <div class="art-hero" data-reveal>
         <div class="art-hero__img"><img src="{{ $foto['url'] }}" alt="{{ $foto['alt'] }}" width="{{ $foto['width'] ?? 1100 }}" height="{{ $foto['height'] ?? 733 }}" fetchpriority="high" data-cms-field="foto" data-foto></div>

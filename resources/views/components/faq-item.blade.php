@@ -17,4 +17,4 @@
     'vraag',
     'antwoord',
 ])
-<details {{ $attributes->class(['faq']) }} @if ($open) open @endif><summary {{ $vraag->attributes }}>{{ $vraag }}</summary>@if (filled($boven))<p>{!! $boven !!}</p>@endif<div style="display:contents" {{ $antwoord->attributes }}>{{ $antwoord }}</div></details>
+<details {{ $attributes->class(['faq']) }} @if ($open) open @endif><summary {{ $vraag->attributes->class(['h4']) }}>{{ $vraag }}</summary>@if (filled($boven))<p>{!! $boven !!}</p>@endif<div style="display:contents" {{ $antwoord->attributes }}>{{ $antwoord }}</div></details>

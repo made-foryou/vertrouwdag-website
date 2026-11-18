@@ -22,7 +22,7 @@
     <div class="wrap sec stack" style="gap:32px">
         <div class="sec-head" data-reveal>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h-xl" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         </div>
         <div class="folders" data-deck data-reveal-group data-cms-items="diensten">
             @foreach ($strip->diensten as $dienst)

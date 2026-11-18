@@ -11,7 +11,7 @@
 @endphp
 <section class="wrap sec stack" style="gap:56px" data-cms-strip="{{ $strip->id }}">
     <div class="werk-head" data-reveal>
-        <div class="stack werk-head__txt"><p class="eb" data-cms-field="label">{{ $strip->label }}</p><h2 class="h-l" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2></div>
+        <div class="stack werk-head__txt"><p class="eb" data-cms-field="label">{{ $strip->label }}</p><h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2></div>
         @if ($strip->knop)
             <x-knop :href="$strip->knop['url']" variant="secundair" data-cms-field="knop">{{ $strip->knop['text'] }}</x-knop>
         @endif

@@ -18,7 +18,7 @@
 >
     <section class="wrap legal">
         <p class="eb">Alleen lokaal</p>
-        <h1>Compo<em>nenten</em></h1>
+        <h1 class="h1">Compo<em>nenten</em></h1>
         <p class="legal__meta">De bouwstenen uit resources/views/components, met de inhoud uit het ontwerp. Test op 375, 768 en 1440 px, en met "Verminder beweging" aan.</p>
     </section>
 
@@ -54,7 +54,7 @@
     <section class="band--aub">
         <div class="wrap sec stack" style="align-items:center;gap:22px;text-align:center">
             <p class="eb eb--lila" data-reveal>Briefjes in een swipe-stapel</p>
-            <h2 data-reveal style="font-size:clamp(36px,4.4vw,58px);line-height:1.1">Klinkt dit <em>een beetje</em> als jullie?</h2>
+            <h2 class="h2" data-reveal>Klinkt dit <em>een beetje</em> als jullie?</h2>
             <div class="notes" data-deck data-reveal-group>
                 <x-briefje kleur="lila" :draaiing="-4">
                     <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#401838" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
@@ -83,7 +83,7 @@
         <div class="wrap sec stack" style="gap:32px">
             <div class="sec-head" data-reveal>
                 <p class="eb">Dienstkaarten met link</p>
-                <h2 class="h-xl">Mijn <em>diensten</em></h2>
+                <h2 class="h2">Mijn <em>diensten</em></h2>
             </div>
             <div class="folders" data-deck data-reveal-group>
                 <x-dienstkaart kleur="lila" dienst="dag" :prijs="$prijzen['dag']" :href="url('/diensten').'#dagcoordinatie'" :draaiing="-4">
@@ -132,7 +132,7 @@
     {{-- Stapkaarten (index.html, Werkwijze) --}}
     <section class="wrap sec stack" style="gap:56px">
         <div class="werk-head" data-reveal>
-            <div class="stack werk-head__txt"><p class="eb">Stapkaarten</p><h2 class="h-l">Vier stappen <em>naar ja</em></h2></div>
+            <div class="stack werk-head__txt"><p class="eb">Stapkaarten</p><h2 class="h2">Vier stappen <em>naar ja</em></h2></div>
             <x-knop :href="url('/werkwijze')" variant="secundair">Zo werk ik</x-knop>
         </div>
         <ol class="steps" data-reveal-group>
@@ -157,7 +157,7 @@
     {{-- Reviews (index.html en over-mij.html) --}}
     <section class="reviews">
         <div class="wrap sec stack" style="align-items:center;gap:40px">
-            <div class="pill" data-reveal><h2>Wat anderen <em>zeggen</em></h2></div>
+            <div class="pill" data-reveal><h2 class="h2">Wat anderen <em>zeggen</em></h2></div>
             <div class="review-list" data-reveal-group>
                 <x-review zegel>
                     <x-slot:label>Collega uit de trouwbranche</x-slot:label>
@@ -226,7 +226,7 @@
         <div class="checklist" data-reveal>
             <x-checklist-formulier>
                 <p class="eb">Checklist-formulier</p>
-                <h2 style="font-size:clamp(34px,3.8vw,48px);line-height:1.08">Wat regel je <em>wanneer?</em></h2>
+                <h2 class="h2">Wat regel je <em>wanneer?</em></h2>
             </x-checklist-formulier>
         </div>
         <x-checklist-formulier id="checklist-form-datum" class="cl-form" trouwdatum data-reveal />

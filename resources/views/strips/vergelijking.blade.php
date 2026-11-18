@@ -30,7 +30,7 @@
 <section id="vergelijk" class="stack" style="max-width:1080px;margin:0 auto;padding:112px 16px 96px;gap:36px" data-cms-strip="{{ $strip->id }}">
     <div class="sec-head" style="position:relative">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h2 class="h-l" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
         @if ($strip->sticker)
             <div class="sticker sticker--aub" style="right:8px;top:-20px;transform:rotate(10deg)" aria-hidden="true" data-cms-field="sticker">{!! nl2br(e($strip->sticker)) !!}</div>
         @endif

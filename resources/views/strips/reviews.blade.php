@@ -7,7 +7,7 @@
 --}}
 <section class="reviews" id="reviews" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:40px">
-        <div class="pill" data-reveal><h2 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2></div>
+        <div class="pill" data-reveal><h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2></div>
         <div class="review-list" data-reveal-group data-cms-items="reviews">
             @foreach ($strip->reviews as $review)
                 <x-review :zegel="$loop->first">

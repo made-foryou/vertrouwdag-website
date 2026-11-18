@@ -11,13 +11,13 @@
 
     RichText van het package kent geen tussenkoppen (een <h2> wordt daar
     gewone tekst), daarom is een tussenkop het veld kop van een sectie en
-    wordt hij een echte <h2>.
+    wordt hij een echte <h2>, met de maat van een tussenkop (.h3).
     De veldwrappers hebben display:contents, zodat de alinea's en koppen
     de opmaak van .legal .prose houden.
 --}}
 <section class="wrap legal" data-cms-strip="{{ $strip->id }}">
     <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-    <h1 data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+    <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
     @if (filled($strip->bijgewerkt))
         <p class="legal__meta">Laatst bijgewerkt: <span data-cms-field="bijgewerkt">{{ $strip->bijgewerkt }}</span></p>
     @endif
@@ -29,7 +29,7 @@
             <div style="display:contents" data-cms-items="secties">
                 @foreach ($strip->secties as $sectie)
                     <div style="display:contents">
-                        <h2 data-cms-field="kop">{{ $sectie['kop'] }}</h2>
+                        <h2 class="h3" data-cms-field="kop">{{ $sectie['kop'] }}</h2>
                         <div style="display:contents" data-cms-field="tekst">{!! $sectie['tekst'] !!}</div>
                     </div>
                 @endforeach

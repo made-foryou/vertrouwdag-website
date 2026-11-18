@@ -29,7 +29,7 @@
         </div>
         <x-checklist-formulier>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 style="font-size:clamp(34px,3.8vw,48px);line-height:1.08" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
             <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
         </x-checklist-formulier>
     </div>

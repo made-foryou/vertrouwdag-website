@@ -11,7 +11,7 @@
 <section class="wrap hero" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal style="gap:24px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 style="font-size:clamp(46px,6.4vw,88px)" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
         <p class="lead" style="max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="row">
             <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
