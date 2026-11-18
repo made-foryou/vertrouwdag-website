@@ -423,10 +423,8 @@ describe('blogkaart', function () {
 describe('cta-split', function () {
     test('the closing block links to the meeting from the config and slides in', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-cta-split data-cms-strip="12">
-                <x-slot:kop data-cms-field="kop">Nog een <em>vraag?</em></x-slot:kop>
-            </x-cta-split>
-            BLADE);
+            <x-cta-split :kop="$kop" data-cms-strip="12" />
+            BLADE, ['kop' => kop('Nog een *vraag?*')]);
         $blok = $document->querySelector('section.cta-split[data-cms-strip="12"]');
         $knop = $blok?->querySelector('.cta-split__txt a.btn.btn--l');
 
@@ -440,11 +438,10 @@ describe('cta-split', function () {
 
     test('the large closing block has a taller photo, a heart, a text and a heading the size of every h2', function () {
         $document = renderComponent(<<<'BLADE'
-            <x-cta-split :foto-hoogte="480" hart groot>
-                <x-slot:kop>Twijfelen jullie <em>welk pakket?</em></x-slot:kop>
+            <x-cta-split :kop="$kop" :foto-hoogte="480" hart groot>
                 <x-slot:tekst>Dat zoeken we samen uit.</x-slot:tekst>
             </x-cta-split>
-            BLADE);
+            BLADE, ['kop' => kop('Twijfelen jullie *welk pakket?*')]);
 
         expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:480px')
             ->and($document->querySelector('.cta-split__txt > svg'))->not->toBeNull()
@@ -476,33 +473,10 @@ describe('stapel-bolletjes', function () {
     });
 });
 
-describe('accent', function () {
-    test('the words between asterisks become the accent of a heading', function () {
-        $document = renderComponent('<h1><x-accent tekst="Jullie dag in *vertrouwde* handen" /></h1>');
-        $kop = $document->querySelector('h1');
-
-        expect($kop?->innerHTML)->toBe('Jullie dag in <em>vertrouwde</em> handen');
-    });
-
-    test('a heading without asterisks stays plain text and html in it is escaped', function () {
-        $document = renderComponent('<h2><x-accent tekst="Hart & <b>hoofd</b>" /></h2>');
-        $kop = $document->querySelector('h2');
-
-        expect($kop?->textContent)->toBe('Hart & <b>hoofd</b>')
-            ->and($kop?->querySelector('b, em'))->toBeNull();
-    });
-
-    test('a heading can have more than one accent', function () {
-        $document = renderComponent('<h2><x-accent tekst="*Hart* én *hoofd*" /></h2>');
-
-        expect(tekstenVan($document->querySelectorAll('h2 em')))->toBe(['Hart', 'hoofd']);
-    });
-});
-
 describe('strips', function () {
     test('every strip is rendered with the view of its type, in order', function () {
         $strips = [
-            new Strip('a', 'cta', ['kop' => 'Zullen we *kennismaken?*', 'tekst' => 'Een half uur.']),
+            new Strip('a', 'cta', ['kop' => kop('Zullen we *kennismaken?*'), 'tekst' => 'Een half uur.']),
             new Strip('b', 'lopende-band', ['teksten' => [['id' => null, 'tekst' => 'Punctueel']]]),
         ];
 

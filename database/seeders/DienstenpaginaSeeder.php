@@ -36,7 +36,7 @@ class DienstenpaginaSeeder extends PaginaSeeder
             ['pakketten'],
             ['vergelijking'],
             ['cta', [
-                'kop' => 'Twijfelen jullie *welk pakket?*',
+                'kop' => ['text' => 'Twijfelen jullie *welk pakket?*'],
                 'tekst' => 'Dat zoeken we samen uit, in een vrijblijvend gesprek van een half uur.',
                 'variant' => 'groot',
             ]],

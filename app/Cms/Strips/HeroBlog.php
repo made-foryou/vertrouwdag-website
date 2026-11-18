@@ -37,6 +37,7 @@ final class HeroBlog extends StripType
                 ->default('Blog')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Rustig *plannen*'),
             LongText::make('tekst')

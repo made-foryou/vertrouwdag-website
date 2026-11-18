@@ -3,7 +3,7 @@
     rechts een boog met de ceremonieplek, de polaroid met de bruid en de
     sticker.
 
-    Velden: label, kop (met accent), tekst, knop (tekst en url, op deze
+    Velden: label, kop (Kop met nadruk), tekst, knop (tekst en url, op deze
     pagina naar #vergelijk), foto_boog, foto_polaroid, bijschrift (onder
     de polaroid) en sticker (meerdere regels). De eerste knop is de
     kennismaking uit de config. Zonder foto staat de foto uit het ontwerp
@@ -12,7 +12,7 @@
 <section class="wrap hero" style="padding-bottom:80px" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" style="gap:24px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         <p class="lead" style="max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="row">
             <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>

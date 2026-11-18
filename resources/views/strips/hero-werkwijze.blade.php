@@ -2,7 +2,7 @@
     Strook: de hero van /werkwijze met kop, tekst en twee knoppen, en
     rechts twee polaroids: het paar in het landschap en de gouden ringen.
 
-    Velden: label, kop (met accent), tekst, knop (tekst en url, op deze
+    Velden: label, kop (Kop met nadruk), tekst, knop (tekst en url, op deze
     pagina naar /diensten), foto_boven en foto_onder (op de polaroids),
     bijschrift_boven (onder de bovenste polaroid) en bijschrift_onder
     (onder de onderste). De eerste knop is de kennismaking uit de config.
@@ -11,7 +11,7 @@
 <section class="wrap hero" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal style="gap:24px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         <p class="lead" style="max-width:34ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
         <div class="row">
             <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>

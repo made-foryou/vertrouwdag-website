@@ -213,13 +213,13 @@ test('the homepage links its buttons to the right pages', function () {
 test('seeding the homepage again keeps what an editor changed', function () {
     $this->seed(HomepaginaSeeder::class);
     $homepagina = geseedeHomepagina();
-    UpdateStrip::run($homepagina, $homepagina->strips[0]['id'], ['kop' => 'Onze dag in *goede* handen'], chooseLevels: false);
+    UpdateStrip::run($homepagina, $homepagina->strips[0]['id'], ['kop' => ['text' => 'Onze dag in *goede* handen']], chooseLevels: false);
     PublishPage::run($homepagina);
 
     $this->seed(HomepaginaSeeder::class);
 
     expect(Page::query()->count())->toBe(1)
-        ->and(geseedeHomepagina()->strips[0]['values']['kop'])->toBe('Onze dag in *goede* handen');
+        ->and(geseedeHomepagina()->strips[0]['values']['kop'])->toBe(['text' => 'Onze dag in *goede* handen', 'tag' => 'h1']);
 });
 
 test('the seeded homepage comes first in the tree and stays out of the menu', function () {

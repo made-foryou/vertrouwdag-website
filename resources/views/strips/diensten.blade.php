@@ -2,7 +2,7 @@
     Strook: de drie diensten als mapjes met prijs, die elk de eigen map op
     /diensten openen. Op mobiel zijn de mapjes een swipe-stapel.
 
-    Velden: label, kop (met accent), knop (tekst en url) en diensten
+    Velden: label, kop (Kop met nadruk), knop (tekst en url) en diensten
     (lijst met dienst, soort, titel, omschrijving en foto). dienst (dag,
     partial of full) bepaalt via App\Support\Dienst de kleur en het anker
     op /diensten, en de foto zolang er geen gekozen is (x-dienstkaart). prijzen (van App\Cms\Strips\Diensten::with()) geeft per
@@ -22,7 +22,7 @@
     <div class="wrap sec stack" style="gap:32px">
         <div class="sec-head" data-reveal>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
         </div>
         <div class="folders" data-deck data-reveal-group data-cms-items="diensten">
             @foreach ($strip->diensten as $dienst)

@@ -46,7 +46,7 @@ final class TweeKolommen extends StripType
                 Velden::foto('foto', 'Vult de hele kolom, met de kaart erop.'),
                 Text::make('label')
                     ->hint('Korte regel boven de kop van de kaart.'),
-                Velden::kopMetAccent()->required(),
+                Velden::kopMetAccent()->tag('h3')->required(),
                 LongText::make('tekst')->required(),
             ])
                 ->min(1)

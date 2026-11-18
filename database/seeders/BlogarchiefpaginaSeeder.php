@@ -35,7 +35,7 @@ class BlogarchiefpaginaSeeder extends PaginaSeeder
             ['hero-archief'],
             ['blog-archief'],
             ['cta', [
-                'kop' => 'Liever direct *persoonlijk advies?*',
+                'kop' => ['text' => 'Liever direct *persoonlijk advies?*'],
                 'tekst' => null,
                 'variant' => 'compact',
             ]],

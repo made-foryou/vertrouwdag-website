@@ -36,7 +36,7 @@ class OverMijPaginaSeeder extends PaginaSeeder
             ['citaat'],
             ['kwaliteiten'],
             ['cta', [
-                'kop' => 'Ik maak graag *kennis*',
+                'kop' => ['text' => 'Ik maak graag *kennis*'],
                 'tekst' => 'Vertel me over jullie plannen. Een half uur, online en vrijblijvend.',
                 'variant' => 'eenvoudig',
             ]],

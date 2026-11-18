@@ -2,7 +2,7 @@
     Strook: de gratis checklist, met links een polaroid en een papiertje
     met vinkjes en rechts het aanmeldformulier, zonder trouwdatum.
 
-    Velden: label, kop (met accent), tekst en foto (op de polaroid). De
+    Velden: label, kop (Kop met nadruk), tekst en foto (op de polaroid). De
     visual is decoratie voor schermlezers (aria-hidden), dus de foto heeft
     een lege alt. Zonder foto staat de foto uit het ontwerp (<x-foto>);
     het bijschrift en het papiertje liggen vast.
@@ -29,7 +29,7 @@
         </div>
         <x-checklist-formulier>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
         </x-checklist-formulier>
     </div>

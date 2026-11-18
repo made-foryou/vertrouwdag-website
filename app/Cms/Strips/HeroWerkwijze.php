@@ -41,6 +41,7 @@ final class HeroWerkwijze extends StripType
                 ->default('Werkwijze')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Van eerste koffie *tot de dag erna*'),
             LongText::make('tekst')

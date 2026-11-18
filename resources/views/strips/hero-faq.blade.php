@@ -3,7 +3,7 @@
     briefjes met vragen die bruidsparen vaak stellen. Op mobiel zijn de
     briefjes verborgen; ze zijn sfeer en staan ook voor screenreaders uit.
 
-    Velden: label, kop (met accent), tekst, app_tekst (de link naar
+    Velden: label, kop (Kop met nadruk), tekst, app_tekst (de link naar
     WhatsApp aan het eind van de tekst, met het nummer uit de config) en
     briefjes (lijst met tekst). Kleur, draaiing en de verschuiving van
     het tweede briefje horen bij de plek en beginnen na het derde opnieuw.
@@ -19,7 +19,7 @@
 <section class="wrap hero" style="padding-top:72px;padding-bottom:72px;gap:48px" data-cms-strip="{{ $strip->id }}">
     <div class="hero__txt" data-reveal style="flex-basis:460px;gap:22px">
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h1 class="h1" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h1>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         <p class="lead" style="max-width:34ch"><span data-cms-field="tekst">{{ $strip->tekst }}</span> <x-whatsapp-link data-cms-field="app_tekst">{{ $strip->app_tekst }}</x-whatsapp-link>.</p>
     </div>
     <div class="faq-notes" data-reveal-group aria-hidden="true" data-cms-items="briefjes">

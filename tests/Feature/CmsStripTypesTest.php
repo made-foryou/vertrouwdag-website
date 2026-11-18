@@ -125,7 +125,7 @@ test('the edit frame finds every field of a strip type in its view', function (s
     /** @var StripType $type */
     $type = new $striptype;
     $herlaadt = [
-        'artikel-kop' => ['intro', 'sticker'],
+        'artikel-kop' => ['titel', 'intro', 'sticker'],
         'artikel-tekst' => ['kop', 'inleiding'],
         'blog-laatste' => ['binnenkort'],
         'lopende-band' => ['teksten'],

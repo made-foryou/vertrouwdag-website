@@ -27,7 +27,7 @@ export default function checklistFormulier() {
             if (bedankt) {
                 bedankt.hidden = false;
                 bedankt.scrollIntoView({ behavior: minderBeweging ? 'auto' : 'smooth', block: 'center' });
-                bedankt.querySelector('h2')?.focus({ preventScroll: true });
+                bedankt.querySelector('[data-cms-field="kop"]')?.focus({ preventScroll: true });
                 formulier.reset();
 
                 return;

@@ -41,6 +41,7 @@ final class HeroFaq extends StripType
                 ->default('Veelgestelde vragen')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Goed *om te weten*'),
             LongText::make('tekst')

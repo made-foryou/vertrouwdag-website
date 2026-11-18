@@ -3,7 +3,7 @@
     kwaliteiten van Romy als briefjes met een icoon. Op mobiel zijn de
     briefjes een swipe-stapel.
 
-    Velden: label, kop (met accent), tekst en kwaliteiten (lijst met titel
+    Velden: label, kop (Kop met nadruk), tekst en kwaliteiten (lijst met titel
     en tekst). Kleur, draaiing en icoon horen bij de plek van het briefje
     en beginnen na het derde opnieuw.
 --}}
@@ -16,7 +16,7 @@
 @endphp
 <section class="wrap sec stack" style="align-items:center;gap:22px;text-align:center" data-cms-strip="{{ $strip->id }}">
     <p class="eb" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-    <h2 class="h2" data-reveal style="max-width:18ch" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+    <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal style="max-width:18ch" />
     <p data-reveal style="font-size:21px;line-height:1.65;max-width:48ch" data-cms-field="tekst">{{ $strip->tekst }}</p>
     <div class="notes notes--licht" data-deck data-reveal-group style="padding-top:32px" data-cms-items="kwaliteiten">
         @foreach ($strip->kwaliteiten as $kwaliteit)

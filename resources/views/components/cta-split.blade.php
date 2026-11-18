@@ -4,9 +4,10 @@
 
     foto: de foto uit het CMS ({url, alt, width, height, focal}) of null;
     zonder foto staat Romy aan tafel, de foto uit het ontwerp (<x-foto>).
+    kop: de waarde van het veld kop, een Kop met nadruk ({text, tag}). Het element komt uit het CMS,
+    de opmaak is altijd .h2, net als elke andere strookkop (#22).
     fotoHoogte: de minimale hoogte van de foto in pixels. hart: een hartje boven de kop. groot: de
-    ruimere tekst van de dienstenpagina. De kop is altijd een .h2, net als elke andere strookkop.
-    De slots kop en tekst geven hun attributen door aan hun element,
+    ruimere tekst van de dienstenpagina. Het slot tekst geeft zijn attributen door aan zijn element,
     bijvoorbeeld data-cms-field. tekst is optioneel.
 --}}
 @props([
@@ -23,7 +24,7 @@
         @if ($hart)
             <svg width="30" height="27" fill="#E0D0E0" aria-hidden="true"><use href="#heart"/></svg>
         @endif
-        <h2 {{ $kop->attributes->class(['h2']) }}>{{ $kop }}</h2>
+        <x-made-cms::heading :heading="$kop" field="kop" emphasis class="h2" />
         @if ($tekst)
             <p {{ $tekst->attributes }}>{{ $tekst }}</p>
         @endif

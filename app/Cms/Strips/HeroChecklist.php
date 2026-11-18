@@ -41,6 +41,7 @@ final class HeroChecklist extends StripType
                 ->default('Gratis checklist')
                 ->hint('Korte regel boven de kop.'),
             Velden::kopMetAccent()
+                ->tag('h1')
                 ->required()
                 ->default('Wat regel je *wanneer?*'),
             LongText::make('tekst')

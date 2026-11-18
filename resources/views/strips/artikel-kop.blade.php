@@ -2,7 +2,7 @@
     Strook: de kop van een artikel, met kruimelpad, onderwerp, leestijd en
     titel, en daaronder een grote foto in een boog met een sticker.
 
-    Velden: titel (met accent), intro, categorie, leestijd, foto en
+    Velden: titel (Kop met nadruk), intro, categorie, leestijd, foto en
     sticker (meerdere regels). De intro staat alleen op de kaart op /blog
     en in het archief, niet in het artikel; het frame herlaadt na het
     opslaan. De sticker staat er alleen als hij gevuld is. Zonder foto (in
@@ -52,7 +52,7 @@
                 @endif
             </div>
         @endif
-        <h1 class="h1" data-cms-field="titel"><x-accent :tekst="$strip->titel" /></h1>
+        <x-made-cms::heading :heading="$strip->titel" field="titel" emphasis class="h1" />
     </div>
     <div class="art-hero" data-reveal>
         <div class="art-hero__img"><img src="{{ $foto['url'] }}" alt="{{ $foto['alt'] }}" width="{{ $foto['width'] ?? 1100 }}" height="{{ $foto['height'] ?? 733 }}" fetchpriority="high" data-cms-field="foto" data-foto></div>

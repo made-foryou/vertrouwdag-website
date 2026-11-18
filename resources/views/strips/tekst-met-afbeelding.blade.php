@@ -2,7 +2,7 @@
     Strook: een kop met tekst, en ernaast een staande afbeelding in een
     boog.
 
-    Velden: kop (optioneel, met accent), tekst (opgemaakte tekst),
+    Velden: kop (optioneel, Kop met nadruk), tekst (opgemaakte tekst),
     afbeelding en positie.
     - kop: staat er alleen als hij gevuld is; vult een redacteur hem
       later, dan herlaadt het frame na het opslaan.
@@ -27,9 +27,7 @@
         <x-foto :foto="$strip->afbeelding" terugval="resources/images/bruid-rozen.jpg" :breedte="1100" :hoogte="1650" veld="afbeelding" loading="lazy" />
     </div>
     <div class="tekst-foto__txt" data-reveal>
-        @if (filled($strip->kop))
-            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
-        @endif
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
         <div class="prose" data-cms-field="tekst">{!! $strip->tekst !!}</div>
     </div>
 </section>

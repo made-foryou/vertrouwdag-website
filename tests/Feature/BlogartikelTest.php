@@ -104,7 +104,7 @@ test('a blog that an editor adds under the blog and publishes is on the blog and
     $artikel = CreatePage::run(new NewPage(title: 'Trouwen in de winter', slug: 'trouwen-in-de-winter', parentId: $blog->id));
     $kop = AddStrip::run($artikel, 'artikel-kop', 0);
     UpdateStrip::run($artikel, $kop->id, [
-        'titel' => 'Trouwen in de *winter*',
+        'titel' => ['text' => 'Trouwen in de *winter*'],
         'intro' => 'Kort licht, warme kleuren.',
         'categorie' => 'inspiratie',
         'foto' => $foto->id,

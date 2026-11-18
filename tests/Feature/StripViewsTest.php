@@ -5,26 +5,14 @@ use App\Support\Blogcategorie;
 use App\Support\Dienst;
 use App\Support\Pakket;
 use App\Support\Prijs;
-use App\Support\Strip;
-use Dom\HTMLDocument;
 use Illuminate\View\ViewException;
-
-/**
- * Rendert een strip-view met een strook, zoals <x-strips> dat doet.
- *
- * @param  array<string, mixed>  $values
- */
-function renderStrip(string $type, array $values): HTMLDocument
-{
-    return renderComponent("@include('strips.{$type}', ['strip' => \$strip])", ['strip' => new Strip('s1', $type, $values)]);
-}
 
 beforeEach(function () {
     $this->withoutVite();
 });
 
 test('the last word of the hero label does not wrap', function (string $label, string $laatsteWoord) {
-    $document = renderStrip('hero', ['label' => $label, 'kop' => 'Kop']);
+    $document = renderStrip('hero', ['label' => $label, 'kop' => kop('Kop', 'h1')]);
 
     expect(platteTekst($document->querySelector('[data-cms-field="label"]')))->toBe($label)
         ->and($document->querySelector('[data-cms-field="label"] span[style="white-space:nowrap"]')?->textContent)->toBe($laatsteWoord);
@@ -36,7 +24,7 @@ test('the last word of the hero label does not wrap', function (string $label, s
 test('the first button of the hero is the one from the cms, and the button to the acquaintance when it is empty', function (?array $knop, string $tekst, string $url) {
     config(['vertrouwdag.cta' => ['pad' => '/kennismaken', 'label' => 'Plan een kennismaking']]);
 
-    $document = renderStrip('hero', ['kop' => 'Kop', 'eerste_knop' => $knop]);
+    $document = renderStrip('hero', ['kop' => kop('Kop', 'h1'), 'eerste_knop' => $knop]);
 
     $eersteKnop = $document->querySelector('.hero .row a.btn');
 
@@ -51,14 +39,14 @@ test('the first button of the hero is the one from the cms, and the button to th
 test('the services strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving']];
 
-    expect(fn () => renderStrip('diensten', ['kop' => 'Mijn *diensten*', 'diensten' => $diensten]))
+    expect(fn () => renderStrip('diensten', ['kop' => kop('Mijn *diensten*'), 'diensten' => $diensten]))
         ->toThrow(ViewException::class, 'De strook diensten kent geen dienst [goud]');
 });
 
 test('a review without a label or name shows only its quote', function () {
     $reviews = [['id' => null, 'label' => null, 'citaat' => '"Fijn samengewerkt."', 'naam' => '']];
 
-    $document = renderStrip('reviews', ['kop' => 'Wat anderen *zeggen*', 'reviews' => $reviews]);
+    $document = renderStrip('reviews', ['kop' => kop('Wat anderen *zeggen*'), 'reviews' => $reviews]);
     $review = $document->querySelector('[data-cms-items="reviews"] > figure');
 
     expect($review?->querySelector('blockquote')?->textContent)->toBe('"Fijn samengewerkt."')
@@ -68,7 +56,7 @@ test('a review without a label or name shows only its quote', function () {
 test('the notes start again with the first colour after the fourth quote', function () {
     $citaten = array_map(fn (int $nummer): array => ['id' => null, 'tekst' => "Citaat {$nummer}"], range(1, 5));
 
-    $document = renderStrip('herkenning', ['kop' => 'Klinkt dit bekend?', 'citaten' => $citaten]);
+    $document = renderStrip('herkenning', ['kop' => kop('Klinkt dit bekend?'), 'citaten' => $citaten]);
     $briefjes = $document->querySelectorAll('[data-cms-items="citaten"] > .note');
 
     expect($briefjes)->toHaveCount(5)
@@ -82,7 +70,7 @@ test('the steps are numbered in their order', function () {
         ['id' => null, 'titel' => 'Voorstel', 'tekst' => 'Binnen een week.'],
     ];
 
-    $document = renderStrip('stappen', ['kop' => 'Vier stappen *naar ja*', 'stappen' => $stappen]);
+    $document = renderStrip('stappen', ['kop' => kop('Vier stappen *naar ja*'), 'stappen' => $stappen]);
 
     expect(tekstenVan($document->querySelectorAll('[data-cms-items="stappen"] > li .step__nr')))->toBe(['1', '2'])
         ->and($document->querySelector('.werk-head .btn'))->toBeNull();
@@ -91,14 +79,14 @@ test('the steps are numbered in their order', function () {
 test('the packages strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving', 'kenmerken' => '', 'bijschrift' => null]];
 
-    expect(fn () => renderStrip('pakketten', ['kop' => 'Welke map?', 'diensten' => $diensten]))
+    expect(fn () => renderStrip('pakketten', ['kop' => kop('Welke map?'), 'diensten' => $diensten]))
         ->toThrow(ViewException::class, 'De strook pakketten kent geen dienst [goud]');
 });
 
 test('the features of a package are its lines without the empty ones', function () {
     $diensten = [['id' => null, 'dienst' => 'dag', 'soort' => 'Dagcoördinatie', 'titel' => 'De Dag in handen', 'omschrijving' => 'Voor stellen.', 'kenmerken' => "Draaiboek\n\n  Afstemming met leveranciers  \r\n", 'bijschrift' => 'op de dag zelf']];
 
-    $document = renderStrip('pakketten', ['kop' => 'Welke map?', 'diensten' => $diensten]);
+    $document = renderStrip('pakketten', ['kop' => kop('Welke map?'), 'diensten' => $diensten]);
 
     expect(tekstenVan($document->querySelectorAll('.tf__panel ul.hl li')))->toBe(['Draaiboek', 'Afstemming met leveranciers'])
         ->and(tekstenVan($document->querySelectorAll('.tf-m .folder ul.hl li')))->toBe(['Draaiboek', 'Afstemming met leveranciers']);
@@ -110,7 +98,7 @@ test('a package shows the price it was given in whole euros, and no price line w
         ['id' => null, 'dienst' => 'partial', 'soort' => 'Gedeeltelijke planning', 'titel' => 'Hand in hand', 'omschrijving' => '<p>Voor stellen.</p>', 'kenmerken' => '', 'bijschrift' => null, 'prijs' => 'op aanvraag'],
     ];
 
-    $document = renderStrip('pakketten', ['kop' => 'Welke map?', 'diensten' => $diensten]);
+    $document = renderStrip('pakketten', ['kop' => kop('Welke map?'), 'diensten' => $diensten]);
 
     expect(tekstenVan($document->querySelectorAll('.tf__panel [data-prijs-incl]')))->toBe(['€1.210'])
         ->and(tekstenVan($document->querySelectorAll('.tf-m .folder [data-prijs]')))->toBe(['€1.000'])
@@ -120,7 +108,7 @@ test('a package shows the price it was given in whole euros, and no price line w
 
 test('the comparison has a column per package, with its title and price, and an empty cell for a package without one', function () {
     $values = [
-        'kop' => 'Wat zit *waarin?*',
+        'kop' => kop('Wat zit *waarin?*'),
         'pakketten' => [
             new Pakket(Dienst::Full, 'Full service', 'Alles in handen', new Prijs(3000, 21)),
             new Pakket(Dienst::Dag, 'Dagcoördinatie', 'De Dag in handen', null),
@@ -140,7 +128,7 @@ test('the comparison has a column per package, with its title and price, and an 
 });
 
 test('the comparison has no table without packages', function () {
-    $document = renderStrip('vergelijking', ['kop' => 'Wat zit *waarin?*', 'onderdelen' => [], 'slotzin' => 'Past geen pakket precies?']);
+    $document = renderStrip('vergelijking', ['kop' => kop('Wat zit *waarin?*'), 'onderdelen' => [], 'slotzin' => 'Past geen pakket precies?']);
 
     expect($document->querySelector('table'))->toBeNull()
         ->and($document->querySelector('.cmp-legend'))->toBeNull()
@@ -149,7 +137,7 @@ test('the comparison has no table without packages', function () {
 
 test('the comparison rejects an answer other than yes, no or partly and names the row', function () {
     $values = [
-        'kop' => 'Wat zit *waarin?*',
+        'kop' => kop('Wat zit *waarin?*'),
         'pakketten' => [new Pakket(Dienst::Dag, 'Dagcoördinatie', 'De Dag in handen', new Prijs(850, 21))],
         'onderdelen' => [['id' => null, 'onderdeel' => 'Budgetoverzicht', 'dag' => 'misschien']],
     ];
@@ -159,7 +147,7 @@ test('the comparison rejects an answer other than yes, no or partly and names th
 });
 
 test('the large closing strip has a taller photo but no heart, and a heading the size of every h2', function () {
-    $document = renderStrip('cta', ['kop' => 'Twijfelen jullie *welk pakket?*', 'tekst' => 'Dat zoeken we samen uit.', 'variant' => 'groot']);
+    $document = renderStrip('cta', ['kop' => kop('Twijfelen jullie *welk pakket?*'), 'tekst' => 'Dat zoeken we samen uit.', 'variant' => 'groot']);
 
     expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:480px')
         ->and($document->querySelector('.cta-split__txt h2')?->getAttribute('class'))->toBe('h2')
@@ -168,19 +156,19 @@ test('the large closing strip has a taller photo but no heart, and a heading the
 });
 
 test('the closing strip without a variant has a heart, as on the homepage', function () {
-    $document = renderStrip('cta', ['kop' => 'Zullen we *kennismaken?*']);
+    $document = renderStrip('cta', ['kop' => kop('Zullen we *kennismaken?*')]);
 
     expect($document->querySelector('.cta-split__txt > svg'))->not->toBeNull()
         ->and($document->querySelector('.cta-split__photo')?->hasAttribute('style'))->toBeFalse();
 });
 
 test('the closing strip rejects an unknown variant', function () {
-    expect(fn () => renderStrip('cta', ['kop' => 'Kop', 'variant' => 'klein']))
+    expect(fn () => renderStrip('cta', ['kop' => kop('Kop'), 'variant' => 'klein']))
         ->toThrow(ViewException::class, 'De strook cta kent geen variant [klein]');
 });
 
 test('the plain closing strip has a taller photo but no heart and the normal heading', function () {
-    $document = renderStrip('cta', ['kop' => 'Het begint met *een gesprek*', 'variant' => 'eenvoudig']);
+    $document = renderStrip('cta', ['kop' => kop('Het begint met *een gesprek*'), 'variant' => 'eenvoudig']);
 
     expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:480px')
         ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull()
@@ -230,7 +218,7 @@ test('the timeline rejects an unknown variant', function () {
 });
 
 test('the wedding day band shows its phase number only when it has one', function (?string $nummer, array $badges) {
-    $document = renderStrip('trouwdag', ['nummer' => $nummer, 'kop' => 'Kop', 'briefjes' => []]);
+    $document = renderStrip('trouwdag', ['nummer' => $nummer, 'kop' => kop('Kop'), 'briefjes' => []]);
 
     expect(tekstenVan($document->querySelectorAll('.tl__badge span')))->toBe($badges);
 })->with([
@@ -244,7 +232,7 @@ test('the wedding day band shows its phase number only when it has one', functio
 test('the notes of the wedding day start again with the first colour after the fourth', function () {
     $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'wie' => "Wie {$nummer}", 'tekst' => "Tekst {$nummer}"], range(1, 5));
 
-    $document = renderStrip('trouwdag', ['kop' => 'Kop', 'briefjes' => $briefjes]);
+    $document = renderStrip('trouwdag', ['kop' => kop('Kop'), 'briefjes' => $briefjes]);
     $briefjesOpDePagina = $document->querySelectorAll('[data-cms-items="briefjes"] > .note');
 
     expect($briefjesOpDePagina)->toHaveCount(5)
@@ -255,7 +243,7 @@ test('the notes of the wedding day start again with the first colour after the f
 test('the qualities start again with the first colour after the third', function () {
     $kwaliteiten = array_map(fn (int $nummer): array => ['id' => null, 'titel' => "Kwaliteit {$nummer}", 'tekst' => 'Tekst'], range(1, 4));
 
-    $document = renderStrip('kwaliteiten', ['kop' => 'Kop', 'kwaliteiten' => $kwaliteiten]);
+    $document = renderStrip('kwaliteiten', ['kop' => kop('Kop'), 'kwaliteiten' => $kwaliteiten]);
     $briefjes = $document->querySelectorAll('[data-cms-items="kwaliteiten"] > .note');
 
     expect($briefjes)->toHaveCount(4)
@@ -273,7 +261,7 @@ test('a quote without a heading shows only the quote', function () {
 });
 
 test('the compact closing strip has a photo of at least 420px, no heart and no empty text', function () {
-    $document = renderStrip('cta', ['kop' => 'Liever direct *persoonlijk advies?*', 'variant' => 'compact']);
+    $document = renderStrip('cta', ['kop' => kop('Liever direct *persoonlijk advies?*'), 'variant' => 'compact']);
 
     expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:420px')
         ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull()
@@ -284,14 +272,14 @@ test('the compact closing strip has a photo of at least 420px, no heart and no e
 test('the article heading leaves out the reading time when its blog has none', function () {
     $blog = new Blog('Titel', 'Intro', Blogcategorie::Inspiratie, null, '/foto.jpg', 'Foto', '/blog/titel');
 
-    $document = renderStrip('artikel-kop', ['titel' => 'Titel', 'foto' => ['url' => '/hero.jpg', 'alt' => 'Hero', 'width' => 1920, 'height' => 1280], 'sticker' => "hoe eerder,\nhoe rustiger", 'blog' => $blog]);
+    $document = renderStrip('artikel-kop', ['titel' => kop('Titel', 'h1'), 'foto' => ['url' => '/hero.jpg', 'alt' => 'Hero', 'width' => 1920, 'height' => 1280], 'sticker' => "hoe eerder,\nhoe rustiger", 'blog' => $blog]);
 
     expect(tekstenVan($document->querySelectorAll('.art-head .row > span')))->toBe(['Inspiratie & styling'])
         ->and($document->querySelector('.art-hero__sticker')?->innerHTML)->toBe("hoe eerder,<br>\nhoe rustiger");
 });
 
 test('the article heading shows a sticker only when it has one', function (?string $sticker, int $aantal) {
-    $document = renderStrip('artikel-kop', ['titel' => 'Titel', 'foto' => null, 'sticker' => $sticker, 'blog' => null]);
+    $document = renderStrip('artikel-kop', ['titel' => kop('Titel', 'h1'), 'foto' => null, 'sticker' => $sticker, 'blog' => null]);
 
     expect($document->querySelectorAll('.art-hero__sticker'))->toHaveCount($aantal);
 })->with([
@@ -300,7 +288,7 @@ test('the article heading shows a sticker only when it has one', function (?stri
 ]);
 
 test('the article heading keeps its photo in shape when it has no photo yet', function () {
-    $document = renderStrip('artikel-kop', ['titel' => 'Titel', 'foto' => null, 'sticker' => null, 'blog' => null]);
+    $document = renderStrip('artikel-kop', ['titel' => kop('Titel', 'h1'), 'foto' => null, 'sticker' => null, 'blog' => null]);
     $img = $document->querySelector('.art-hero__img img[data-cms-field="foto"]');
 
     expect($img?->getAttribute('width'))->toBe('1100')
@@ -310,7 +298,7 @@ test('the article heading keeps its photo in shape when it has no photo yet', fu
 });
 
 test('the article text starts with its heading and introduction only when it has them', function (?string $kop, ?string $inleiding, array $koppen, array $leads) {
-    $document = renderStrip('artikel-tekst', ['kop' => $kop, 'inleiding' => $inleiding, 'tekst' => '<p>Alinea.</p>']);
+    $document = renderStrip('artikel-tekst', ['kop' => $kop === null ? null : kop($kop), 'inleiding' => $inleiding, 'tekst' => '<p>Alinea.</p>']);
 
     expect(tekstenVan($document->querySelectorAll('.art-prose > h2[data-cms-field="kop"]')))->toBe($koppen)
         ->and(tekstenVan($document->querySelectorAll('.art-prose .art-lead')))->toBe($leads)
@@ -321,7 +309,7 @@ test('the article text starts with its heading and introduction only when it has
 ]);
 
 test('the heading of an article text has its accent', function () {
-    $document = renderStrip('artikel-tekst', ['kop' => 'Het begin *bepaalt de rest*', 'inleiding' => null, 'tekst' => '<p>Alinea.</p>']);
+    $document = renderStrip('artikel-tekst', ['kop' => kop('Het begin *bepaalt de rest*'), 'inleiding' => null, 'tekst' => '<p>Alinea.</p>']);
 
     expect($document->querySelector('.art-prose > h2 em')?->textContent)->toBe('bepaalt de rest');
 });
@@ -337,7 +325,7 @@ test('the photos of an article tilt one way and then the other', function () {
 });
 
 test('the medium closing strip has a photo of at least 440px, no heart and the normal heading', function () {
-    $document = renderStrip('cta', ['kop' => 'Nog een *vraag?*', 'tekst' => 'Die beantwoord ik graag.', 'variant' => 'middel']);
+    $document = renderStrip('cta', ['kop' => kop('Nog een *vraag?*'), 'tekst' => 'Die beantwoord ik graag.', 'variant' => 'middel']);
 
     expect($document->querySelector('.cta-split__photo')?->getAttribute('style'))->toBe('min-height:440px')
         ->and($document->querySelector('.cta-split__txt > svg'))->toBeNull()
@@ -387,7 +375,7 @@ test('the FAQ strip shows no sentence with the prices when there is none', funct
 test('the notes of the FAQ hero start again with the first colour after the third', function () {
     $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'tekst' => "Vraag {$nummer}"], range(1, 4));
 
-    $document = renderStrip('hero-faq', ['label' => 'Label', 'kop' => 'Kop', 'tekst' => 'Tekst', 'app_tekst' => 'App', 'briefjes' => $briefjes]);
+    $document = renderStrip('hero-faq', ['label' => 'Label', 'kop' => kop('Kop', 'h1'), 'tekst' => 'Tekst', 'app_tekst' => 'App', 'briefjes' => $briefjes]);
     $notes = $document->querySelectorAll('.faq-notes[data-cms-items="briefjes"] > .note');
 
     expect($notes)->toHaveCount(4)
@@ -396,7 +384,7 @@ test('the notes of the FAQ hero start again with the first colour after the thir
 });
 
 test('a legal strip leaves out the date, sections, button and closing text it does not have', function () {
-    $document = renderStrip('juridisch', ['label' => 'Goed om te weten', 'kop' => 'Algemene *voorwaarden*', 'inleiding' => '<p>Tekst.</p>']);
+    $document = renderStrip('juridisch', ['label' => 'Goed om te weten', 'kop' => kop('Algemene *voorwaarden*', 'h1'), 'inleiding' => '<p>Tekst.</p>']);
     $strook = $document->querySelector('section.wrap.legal');
 
     expect($strook?->querySelector('.legal__meta'))->toBeNull()
@@ -412,7 +400,7 @@ test('a legal strip gives every section a heading and its text in order', functi
         ['id' => null, 'kop' => 'Statistieken', 'tekst' => '<p>Met toestemming.</p>'],
     ];
 
-    $document = renderStrip('juridisch', ['label' => 'Label', 'kop' => 'Kop', 'secties' => $secties, 'cookieknop' => 'Instellingen']);
+    $document = renderStrip('juridisch', ['label' => 'Label', 'kop' => kop('Kop', 'h1'), 'secties' => $secties, 'cookieknop' => 'Instellingen']);
     $prose = $document->querySelector('.legal .prose');
 
     expect(tekstenVan($prose?->querySelectorAll('[data-cms-items="secties"] h2[data-cms-field="kop"]')))->toBe(['Noodzakelijk', 'Statistieken'])
@@ -423,7 +411,7 @@ test('a legal strip gives every section a heading and its text in order', functi
 test('the steps of the acquaintance start again with the first colour after the third', function () {
     $stappen = array_map(fn (int $nummer): array => ['id' => null, 'tekst' => "Stap {$nummer}"], range(1, 4));
 
-    $document = renderStrip('hero-kennismaken', ['kop' => 'Kop', 'stappen' => $stappen]);
+    $document = renderStrip('hero-kennismaken', ['kop' => kop('Kop', 'h1'), 'stappen' => $stappen]);
     $nummers = $document->querySelectorAll('ol.mini-steps[data-cms-items="stappen"] > li > span');
 
     expect(tekstenVan($nummers))->toBe(['1', '2', '3', '4'])
@@ -432,13 +420,13 @@ test('the steps of the acquaintance start again with the first colour after the 
 });
 
 test('the acquaintance hero leaves out the remark it does not have', function () {
-    $document = renderStrip('hero-kennismaken', ['kop' => 'Kop', 'stappen' => [], 'opmerking' => '']);
+    $document = renderStrip('hero-kennismaken', ['kop' => kop('Kop', 'h1'), 'stappen' => [], 'opmerking' => '']);
 
     expect($document->querySelector('[data-cms-field="opmerking"]'))->toBeNull();
 });
 
 test('the thank-you block leaves out the question it does not have', function () {
-    $document = renderStrip('checklist-bedankt', ['kop' => 'Dank *jullie wel*', 'tekst' => 'Tekst.']);
+    $document = renderStrip('checklist-bedankt', ['kop' => kop('Dank *jullie wel*'), 'tekst' => 'Tekst.']);
 
     expect($document->querySelector('[data-cms-field="vraag"]'))->toBeNull()
         ->and($document->querySelector('#bedankt a.btn'))->not->toBeNull();
@@ -447,11 +435,11 @@ test('the thank-you block leaves out the question it does not have', function ()
 test('a column without a photo from the cms gets the photo of the design for its place', function () {
     metGebouwdeFotos();
     $kolommen = [
-        ['id' => 'k1', 'foto' => fotoUitCms(), 'label' => 'Het hart van', 'kop' => '*een goede* vriendin', 'tekst' => 'Tekst'],
-        ['id' => 'k2', 'foto' => null, 'label' => 'Het hoofd van', 'kop' => '*een* projectmanager', 'tekst' => 'Tekst'],
+        ['id' => 'k1', 'foto' => fotoUitCms(), 'label' => 'Het hart van', 'kop' => kop('*een goede* vriendin'), 'tekst' => 'Tekst'],
+        ['id' => 'k2', 'foto' => null, 'label' => 'Het hoofd van', 'kop' => kop('*een* projectmanager'), 'tekst' => 'Tekst'],
     ];
 
-    $document = renderStrip('twee-kolommen', ['kop' => 'Hart *én* hoofd', 'tekst' => 'Tekst', 'kolommen' => $kolommen]);
+    $document = renderStrip('twee-kolommen', ['kop' => kop('Hart *én* hoofd'), 'tekst' => 'Tekst', 'kolommen' => $kolommen]);
     $fotos = $document->querySelectorAll('[data-cms-items="kolommen"] img[data-cms-field="foto"]');
 
     expect(array_map(fn (string $src): string => basename($src), attributenVan($fotos, 'src')))->sequence(
@@ -462,7 +450,7 @@ test('a column without a photo from the cms gets the photo of the design for its
 });
 
 test('a text strip shows its heading only when it has one', function (string $type, ?string $kop, array $koppen) {
-    $document = renderStrip($type, ['kop' => $kop, 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+    $document = renderStrip($type, ['kop' => $kop === null ? null : kop($kop), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
 
     expect(tekstenVan($document->querySelectorAll('h2[data-cms-field="kop"]')))->toBe($koppen)
         ->and(tekstenVan($document->querySelectorAll('[data-cms-field="tekst"] p')))->toBe(['Alinea.']);
@@ -475,7 +463,7 @@ test('a text strip shows its heading only when it has one', function (string $ty
 ]);
 
 test('the text with an image puts its image on the right only when asked', function (?string $positie, string $klasse) {
-    $document = renderStrip('tekst-met-afbeelding', ['kop' => 'Kop', 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
+    $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
 
     expect($document->querySelector('section[data-cms-strip]')?->getAttribute('class'))->toBe($klasse);
 })->with([
@@ -485,12 +473,12 @@ test('the text with an image puts its image on the right only when asked', funct
 ]);
 
 test('the text with an image rejects an unknown position', function () {
-    expect(fn () => renderStrip('tekst-met-afbeelding', ['kop' => 'Kop', 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
+    expect(fn () => renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
         ->toThrow(ViewException::class, 'De strook tekst-met-afbeelding kent geen positie [midden]');
 });
 
 test('the image of a text with an image has the alt text of its file', function () {
-    $document = renderStrip('tekst-met-afbeelding', ['kop' => 'Kop', 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+    $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
 
     expect($document->querySelector('.tekst-foto__media img[data-cms-field="afbeelding"]')?->getAttribute('alt'))->toBe('Twee gouden trouwringen');
 });

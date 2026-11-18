@@ -3,13 +3,13 @@
     die een mail opent en een link naar WhatsApp. Het e-mailadres en het
     WhatsApp-nummer komen uit de config.
 
-    Velden: label, kop (met accent), tekst, knop_tekst en app_tekst.
+    Velden: label, kop (Kop met nadruk), tekst, knop_tekst en app_tekst.
 --}}
 <section class="wrap sec-top" id="samenwerken" data-cms-strip="{{ $strip->id }}">
     <div class="founding founding--lev" data-reveal>
         <div class="stack" style="gap:12px;max-width:600px">
             <p class="eb eb--lila" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             <p style="font-size:20px" data-cms-field="tekst">{{ $strip->tekst }}</p>
         </div>
         <div class="stack founding__acties">

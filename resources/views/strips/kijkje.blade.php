@@ -2,7 +2,7 @@
     Strook: "Een kijkje achter de planner", met links een korte tekst en
     rechts twee persoonlijke polaroids die over elkaar heen liggen.
 
-    Velden: label, kop (met accent), tekst, foto_links en foto_rechts (op
+    Velden: label, kop (Kop met nadruk), tekst, foto_links en foto_rechts (op
     de polaroids), bijschrift_links en bijschrift_rechts (onder de
     polaroids). Het zijn er precies twee, want de stylesheet legt ze met
     nth-child neer. Zonder foto staat de foto uit het ontwerp (<x-foto>).
@@ -10,7 +10,7 @@
 <section class="wrap persoonlijk" data-cms-strip="{{ $strip->id }}">
     <div class="persoonlijk__txt" data-reveal>
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
         <p class="lead" data-cms-field="tekst">{{ $strip->tekst }}</p>
     </div>
     <div class="persoonlijk__fotos" data-reveal-group>

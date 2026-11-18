@@ -5,7 +5,7 @@
     mapjes-stapel als op de homepage. Zonder JavaScript staan de mappen
     onder elkaar.
 
-    Velden: label, kop (met accent), hint (boven de mappen, alleen met
+    Velden: label, kop (Kop met nadruk), hint (boven de mappen, alleen met
     JavaScript), hint_mobiel (onder de stapel) en diensten (lijst met
     dienst, soort, titel, omschrijving, kenmerken, foto, bijschrift en
     prijs).
@@ -49,7 +49,7 @@
     <div class="wrap sec">
         <div class="sec-head" data-reveal style="margin-bottom:40px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-            <h2 class="h2" data-cms-field="kop"><x-accent :tekst="$strip->kop" /></h2>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             @if ($strip->hint)
                 <p class="tf-hint" data-cms-field="hint">{{ $strip->hint }}</p>
             @endif

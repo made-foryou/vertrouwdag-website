@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Strip;
 use Dom\Element;
 use Dom\HTMLDocument;
 use Dom\NodeList;
@@ -86,6 +87,26 @@ function renderComponent(string $template, array $data = []): HTMLDocument
     $html = (string) test()->blade($template, $data);
 
     return HTMLDocument::createFromString('<!doctype html><html><body>'.$html.'</body></html>', LIBXML_NOERROR);
+}
+
+/**
+ * Rendert een strip-view met een strook, zoals <x-strips> dat doet.
+ *
+ * @param  array<string, mixed>  $values
+ */
+function renderStrip(string $type, array $values): HTMLDocument
+{
+    return renderComponent("@include('strips.{$type}', ['strip' => \$strip])", ['strip' => new Strip('s1', $type, $values)]);
+}
+
+/**
+ * Een kop zoals een veld Kop hem rendert: de tekst met het niveau.
+ *
+ * @return array{text: string, tag: string}
+ */
+function kop(string $tekst, string $niveau = 'h2'): array
+{
+    return ['text' => $tekst, 'tag' => $niveau];
 }
 
 /**

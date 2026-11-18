@@ -30,7 +30,7 @@ class PrivacyverklaringSeeder extends PaginaSeeder
     {
         return [
             ['juridisch', [
-                'kop' => 'Privacy*verklaring*',
+                'kop' => ['text' => 'Privacy*verklaring*'],
                 'inleiding' => '<p>[Plak hier je privacyverklaring, Romy.]</p>',
                 'secties' => [],
                 'cookieknop' => null,
