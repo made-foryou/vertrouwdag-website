@@ -102,6 +102,11 @@ test('the pages above cover every page of the site, so a new page cannot skip th
             continue;
         }
 
+        // The CMS serves robots.txt and the sitemap for search engines; they are files, not pages for visitors.
+        if (in_array($route->uri(), ['robots.txt', 'sitemap.xml'], true)) {
+            continue;
+        }
+
         $adressen[] = '/'.ltrim($route->uri(), '/');
     }
 
