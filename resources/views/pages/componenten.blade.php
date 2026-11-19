@@ -178,9 +178,9 @@
     </section>
 
     {{-- FAQ (veelgestelde-vragen.html) --}}
-    <section class="wrap wrap--smal" style="padding-top:56px;padding-bottom:var(--sec)">
+    <section class="wrap wrap--midden" style="padding-top:56px;padding-bottom:var(--sec)">
         <div class="faq-box" data-reveal>
-            <span class="faq-box__tab eb">FAQ-items</span>
+            <h2 class="faq-box__tab eb">FAQ-items</h2>
             <x-faq-item open>
                 <x-slot:vraag>Wanneer schakelen we een weddingplanner in?</x-slot:vraag>
                 <x-slot:antwoord><p>Voor Helemaal in handen (full service) het liefst 12 tot 18 maanden van tevoren, zodat we de locatie en datum samen kunnen kiezen. Voor De Dag in handen (dagcoördinatie) is 3 tot 6 maanden ervoor vaak genoeg. Hoe eerder, hoe meer rust.</p></x-slot:antwoord>
