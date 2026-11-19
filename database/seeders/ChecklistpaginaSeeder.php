@@ -18,6 +18,21 @@ class ChecklistpaginaSeeder extends PaginaSeeder
         return 'Checklist';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Gratis trouwplanning-checklist | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Wat regel je wanneer? Download de gratis trouwplanning-checklist van weddingplanner Romy: maand voor maand, van twaalf maanden ervoor tot de week zelf.';
+    }
+
+    protected function shareImage(): ?string
+    {
+        return 'ringen-pioenen.jpg';
+    }
+
     protected function inMenu(): bool
     {
         return false;

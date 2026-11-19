@@ -19,6 +19,16 @@ class AlgemeneVoorwaardenSeeder extends PaginaSeeder
         return 'Algemene voorwaarden';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Algemene voorwaarden | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'De algemene voorwaarden van vertrouwdag weddingplanning.';
+    }
+
     protected function inMenu(): bool
     {
         return false;

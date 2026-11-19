@@ -19,6 +19,16 @@ class BlogarchiefpaginaSeeder extends PaginaSeeder
         return 'Archief';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Blogarchief: alle artikelen | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Alle blogs van weddingplanner Romy op een rij: tips voor het plannen van jullie bruiloft, locaties in Zuid-Holland en een kijkje achter de schermen.';
+    }
+
     protected function ouder(): ?string
     {
         return '/blog';

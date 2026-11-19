@@ -25,6 +25,16 @@ class HomepaginaSeeder extends PaginaSeeder
         return 'Home';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Jullie dag in vertrouwde handen | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Weddingplanner in Zuid-Holland. De Dag in handen, Hand in hand en Helemaal in handen: van dagcoördinatie tot full service, zodat jullie en jullie familie op de dag zelf alleen maar hoeven te genieten.';
+    }
+
     protected function stroken(): array
     {
         return [

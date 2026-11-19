@@ -13,7 +13,8 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    // made-cms-package names the site after this, in titles and shared links (#23), so it does not depend on the .env file.
+    'name' => 'vertrouwdag',
 
     /*
     |--------------------------------------------------------------------------

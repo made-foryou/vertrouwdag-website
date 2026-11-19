@@ -169,4 +169,25 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Meta
+    |--------------------------------------------------------------------------
+    |
+    | share_image is the image a shared link shows (og:image) for a page
+    | without one of its own (#23). It is a copy of a photo of the design in
+    | public/, because the address must not change with every build, as the
+    | addresses of Vite do.
+    |
+    */
+
+    'meta' => [
+        'share_image' => [
+            'url' => '/deelafbeelding.jpg',
+            'width' => 1100,
+            'height' => 733,
+            'alt' => 'Bruidspaar wandelt door een weids landschap',
+        ],
+    ],
+
 ];

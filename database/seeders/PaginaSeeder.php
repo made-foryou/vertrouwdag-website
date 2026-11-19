@@ -8,10 +8,13 @@ use Illuminate\Database\Seeder;
 use Made\CmsPackage\Content\Actions\AddStrip;
 use Made\CmsPackage\Content\Actions\CreatePage;
 use Made\CmsPackage\Content\Actions\PublishPage;
+use Made\CmsPackage\Content\Actions\SetPageShareImage;
 use Made\CmsPackage\Content\Actions\UpdateAltText;
+use Made\CmsPackage\Content\Actions\UpdatePageMeta;
 use Made\CmsPackage\Content\Actions\UpdateStrip;
 use Made\CmsPackage\Content\Actions\UploadMedia;
 use Made\CmsPackage\Content\Data\NewPage;
+use Made\CmsPackage\Content\Data\PageMetaChanges;
 use Made\CmsPackage\Content\Data\PagePath;
 use Made\CmsPackage\Content\Data\Strip;
 use Made\CmsPackage\Content\Data\UploadedMedia;
@@ -79,6 +82,31 @@ abstract class PaginaSeeder extends Seeder
         return null;
     }
 
+    /**
+     * The title of the page in Google (#23), or null for the name of the page with the site name.
+     */
+    protected function metaTitle(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * The description of the page in Google (#23), or null when the site has none of its own for it.
+     */
+    protected function metaDescription(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * The photo of the design a shared link to the page shows (#23), such as romy.jpg, or null for the default
+     * image of the site.
+     */
+    protected function shareImage(): ?string
+    {
+        return null;
+    }
+
     public function run(): void
     {
         $adres = PagePath::fromString($this->adres());
@@ -102,6 +130,19 @@ abstract class PaginaSeeder extends Seeder
         }
 
         PublishPage::run($page);
+        $this->describeForSharing($page);
+    }
+
+    /**
+     * Gives the page its title and description in Google and its share image, as the card in the cms does.
+     */
+    private function describeForSharing(Page $page): void
+    {
+        UpdatePageMeta::run($page, new PageMetaChanges($this->metaTitle(), $this->metaDescription(), $page->in_sitemap, $page->indexable));
+
+        if ($this->shareImage() !== null) {
+            SetPageShareImage::run($page, $this->ontwerpfoto($this->shareImage()));
+        }
     }
 
     /**

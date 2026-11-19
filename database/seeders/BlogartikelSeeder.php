@@ -27,6 +27,16 @@ class BlogartikelSeeder extends PaginaSeeder
         return 'Wanneer schakel je een weddingplanner in?';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Wanneer schakel je een weddingplanner in? | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Wanneer schakel je een weddingplanner in? Voor full service het liefst 12 tot 18 maanden van tevoren. Waarom een vroeg begin juist rust oplevert.';
+    }
+
     protected function ouder(): ?string
     {
         return '/blog';

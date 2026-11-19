@@ -2,24 +2,23 @@
     De layout van elke pagina: de head, de header, het menu, de footer en
     de cookiebanner. De pagina zelf komt in $slot.
 
-    title en description zijn de <title> en de meta description. De Open
-    Graph-tags bepalen hoe een gedeelde link eruitziet: ogTitle is de
-    korte titel ("Diensten en prijzen · vertrouwdag"), ogDescription valt
-    terug op description, en ogImage is het pad van een foto voor
-    Vite::asset(), of de url van een foto uit het CMS (een artikel).
-    ogType is website, of article voor een blog.
+    Een pagina uit het CMS geeft zichzelf mee als page. De head komt dan
+    uit het CMS (<x-made-cms::meta>, #23): titel, omschrijving, canonical,
+    noindex en de Open Graph-tags met de deelafbeelding. Typte Romy geen
+    omschrijving, dan vult de site er een in waar ze die kent: de prijzen
+    op /diensten en de intro van een artikel (App\Support\FallbackDescription).
 
-    Een pagina van de site geeft die waarden mee als seo, een PaginaSeo
-    uit de vaste lijst in app/Support/PaginaSeo.php. Met seo komen alle
-    zes daaruit. Een foutpagina geeft ze los mee.
-
-    De canonical en og:url wijzen naar hetzelfde pad op het canonieke
-    adres uit config/vertrouwdag.php, zonder querystring, tenzij de pagina
-    zelf een canonical meegeeft. Met noindex vraagt de pagina zoekmachines
-    haar over te slaan en heeft ze geen canonical, zoals een foutpagina.
+    Een pagina buiten het CMS (een foutpagina, de stijlgids) geeft de
+    waarden los mee. title en description zijn de <title> en de meta
+    description. ogTitle is de titel van een gedeelde link, ogDescription
+    valt terug op description, en ogImage is het pad van een foto voor
+    Vite::asset(). Met noindex vraagt de pagina zoekmachines haar over te
+    slaan. Een canonical en og:url staan er alleen als de pagina een
+    canonical meegeeft.
 --}}
+@use('App\Support\FallbackDescription')
 @props([
-    'seo' => null,
+    'page' => null,
     'title' => null,
     'description' => null,
     'ogTitle' => null,
@@ -30,36 +29,38 @@
     'noindex' => false,
 ])
 @php
-    if ($seo !== null) {
-        $title = $seo->titel;
-        $description = $seo->omschrijving;
-        $ogTitle = $seo->ogTitel;
-        $ogDescription = $seo->ogOmschrijving;
-        $ogImage = $seo->ogAfbeelding;
-        $ogType = $seo->ogType;
-    }
-
-    $canonical ??= rtrim(config('vertrouwdag.canonieke_url'), '/').'/'.ltrim(request()->path(), '/');
+    $fallbackDescription = $page !== null && blank($page->meta_description)
+        ? app(FallbackDescription::class)->forPage($page)
+        : null;
 @endphp
 <!doctype html>
 <html lang="nl">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title }}</title>
-    <meta name="description" content="{{ $description }}">
-    @if ($noindex)
-        <meta name="robots" content="noindex">
+    @if ($page !== null)
+        <x-made-cms::meta :page="$page" />
+        @if ($fallbackDescription !== null)
+            <meta name="description" content="{{ $fallbackDescription }}">
+            <meta property="og:description" content="{{ $fallbackDescription }}">
+        @endif
     @else
-        <link rel="canonical" href="{{ $canonical }}">
+        <title>{{ $title }}</title>
+        <meta name="description" content="{{ $description }}">
+        @if ($noindex)
+            <meta name="robots" content="noindex">
+        @endif
+        @if ($canonical !== null && ! $noindex)
+            <link rel="canonical" href="{{ $canonical }}">
+        @endif
+        <meta property="og:type" content="{{ $ogType }}">
+        <meta property="og:title" content="{{ $ogTitle }}">
+        <meta property="og:description" content="{{ $ogDescription ?? $description }}">
+        <meta property="og:image" content="{{ str_starts_with($ogImage, 'resources/') ? Vite::asset($ogImage) : $ogImage }}">
+        @if ($canonical !== null && ! $noindex)
+            <meta property="og:url" content="{{ $canonical }}">
+        @endif
     @endif
-    <meta property="og:type" content="{{ $ogType }}">
-    <meta property="og:title" content="{{ $ogTitle }}">
-    <meta property="og:description" content="{{ $ogDescription ?? $description }}">
-    <meta property="og:image" content="{{ str_starts_with($ogImage, 'resources/') ? Vite::asset($ogImage) : $ogImage }}">
-    @unless ($noindex)
-        <meta property="og:url" content="{{ $canonical }}">
-    @endunless
     <meta name="theme-color" content="#F6F6F0">
     <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/monogram-groen.png') }}">
     <link rel="preload" href="{{ Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') }}" as="font" type="font/woff2" crossorigin>

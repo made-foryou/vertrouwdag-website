@@ -19,6 +19,21 @@ class VeelgesteldeVragenpaginaSeeder extends PaginaSeeder
         return 'Veelgestelde vragen';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Veelgestelde vragen over een weddingplanner | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Wat kost een weddingplanner, wanneer schakel je er een in en wat als het regent? Antwoorden op de vragen die bruidsparen mij het vaakst stellen.';
+    }
+
+    protected function shareImage(): ?string
+    {
+        return 'hand-in-hand.jpg';
+    }
+
     protected function stroken(): array
     {
         return [

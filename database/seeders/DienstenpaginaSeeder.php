@@ -21,6 +21,16 @@ class DienstenpaginaSeeder extends PaginaSeeder
         return 'Diensten';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Diensten en prijzen | vertrouwdag weddingplanner';
+    }
+
+    protected function shareImage(): ?string
+    {
+        return 'ceremonie-buiten.jpg';
+    }
+
     protected function stroken(): array
     {
         return [

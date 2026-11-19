@@ -32,6 +32,16 @@ class BlogpaginaSeeder extends PaginaSeeder
         return 'Blog';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Blog: rustig je bruiloft plannen | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Praktische tips voor het plannen van jullie bruiloft, trouwlocaties in Zuid-Holland en een kijkje achter de schermen bij weddingplanner Romy.';
+    }
+
     protected function stroken(): array
     {
         return [
