@@ -2785,12 +2785,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:made-foryou/made-cms-package.git",
-                "reference": "89a6f80146c60267176f4de010477168b2afd7d7"
+                "reference": "1c87893edabd57d1365f1918021e7b785ef555de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/89a6f80146c60267176f4de010477168b2afd7d7",
-                "reference": "89a6f80146c60267176f4de010477168b2afd7d7",
+                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/1c87893edabd57d1365f1918021e7b785ef555de",
+                "reference": "1c87893edabd57d1365f1918021e7b785ef555de",
                 "shasum": ""
             },
             "require": {
@@ -2909,7 +2909,7 @@
                 "made-cms-package",
                 "made-foryou"
             ],
-            "time": "2026-11-19T15:58:16+00:00"
+            "time": "2026-11-19T18:58:44+00:00"
         },
         {
             "name": "monolog/monolog",
