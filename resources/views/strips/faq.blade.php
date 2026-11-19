@@ -18,6 +18,11 @@
     tabblad zonder vragen staat niet in de view: een wijziging van zijn
     naam herlaadt het frame, net als zijn eerste vraag.
 
+    De naam van een tabblad is een h2 en elke vraag een h3 (x-faq-item). Een
+    tabje is zelf de h2, met role="tab": HTML staat geen kop in een button
+    toe, en een kop om het tabje heen hoort niet in een tablist. Omdat een
+    h2 uit zichzelf geen focus krijgt, heeft het open tabje tabindex 0.
+
     Staat de keuze prijzen aan, dan staat boven het antwoord de zin met de
     vanaf-prijzen uit de pakketten (prijzenzin uit App\Cms\Strips\Faq). Die
     zin staat buiten het veld antwoord, zodat meekijken hem niet
@@ -39,7 +44,7 @@
             <div class="faq-box faq-box--tabbladen" data-tabfolders data-reveal>
                 <div class="faq-box__tabs" role="tablist" aria-label="Veelgestelde vragen">
                     @foreach ($tabbladen as $tabblad)
-                        <button type="button" class="faq-box__tab eb" role="tab" id="faq-{{ $strip->id }}-{{ $loop->iteration }}" aria-controls="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-selected="{{ $loop->first ? 'true' : 'false' }}" @unless ($loop->first) tabindex="-1" @endunless><span data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span></button>
+                        <h2 class="faq-box__tab eb" role="tab" id="faq-{{ $strip->id }}-{{ $loop->iteration }}" aria-controls="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-selected="{{ $loop->first ? 'true' : 'false' }}" tabindex="{{ $loop->first ? '0' : '-1' }}"><span data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span></h2>
                     @endforeach
                 </div>
                 @foreach ($tabbladen as $tabblad)
@@ -52,7 +57,7 @@
         @else
             @php($tabblad = $tabbladen[0])
             <div class="faq-box" data-reveal>
-                <span class="faq-box__tab eb" data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span>
+                <h2 class="faq-box__tab eb" data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</h2>
                 <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
             </div>
         @endif

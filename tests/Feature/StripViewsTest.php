@@ -394,7 +394,7 @@ test('the FAQ strip puts each group of questions behind its own tab, with the fi
 
     expect(tekstenVan($tabjes))->toBe(['Planning', 'Kosten', 'De dag zelf'])
         ->and(attributenVan($tabjes, 'aria-selected'))->toBe(['true', 'false', 'false'])
-        ->and(attributenVan($tabjes, 'tabindex'))->toBe([null, '-1', '-1'])
+        ->and(attributenVan($tabjes, 'tabindex'))->toBe(['0', '-1', '-1'])
         ->and(attributenVan($tabjes, 'aria-controls'))->toBe(attributenVan($panelen, 'id'))
         ->and(attributenVan($panelen, 'aria-labelledby'))->toBe(attributenVan($tabjes, 'id'))
         ->and(array_map(fn (Element $paneel): bool => $paneel->classList->contains('is-active'), iterator_to_array($panelen)))->toBe([true, false, false])
@@ -423,6 +423,22 @@ test('the FAQ strip keeps its single tab above the card when only the first grou
     expect($document->querySelector('[role="tablist"]'))->toBeNull()
         ->and($document->querySelector('.faq-box > .faq-box__tab[data-cms-field="label"]')?->textContent)->toBe('Alle vragen')
         ->and($document->querySelectorAll('.faq-box > [data-cms-items="vragen"] > details.faq'))->toHaveCount(1);
+});
+
+test('the FAQ strip makes its tabs level two headings and its questions level three headings', function () {
+    $document = renderStrip('faq', [
+        'label' => 'Planning', 'vragen' => faqVragen('Wanneer beginnen we?', 'Hoeveel contact hebben we?'),
+        'label_2' => 'Kosten', 'vragen_2' => faqVragen('Wat kost het?'),
+    ]);
+
+    expect(tekstenVan($document->querySelectorAll('[role="tablist"] > h2[role="tab"]')))->toBe(['Planning', 'Kosten'])
+        ->and(tekstenVan($document->querySelectorAll('details.faq > summary > h3[data-cms-field="vraag"]')))->toBe(['Wanneer beginnen we?', 'Hoeveel contact hebben we?', 'Wat kost het?']);
+});
+
+test('the FAQ strip makes the name of its single tab a level two heading', function () {
+    $document = renderStrip('faq', ['label' => 'Alle vragen', 'vragen' => faqVragen('Wanneer beginnen we?')]);
+
+    expect($document->querySelector('.faq-box > h2.faq-box__tab[data-cms-field="label"]')?->textContent)->toBe('Alle vragen');
 });
 
 test('the FAQ strip names a tab without a name after its questions', function () {
