@@ -2,14 +2,17 @@
 
 use App\Cms\Strips\ChecklistAanmelding;
 use App\Cms\Strips\Diensten;
+use App\Cms\Strips\Herkenning;
 use App\Cms\Strips\HeroChecklist;
 use App\Cms\Strips\Pakketten;
+use App\Support\Icoon;
 use Database\Seeders\DienstenpaginaSeeder;
 use Dom\Element;
 use Illuminate\Support\Str;
 use Made\CmsPackage\Content\Models\Media;
 use Made\CmsPackage\Content\Models\Page;
 use Made\CmsPackage\Content\Strips\Fields\Choice;
+use Made\CmsPackage\Content\Strips\Fields\Field;
 use Made\CmsPackage\Content\Strips\Fields\Image;
 use Made\CmsPackage\Content\Strips\Fields\Items;
 use Made\CmsPackage\Content\Strips\Fields\LongText;
@@ -393,3 +396,12 @@ test('every text area of a strip type shows its line breaks on the site', functi
         }
     }
 })->with('striptypes met tekstvakken');
+
+test('an editor chooses the icon of a quote out of every icon, or none for the icon of its place', function () {
+    $citaten = collect((new Herkenning)->fields())->first(fn (Field $veld): bool => $veld->getKey() === 'citaten');
+    $icoon = collect($citaten->getFields())->first(fn (Field $veld): bool => $veld->getKey() === 'icoon');
+
+    expect($icoon)->toBeInstanceOf(Choice::class)
+        ->and(array_keys($icoon->getOptions()))->toBe(array_column(Icoon::cases(), 'value'))
+        ->and($icoon->isRequired())->toBeFalse();
+});

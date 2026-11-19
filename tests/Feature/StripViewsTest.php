@@ -3,6 +3,7 @@
 use App\Support\Blog;
 use App\Support\Blogcategorie;
 use App\Support\Dienst;
+use App\Support\Icoon;
 use App\Support\Pakket;
 use App\Support\Prijs;
 use Dom\Element;
@@ -63,6 +64,36 @@ test('the notes start again with the first colour after the fourth quote', funct
     expect($briefjes)->toHaveCount(5)
         ->and($briefjes->item(4)->getAttribute('style'))->toBe($briefjes->item(0)->getAttribute('style'))
         ->and($document->querySelectorAll('.deck-dots span'))->toHaveCount(5);
+});
+
+/**
+ * De tekening van een icoon zoals de HTML-parser hem in een svg leest, om hem te vergelijken met een icoon op de pagina.
+ */
+function tekeningVan(Icoon $icoon): string
+{
+    return renderComponent('<svg>'.$icoon->tekening().'</svg>')->querySelector('svg')->innerHTML;
+}
+
+test('a quote shows the icon chosen for it, and without one the icon of its place, in the line colour of its note', function () {
+    $citaten = [
+        ['id' => null, 'tekst' => 'Citaat 1', 'icoon' => 'ringen'],
+        ['id' => null, 'tekst' => 'Citaat 2', 'icoon' => null],
+        ['id' => null, 'tekst' => 'Citaat 3'],
+    ];
+
+    $document = renderStrip('herkenning', ['kop' => kop('Klinkt dit bekend?'), 'citaten' => $citaten]);
+    $iconen = $document->querySelectorAll('[data-cms-items="citaten"] > .note > svg');
+
+    expect(array_map(fn (Element $icoon): string => $icoon->innerHTML, iterator_to_array($iconen)))
+        ->toBe([tekeningVan(Icoon::Ringen), tekeningVan(Icoon::Hart), tekeningVan(Icoon::Lijstje)])
+        ->and(attributenVan($iconen, 'stroke'))->toBe(['#401838', '#404830', '#404830']);
+});
+
+test('the recognition strip rejects an unknown icon and names it', function () {
+    $citaten = [['id' => null, 'tekst' => 'Citaat', 'icoon' => 'eenhoorn']];
+
+    expect(fn () => renderStrip('herkenning', ['kop' => kop('Klinkt dit bekend?'), 'citaten' => $citaten]))
+        ->toThrow(ViewException::class, 'De strook herkenning kent geen icoon [eenhoorn]');
 });
 
 test('the steps are numbered in their order', function () {
