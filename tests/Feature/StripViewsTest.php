@@ -447,7 +447,7 @@ test('the notes of the FAQ hero start again with the first colour after the thir
 
 test('a legal strip leaves out the date, sections, button and closing text it does not have', function () {
     $document = renderStrip('juridisch', ['label' => 'Goed om te weten', 'kop' => kop('Algemene *voorwaarden*', 'h1'), 'inleiding' => '<p>Tekst.</p>']);
-    $strook = $document->querySelector('section.wrap.legal');
+    $strook = $document->querySelector('section[data-cms-strip] > .wrap.legal');
 
     expect($strook?->querySelector('.legal__meta'))->toBeNull()
         ->and($strook?->querySelector('h2'))->toBeNull()
@@ -527,7 +527,7 @@ test('a text strip shows its heading only when it has one', function (string $ty
 test('the text with an image puts its image on the right only when asked', function (?string $positie, string $klasse) {
     $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
 
-    expect($document->querySelector('section[data-cms-strip]')?->getAttribute('class'))->toBe($klasse);
+    expect($document->querySelector('section[data-cms-strip] > div')?->getAttribute('class'))->toBe($klasse);
 })->with([
     'links' => ['links', 'wrap sec tekst-foto'],
     'rechts' => ['rechts', 'wrap sec tekst-foto tekst-foto--rechts'],

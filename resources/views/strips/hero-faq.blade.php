@@ -16,18 +16,20 @@
         ['kleur' => 'zand', 'draaiing' => -2, 'style' => null],
     ];
 @endphp
-<section class="wrap hero" style="padding-top:72px;padding-bottom:72px;gap:48px" data-cms-strip="{{ $strip->id }}">
-    <div class="hero__txt" data-reveal style="flex-basis:460px;gap:22px">
-        <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-        <p class="lead" style="max-width:34ch"><span data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></span> <x-whatsapp-link data-cms-field="app_tekst">{{ $strip->app_tekst }}</x-whatsapp-link>.</p>
-    </div>
-    <div class="faq-notes" data-reveal-group aria-hidden="true" data-cms-items="briefjes">
-        @foreach ($strip->briefjes ?? [] as $briefje)
-            @php($plek = $plekken[$loop->index % count($plekken)])
-            <x-briefje :kleur="$plek['kleur']" :draaiing="$plek['draaiing']" :attributes="new ComponentAttributeBag(array_filter(['style' => $plek['style']]))">
-                <p data-cms-field="tekst">{{ $briefje['tekst'] }}</p>
-            </x-briefje>
-        @endforeach
+<section data-cms-strip="{{ $strip->id }}">
+    <div class="wrap hero" style="padding-top:72px;padding-bottom:72px;gap:48px">
+        <div class="hero__txt" data-reveal style="flex-basis:460px;gap:22px">
+            <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
+            <p class="lead" style="max-width:34ch"><span data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></span> <x-whatsapp-link data-cms-field="app_tekst">{{ $strip->app_tekst }}</x-whatsapp-link>.</p>
+        </div>
+        <div class="faq-notes" data-reveal-group aria-hidden="true" data-cms-items="briefjes">
+            @foreach ($strip->briefjes ?? [] as $briefje)
+                @php($plek = $plekken[$loop->index % count($plekken)])
+                <x-briefje :kleur="$plek['kleur']" :draaiing="$plek['draaiing']" :attributes="new ComponentAttributeBag(array_filter(['style' => $plek['style']]))">
+                    <p data-cms-field="tekst">{{ $briefje['tekst'] }}</p>
+                </x-briefje>
+            @endforeach
+        </div>
     </div>
 </section>

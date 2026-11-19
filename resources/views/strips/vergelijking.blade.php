@@ -27,48 +27,50 @@
         'prijs' => $pakket->prijs,
     ], $strip->pakketten ?? []);
 @endphp
-<section id="vergelijk" class="stack" style="max-width:1080px;margin:0 auto;padding:112px 16px 96px;gap:36px" data-cms-strip="{{ $strip->id }}">
-    <div class="sec-head" style="position:relative">
-        <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
-        @if ($strip->sticker)
-            <div class="sticker sticker--aub" style="right:8px;top:-20px;transform:rotate(10deg)" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
-        @endif
-    </div>
-    @if (count($kolommen) > 0)
-        <div class="cmp-wrap" tabindex="0" role="region" aria-label="Vergelijking van de pakketten">
-            <table class="cmp">
-                <thead>
-                    <tr>
-                        <th scope="col"><span class="sr-only">Onderdeel</span></th>
-                        @foreach ($kolommen as $kolom)
-                            <th scope="col" class="{{ $kolom['klasse'] }}" data-short="{{ $kolom['titel'] }}">{{ $kolom['titel'] }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($strip->onderdelen ?? [] as $onderdeel)
+<section id="vergelijk" data-cms-strip="{{ $strip->id }}">
+    <div class="wrap stack" style="padding-top:112px;padding-bottom:96px;gap:36px">
+        <div class="sec-head" style="position:relative">
+            <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
+            @if ($strip->sticker)
+                <div class="sticker sticker--aub" style="right:8px;top:-20px;transform:rotate(10deg)" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
+            @endif
+        </div>
+        @if (count($kolommen) > 0)
+            <div class="cmp-wrap" tabindex="0" role="region" aria-label="Vergelijking van de pakketten">
+                <table class="cmp">
+                    <thead>
                         <tr>
-                            <th scope="row">{{ $onderdeel['onderdeel'] }}</th>
+                            <th scope="col"><span class="sr-only">Onderdeel</span></th>
                             @foreach ($kolommen as $kolom)
-                                @php($antwoord = (string) ($onderdeel[$kolom['dienst']] ?? ''))
-                                @php($tekst = $antwoorden[$antwoord] ?? throw new InvalidArgumentException("De strook vergelijking kent geen antwoord [{$antwoord}] bij [{$onderdeel['onderdeel']}]; kies ja, nee of deels."))
-                                <td class="{{ $antwoord }}" data-l="{{ $kolom['titel'] }}">{{ $tekst }}</td>
+                                <th scope="col" class="{{ $kolom['klasse'] }}" data-short="{{ $kolom['titel'] }}">{{ $kolom['titel'] }}</th>
                             @endforeach
                         </tr>
-                    @endforeach
-                    <tr>
-                        <th scope="row" data-cms-field="prijs_label">{{ $strip->prijs_label }}</th>
-                        @foreach ($kolommen as $kolom)
-                            <td data-l="{{ $kolom['titel'] }}">@if ($kolom['prijs'] !== null)<x-prijs :prijs="$kolom['prijs']" :dienst="$kolom['dienst']" /><small class="cmp-ex"><x-prijs :prijs="$kolom['prijs']" :dienst="$kolom['dienst']" excl /> excl. btw</small>@endif</td>
+                    </thead>
+                    <tbody>
+                        @foreach ($strip->onderdelen ?? [] as $onderdeel)
+                            <tr>
+                                <th scope="row">{{ $onderdeel['onderdeel'] }}</th>
+                                @foreach ($kolommen as $kolom)
+                                    @php($antwoord = (string) ($onderdeel[$kolom['dienst']] ?? ''))
+                                    @php($tekst = $antwoorden[$antwoord] ?? throw new InvalidArgumentException("De strook vergelijking kent geen antwoord [{$antwoord}] bij [{$onderdeel['onderdeel']}]; kies ja, nee of deels."))
+                                    <td class="{{ $antwoord }}" data-l="{{ $kolom['titel'] }}">{{ $tekst }}</td>
+                                @endforeach
+                            </tr>
                         @endforeach
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="cmp-legend" aria-hidden="true"><span><i></i>zit erin</span><span><b></b>zit er niet in</span></p>
-    @endif
-    @if ($strip->slotzin)
-        <p class="center" style="font-size:20px" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
-    @endif
+                        <tr>
+                            <th scope="row" data-cms-field="prijs_label">{{ $strip->prijs_label }}</th>
+                            @foreach ($kolommen as $kolom)
+                                <td data-l="{{ $kolom['titel'] }}">@if ($kolom['prijs'] !== null)<x-prijs :prijs="$kolom['prijs']" :dienst="$kolom['dienst']" /><small class="cmp-ex"><x-prijs :prijs="$kolom['prijs']" :dienst="$kolom['dienst']" excl /> excl. btw</small>@endif</td>
+                            @endforeach
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="cmp-legend" aria-hidden="true"><span><i></i>zit erin</span><span><b></b>zit er niet in</span></p>
+        @endif
+        @if ($strip->slotzin)
+            <p class="center" style="font-size:20px" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
+        @endif
+    </div>
 </section>

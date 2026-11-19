@@ -20,7 +20,7 @@
     $eersteNummer = filter_var(trim((string) $strip->eerste_nummer), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'default' => 1]]);
 @endphp
 <section @if ($opBand) class="band" @endif data-cms-strip="{{ $strip->id }}">
-    <ol class="tl wrap sec" style="max-width:1040px" @if ($eersteNummer !== 1) start="{{ $eersteNummer }}" @endif data-cms-items="fases">
+    <ol class="tl wrap wrap--midden sec" @if ($eersteNummer !== 1) start="{{ $eersteNummer }}" @endif data-cms-items="fases">
         @foreach ($strip->fases as $fase)
             <li @class(['tl__step', 'tl__step--r' => $loop->even]) data-reveal><x-fasenummer :nummer="$eersteNummer + $loop->index" /><div class="tl__card"><p class="eb eb--sm eb--grijs" data-cms-field="periode">{{ $fase['periode'] }}</p><h2 class="h3" data-cms-field="titel">{{ $fase['titel'] }}</h2><p class="tl__txt" data-cms-field="tekst"><x-regels :tekst="$fase['tekst']" /></p></div></li>
         @endforeach

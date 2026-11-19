@@ -7,14 +7,16 @@
     polaroids). Het zijn er precies twee, want de stylesheet legt ze met
     nth-child neer. Zonder foto staat de foto uit het ontwerp (<x-foto>).
 --}}
-<section class="wrap persoonlijk" data-cms-strip="{{ $strip->id }}">
-    <div class="persoonlijk__txt" data-reveal>
-        <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
-        <p class="lead" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
-    </div>
-    <div class="persoonlijk__fotos" data-reveal-group>
-        <figure class="polaroid" data-reveal><x-foto :foto="$strip->foto_links" terugval="resources/images/romy-klein.jpg" alt="Romy als klein meisje verkleed als bruidje, met sluier, bloemenkrans en boeket" :breedte="800" :hoogte="1038" veld="foto_links" loading="lazy" /><span data-cms-field="bijschrift_links">{{ $strip->bijschrift_links }}</span></figure>
-        <figure class="polaroid" data-reveal><x-foto :foto="$strip->foto_rechts" terugval="resources/images/romy-samen.jpg" alt="Romy samen met haar partner aan zee" :breedte="900" :hoogte="842" veld="foto_rechts" loading="lazy" /><span data-cms-field="bijschrift_rechts">{{ $strip->bijschrift_rechts }}</span></figure>
+<section data-cms-strip="{{ $strip->id }}">
+    <div class="wrap persoonlijk">
+        <div class="persoonlijk__txt" data-reveal>
+            <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
+            <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
+            <p class="lead" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+        </div>
+        <div class="persoonlijk__fotos" data-reveal-group>
+            <figure class="polaroid" data-reveal><x-foto :foto="$strip->foto_links" terugval="resources/images/romy-klein.jpg" alt="Romy als klein meisje verkleed als bruidje, met sluier, bloemenkrans en boeket" :breedte="800" :hoogte="1038" veld="foto_links" loading="lazy" /><span data-cms-field="bijschrift_links">{{ $strip->bijschrift_links }}</span></figure>
+            <figure class="polaroid" data-reveal><x-foto :foto="$strip->foto_rechts" terugval="resources/images/romy-samen.jpg" alt="Romy samen met haar partner aan zee" :breedte="900" :hoogte="842" veld="foto_rechts" loading="lazy" /><span data-cms-field="bijschrift_rechts">{{ $strip->bijschrift_rechts }}</span></figure>
+        </div>
     </div>
 </section>

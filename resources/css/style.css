@@ -36,6 +36,11 @@
   --ease:cubic-bezier(.22,.61,.36,1);
   --gutter:clamp(16px,6vw,80px);
   --sec:clamp(72px,9vw,112px);   /* ruimte boven/onder elke sectie */
+  /* De inhoud van een strook heeft één van drie breedtes, allemaal op dezelfde middenas en met dezelfde marge
+     (--gutter) aan de zijkant. De strook zelf loopt altijd over de volle breedte: zie .wrap. */
+  --breed:1080px;  /* het raster: header, footer, hero's, kaarten, blokken en tabellen */
+  --midden:880px;  /* de tijdlijn en de kop van een artikel */
+  --smal:640px;    /* de leeskolom: lopende tekst, juridisch, vragen en een artikel; zo'n 65 tekens per regel */
 }
 
 /* ---------- Basis ---------- */
@@ -70,7 +75,15 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--groen);color:var(--cream);padding:12px 20px;border-radius:999px;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .skip:focus{top:12px;color:var(--cream)}
 
-.wrap{max-width:1240px;margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+/* De inhoud van een strook. Hij staat in de strook en niet op de strook zelf: de bewerkschil van het CMS legt zijn
+   kader over het element met data-cms-strip, en dat moet over de volle breedte lopen. */
+.wrap{max-width:calc(var(--wrap-breedte,var(--breed)) + 2 * var(--gutter));margin-left:auto;margin-right:auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+.wrap--midden{--wrap-breedte:var(--midden)}
+.wrap--smal{--wrap-breedte:var(--smal)}
+/* Is er naast een smallere kolom niet genoeg ruimte, dan springt hij maar een paar pixels in en lijkt hij scheef te
+   staan. Daaronder vult hij het raster; de 68ch op de lopende tekst (.prose) houdt de regels dan leesbaar. */
+@media (max-width:1140px){.wrap--midden{--wrap-breedte:var(--breed)}}
+@media (max-width:860px){.wrap--smal{--wrap-breedte:var(--breed)}}
 .center{text-align:center}
 .stack{display:flex;flex-direction:column}
 .row{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
@@ -97,7 +110,7 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 /* ---------- Header ---------- */
 /* top: blijft onder de bewerkbalk van het CMS, die --made-cms-bar-height op <html> zet zolang hij er staat. */
 .site-header{position:sticky;top:var(--made-cms-bar-height,0px);z-index:40;background:rgba(246,246,240,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(64,72,48,.10)}
-.site-header__in{max-width:1240px;margin:0 auto;padding:10px var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:12px 32px}
+.site-header__in{max-width:calc(var(--breed) + 2 * var(--gutter));margin:0 auto;padding:10px var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:12px 32px}
 .site-header__logo img{height:56px;width:auto}
 .site-nav{display:flex;align-items:center;gap:0 28px}
 .site-nav a{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--groen);text-decoration:none;padding:14px 0}
@@ -530,6 +543,8 @@ a.folder:hover{transform:translateY(-4px)}
 .story{display:flex;flex-wrap:wrap;gap:56px;--kop:var(--groen)}
 .prose{display:flex;flex-direction:column;gap:22px;flex:1 1 520px;min-width:0}
 .prose p{font-size:21px;line-height:1.75}
+/* hooguit zo'n 65 tekens per regel, ook waar de kolom breder is dan --smal */
+.prose :is(p,ul,ol){max-width:68ch}
 .review--groot{width:640px;padding:48px 44px;gap:18px;align-items:center}
 .review--groot blockquote{font-size:clamp(23px,2.6vw,30px);line-height:1.45}
 .notes--licht .note{box-shadow:var(--schaduw)}
@@ -616,17 +631,19 @@ a.folder:hover{transform:translateY(-4px)}
 [data-post][hidden]{display:none!important}
 
 /* Blogartikel */
-.art-head{max-width:900px;margin:0 auto;padding:64px 16px 48px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+.art-head{padding-top:64px;padding-bottom:48px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
 .crumbs{font-size:17px;color:var(--grijs)}
-.art-hero{max-width:1080px;margin:0 auto;padding:0 16px 72px;position:relative}
+.art-hero{padding-bottom:72px;position:relative}
 .art-hero__img{border-radius:400px 400px 28px 28px;overflow:hidden;aspect-ratio:16/9;background:var(--plaatshouder)}
 .art-hero__img img{width:100%;height:100%;object-fit:cover}
-.art-hero__sticker{right:4px;bottom:36px;width:110px;height:110px;font-size:18px;transform:rotate(12deg)}
-.art-prose{max-width:712px;margin:0 auto;padding:0 16px;gap:0}
+/* steekt 12px over de rechterrand van de foto, die op de marge van .wrap ligt */
+.art-hero__sticker{right:calc(var(--gutter) - 12px);bottom:36px;width:110px;height:110px;font-size:18px;transform:rotate(12deg)}
+.art-prose{gap:0}
 .art-prose p{margin-bottom:24px;line-height:1.78}
 .art-prose .h3{margin:52px 0 18px}
 .art-lead{font-size:24px!important;line-height:1.6!important;color:var(--groen-donker)}
-.art-pols{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin:20px 0 44px}
+/* padding en geen marge: een marge valt buiten de strook, en dan sluit het kader van de bewerkschil niet aan */
+.art-pols{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;padding:20px 0 44px}
 .art-pols .polaroid{position:relative;margin:0;width:260px;max-width:100%;padding:10px 10px 40px}
 .art-pols figcaption{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-size:18px;font-style:italic;color:var(--aubergine)}
 .art-quote{margin:0;font-style:italic;color:var(--aubergine);text-align:center}
@@ -679,7 +696,7 @@ a.folder:hover{transform:translateY(-4px)}
   .contact-notes .note{transform:rotate(var(--r,0deg))!important}
 }
 /* Juridische pagina's */
-.legal{max-width:760px;padding-top:72px;padding-bottom:var(--sec);display:flex;flex-direction:column;gap:18px}
+.legal{padding-top:72px;padding-bottom:var(--sec);display:flex;flex-direction:column;gap:18px}
 .legal__meta{font-size:17px;color:var(--grijs)}
 .legal .prose{gap:0;margin-top:20px}
 .legal .prose p{margin-bottom:20px;font-size:20px;line-height:1.7}
@@ -866,8 +883,8 @@ a.folder:hover{transform:translateY(-4px)}
 @media (max-width:720px){.cal-fallback{min-height:0;padding:96px 20px 36px}}
 @media (max-width:720px){.about-hero .stamp{left:auto!important;right:2%;top:2%!important;width:84px!important;height:100px!important}.about-hero .stamp img{width:54px!important;height:54px!important}}
 /* Over mij "Van stagiaire tot planner": titel altijd boven de tekst */
-.story{flex-direction:column;gap:28px;max-width:860px}
-.story .prose{flex:none;max-width:68ch}
+.story{flex-direction:column;gap:28px}
+.story .prose{flex:none}
 
 /* Swipe-stapels: geen CSS-filter (Safari laat dan tijdens scrollen tekst wegvallen).
    De kaarten erachter worden gedimd met een zacht laagje erover. */
@@ -1051,8 +1068,9 @@ a.folder:hover{transform:translateY(-4px)}
 @media (max-width:860px){.persoonlijk__fotos{padding-right:4px}.persoonlijk__fotos .polaroid{width:52%}}
 
 /* Tekst en tekst met afbeelding: algemene stroken, voor elke pagina */
-.tekst{display:flex;flex-direction:column;gap:28px;max-width:860px}
-.tekst .prose,.tekst-foto .prose{flex:none;max-width:68ch}
+.tekst{display:flex;flex-direction:column;gap:28px}
+.tekst .prose{flex:none}
+.tekst-foto .prose{flex:none;max-width:68ch}
 .tekst .prose :is(ul,ol),.tekst-foto .prose :is(ul,ol){margin:0;padding-left:1.2em;font-size:21px;line-height:1.75}
 .tekst-foto{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:72px;align-items:center}
 .tekst-foto--rechts{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}

@@ -13,8 +13,10 @@
     ];
 @endphp
 <section class="sec-top" data-cms-strip="{{ $strip->id }}">
-    <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2 center wrap" data-reveal />
-    <p class="center" data-reveal style="margin:22px auto 56px;max-width:46ch;padding:0 24px;font-size:21px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+    <div class="wrap center">
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
+        <p data-reveal style="margin:22px auto 56px;max-width:46ch;font-size:21px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+    </div>
     <div class="split" data-reveal-group data-cms-items="kolommen">
         @foreach ($strip->kolommen as $kolom)
             @php($terugval = $fotos[$loop->index % count($fotos)])

@@ -12,10 +12,12 @@
     staat in een element met display:contents, zodat de alinea's de ruimte
     van .art-prose houden.
 --}}
-<div class="prose art-prose" data-cms-strip="{{ $strip->id }}">
-    <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h3" />
-    @if (filled($strip->inleiding))
-        <p class="art-lead" data-cms-field="inleiding"><x-regels :tekst="$strip->inleiding" /></p>
-    @endif
-    <div style="display:contents" data-cms-field="tekst">{!! $strip->tekst !!}</div>
+<div data-cms-strip="{{ $strip->id }}">
+    <div class="wrap wrap--smal prose art-prose">
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h3" />
+        @if (filled($strip->inleiding))
+            <p class="art-lead" data-cms-field="inleiding"><x-regels :tekst="$strip->inleiding" /></p>
+        @endif
+        <div style="display:contents" data-cms-field="tekst">{!! $strip->tekst !!}</div>
+    </div>
 </div>
