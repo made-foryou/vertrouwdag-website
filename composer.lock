@@ -2785,34 +2785,20 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:made-foryou/made-cms-package.git",
-                "reference": "bc5cb447a7c0e0b58167a32a44eee4f5bf38788d"
+                "reference": "89a6f80146c60267176f4de010477168b2afd7d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/bc5cb447a7c0e0b58167a32a44eee4f5bf38788d",
-                "reference": "bc5cb447a7c0e0b58167a32a44eee4f5bf38788d",
+                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/89a6f80146c60267176f4de010477168b2afd7d7",
+                "reference": "89a6f80146c60267176f4de010477168b2afd7d7",
                 "shasum": ""
             },
             "require": {
                 "bacon/bacon-qr-code": "^3.0",
                 "ext-dom": "*",
                 "ext-fileinfo": "*",
-                "illuminate/auth": "^12.0||^13.0",
-                "illuminate/cache": "^12.0||^13.0",
-                "illuminate/console": "^12.0||^13.0",
-                "illuminate/contracts": "^12.0||^13.0",
-                "illuminate/cookie": "^12.0||^13.0",
-                "illuminate/database": "^12.0||^13.0",
-                "illuminate/filesystem": "^12.0||^13.0",
-                "illuminate/hashing": "^12.0||^13.0",
-                "illuminate/http": "^12.0||^13.0",
-                "illuminate/mail": "^12.0||^13.0",
-                "illuminate/notifications": "^12.0||^13.0",
-                "illuminate/routing": "^12.0||^13.0",
-                "illuminate/session": "^12.0||^13.0",
-                "illuminate/support": "^12.0||^13.0",
-                "illuminate/view": "^12.0||^13.0",
                 "intervention/image": "^4.0",
+                "laravel/framework": "^12.0||^13.0",
                 "lorisleiva/laravel-actions": "^2.12",
                 "php": "^8.4",
                 "pragmarx/google2fa": "^8.0||^9.0",
@@ -2923,7 +2909,7 @@
                 "made-cms-package",
                 "made-foryou"
             ],
-            "time": "2026-11-19T09:58:31+00:00"
+            "time": "2026-11-19T15:58:16+00:00"
         },
         {
             "name": "monolog/monolog",
