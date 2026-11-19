@@ -29,7 +29,8 @@ test('the process page numbers the phases one to six with the wedding day as the
     $document = documentVoor('/werkwijze');
 
     expect(tekstenVan($document->querySelectorAll('.tl__badge span')))->toBe(['1', '2', '3', '4', '5', '6'])
-        ->and(tekstenVan($document->querySelectorAll('.tl__card h2')))->toBe([
+        ->and($document->querySelector('.tl__card h2'))->toBeNull()
+        ->and(tekstenVan($document->querySelectorAll('.tl__card > h3.h3')))->toBe([
             'Kennismaken en voorstel',
             'Locatie, datum en budget',
             'Leveranciers en styling',
