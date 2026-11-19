@@ -2785,12 +2785,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:made-foryou/made-cms-package.git",
-                "reference": "95ad23f5428cb4b8947c6285e3e08f2ace1dffd3"
+                "reference": "bc5cb447a7c0e0b58167a32a44eee4f5bf38788d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/95ad23f5428cb4b8947c6285e3e08f2ace1dffd3",
-                "reference": "95ad23f5428cb4b8947c6285e3e08f2ace1dffd3",
+                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/bc5cb447a7c0e0b58167a32a44eee4f5bf38788d",
+                "reference": "bc5cb447a7c0e0b58167a32a44eee4f5bf38788d",
                 "shasum": ""
             },
             "require": {
@@ -2822,7 +2822,7 @@
                 "symfony/mime": "^7.2||^8.0"
             },
             "require-dev": {
-                "brianium/paratest": "<7.28",
+                "brianium/paratest": "<7.30",
                 "larastan/larastan": "^3.13",
                 "laravel/pao": "^1.0",
                 "laravel/pint": "^1.29",
@@ -2923,7 +2923,7 @@
                 "made-cms-package",
                 "made-foryou"
             ],
-            "time": "2026-11-17T17:47:58+00:00"
+            "time": "2026-11-19T09:58:31+00:00"
         },
         {
             "name": "monolog/monolog",
