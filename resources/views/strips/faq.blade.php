@@ -34,7 +34,7 @@
     <x-json-ld :data="$strip->schema" />
 @endpush
 <section data-cms-strip="{{ $strip->id }}">
-    <div class="wrap wrap--smal" style="padding-top:56px;padding-bottom:var(--sec)">
+    <div class="wrap wrap--midden" style="padding-top:56px;padding-bottom:var(--sec)">
         @if (count($tabbladen) > 1)
             <div class="faq-box faq-box--tabbladen" data-tabfolders data-reveal>
                 <div class="faq-box__tabs" role="tablist" aria-label="Veelgestelde vragen">

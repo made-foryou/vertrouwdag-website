@@ -39,8 +39,8 @@
   /* De inhoud van een strook heeft één van drie breedtes, allemaal op dezelfde middenas en met dezelfde marge
      (--gutter) aan de zijkant. De strook zelf loopt altijd over de volle breedte: zie .wrap. */
   --breed:1080px;  /* het raster: header, footer, hero's, kaarten, blokken en tabellen */
-  --midden:880px;  /* de tijdlijn en de kop van een artikel */
-  --smal:640px;    /* de leeskolom: lopende tekst, juridisch, vragen en een artikel; zo'n 65 tekens per regel */
+  --midden:880px;  /* de tijdlijn, de vragen en de kop van een artikel */
+  --smal:640px;    /* de leeskolom: lopende tekst, juridisch en een artikel; zo'n 65 tekens per regel */
 }
 
 /* ---------- Basis ---------- */

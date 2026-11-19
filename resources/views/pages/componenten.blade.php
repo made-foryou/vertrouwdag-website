@@ -178,7 +178,7 @@
     </section>
 
     {{-- FAQ (veelgestelde-vragen.html) --}}
-    <section class="wrap wrap--smal" style="padding-top:56px;padding-bottom:var(--sec)">
+    <section class="wrap wrap--midden" style="padding-top:56px;padding-bottom:var(--sec)">
         <div class="faq-box" data-reveal>
             <span class="faq-box__tab eb">FAQ-items</span>
             <x-faq-item open>
