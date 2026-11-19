@@ -195,7 +195,8 @@ test('the checklist form on the homepage does not ask for the wedding date', fun
 
     $formulier = $document->querySelector('#checklist form#checklist-form');
 
-    expect(attributenVan($formulier?->querySelectorAll('input'), 'name'))->toBe(['voornaam', 'email', 'avg'])
+    expect(attributenVan($formulier?->querySelectorAll('input'), 'name'))->toBe(['_token', 'bron', 'website', 'voornaam', 'email', 'avg'])
+        ->and($formulier?->querySelector('input[name="bron"]')?->getAttribute('value'))->toBe('homepage')
         ->and(platteTekst($formulier?->querySelector('h2')))->toBe('Wat regel je wanneer?');
 });
 

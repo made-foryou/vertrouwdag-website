@@ -14,6 +14,7 @@
         "laravel/nightwatch": "^1.30",
         "laravel/tinker": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "lorisleiva/laravel-actions": "^2.13",
         "made-foryou/made-cms-package": "dev-main",
         "symfony/http-client": "^8.1",
         "symfony/postmark-mailer": "^8.1"
