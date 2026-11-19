@@ -145,6 +145,27 @@ describe('the seeded FAQ page', function () {
             ->and(faqSchemaVan($document)['mainEntity'][1]['acceptedAnswer']['text'])->toBe('Na de kennismaking krijgen jullie een voorstel met een vaste prijs. Bekijk wat er in elk pakket zit.');
     });
 
+    test('puts the questions of a second tab on the page and in the structured data, with the prices when asked', function () {
+        config()->set('vertrouwdag.btw_percentage', 9);
+        wijzigStrook('/veelgestelde-vragen', 'faq', fn (array $waarden): array => [
+            'label_2' => 'Kosten',
+            'vragen_2' => [['vraag' => 'Betalen we een aanbetaling?', 'antwoord' => '<p>Ja, een kwart bij de bevestiging.</p>', 'prijzen' => Faq::MET_PRIJZEN]],
+        ]);
+
+        $document = documentVoor('/veelgestelde-vragen');
+        $strook = strookVanType('/veelgestelde-vragen', $document, 'faq');
+        $zichtbaar = zichtbareVragen($document);
+
+        expect(tekstenVan($strook?->querySelectorAll('[role="tab"]')))->toBe(['Alle vragen', 'Kosten'])
+            ->and(platteTekst($strook?->querySelector('[data-cms-items="vragen_2"] summary')))->toBe('Betalen we een aanbetaling?')
+            ->and($zichtbaar[11] ?? null)->toBe([
+                'name' => 'Betalen we een aanbetaling?',
+                'text' => 'De Dag in handen (dagcoördinatie) begint bij €926,50, Hand in hand (gedeeltelijke planning) bij €2.016,50 en Helemaal in handen (full service) bij €3.815, steeds inclusief 9% btw. Ja, een kwart bij de bevestiging.',
+            ])
+            ->and(array_map(fn (array $vraag): array => ['name' => $vraag['name'], 'text' => $vraag['acceptedAnswer']['text']], faqSchemaVan($document)['mainEntity']))
+            ->toBe($zichtbaar);
+    });
+
     test('shows the prices only above the answers that ask for them', function () {
         wijzigStrook('/veelgestelde-vragen', 'faq', fn (array $waarden): array => [
             'vragen' => array_map(fn (array $vraag): array => [...$vraag, 'prijzen' => $vraag['vraag'] === 'Kunnen we een pakket aanpassen?' ? Faq::MET_PRIJZEN : null], $waarden['vragen']),

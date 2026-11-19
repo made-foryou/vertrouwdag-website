@@ -129,6 +129,7 @@ test('the edit frame finds every field of a strip type in its view', function (s
         'artikel-kop' => ['titel', 'intro', 'sticker'],
         'artikel-tekst' => ['kop', 'inleiding'],
         'blog-laatste' => ['binnenkort'],
+        'faq' => ['label_2', 'vragen_2', 'label_3', 'vragen_3'],
         'lopende-band' => ['teksten'],
         'pakketten' => ['diensten.kenmerken', 'diensten.prijs'],
         'tijdlijn' => ['eerste_nummer'],

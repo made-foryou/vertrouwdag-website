@@ -2,35 +2,57 @@
     Strook: de veelgestelde vragen in een kaart met een tabje erboven. De
     eerste vraag staat open, de rest klapt open bij een klik.
 
-    Velden: label (het tabje) en vragen (lijst met vraag, antwoord en de
-    keuze prijzen). Het antwoord is opgemaakte tekst (alinea's, links,
-    nadruk), zoals RichText van het package hem levert, en wordt
-    ongeëscapet geprint, zoals de tekst van artikel-tekst.
+    Velden: per tabblad een naam en een lijst met vragen (label en vragen,
+    label_2 en vragen_2, label_3 en vragen_3). Een vraag heeft een vraag,
+    een antwoord en de keuze prijzen. Het antwoord is opgemaakte tekst
+    (alinea's, links, nadruk), zoals RichText van het package hem levert, en
+    wordt ongeëscapet geprint, zoals de tekst van artikel-tekst.
+
+    Welke tabbladen er zijn, bepaalt App\Cms\Strips\Faq::tabbladen(): het
+    eerste altijd, het tweede en derde alleen met vragen. Met één tabblad
+    staat zijn naam als tabje boven de kaart. Met meer zijn het tabjes die
+    elk hun eigen vragen tonen, met hetzelfde gedrag als de mappen op
+    /diensten (data-tabfolders, resources/js/modules/dienstmappen.js), en
+    in elk tabblad staat de eerste vraag open. Zonder JavaScript staan de
+    tabbladen onder elkaar, elk met zijn naam erboven. Een tweede of derde
+    tabblad zonder vragen staat niet in de view: een wijziging van zijn
+    naam herlaadt het frame, net als zijn eerste vraag.
 
     Staat de keuze prijzen aan, dan staat boven het antwoord de zin met de
     vanaf-prijzen uit de pakketten (prijzenzin uit App\Cms\Strips\Faq). Die
     zin staat buiten het veld antwoord, zodat meekijken hem niet
     overschrijft. Zonder prijs voor elk pakket is er geen zin.
 
-    De strook geeft zoekmachines dezelfde vragen als FAQPage (JSON-LD,
-    schema uit App\Cms\Strips\Faq), zodat de gestructureerde gegevens altijd
-    gelijk zijn aan de pagina. Het tabje staat buiten de lijst: elk kind
-    van data-cms-items is een vraag.
+    De strook geeft zoekmachines de vragen van alle tabbladen als FAQPage
+    (JSON-LD, schema uit App\Cms\Strips\Faq), zodat de gestructureerde
+    gegevens altijd gelijk zijn aan de pagina. Het tabje staat buiten de
+    lijst: elk kind van data-cms-items is een vraag.
 --}}
 @use('App\Cms\Strips\Faq')
+@php($tabbladen = Faq::tabbladen($strip->values))
 @push('jsonld')
     <x-json-ld :data="$strip->schema" />
 @endpush
 <section class="wrap" style="max-width:920px;padding-top:56px;padding-bottom:var(--sec)" data-cms-strip="{{ $strip->id }}">
-    <div class="faq-box" data-reveal>
-        <span class="faq-box__tab eb" data-cms-field="label">{{ $strip->label }}</span>
-        <div style="display:contents" data-cms-items="vragen">
-            @foreach ($strip->vragen ?? [] as $vraag)
-                <x-faq-item :open="$loop->first" :boven="($vraag['prijzen'] ?? null) === Faq::MET_PRIJZEN ? $strip->prijzenzin : null">
-                    <x-slot:vraag data-cms-field="vraag">{{ $vraag['vraag'] }}</x-slot:vraag>
-                    <x-slot:antwoord data-cms-field="antwoord">{!! $vraag['antwoord'] !!}</x-slot:antwoord>
-                </x-faq-item>
+    @if (count($tabbladen) > 1)
+        <div class="faq-box faq-box--tabbladen" data-tabfolders data-reveal>
+            <div class="faq-box__tabs" role="tablist" aria-label="Veelgestelde vragen">
+                @foreach ($tabbladen as $tabblad)
+                    <button type="button" class="faq-box__tab eb" role="tab" id="faq-{{ $strip->id }}-{{ $loop->iteration }}" aria-controls="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-selected="{{ $loop->first ? 'true' : 'false' }}" @unless ($loop->first) tabindex="-1" @endunless><span data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span></button>
+                @endforeach
+            </div>
+            @foreach ($tabbladen as $tabblad)
+                <div @class(['faq-box__panel', 'is-active' => $loop->first]) role="tabpanel" id="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-labelledby="faq-{{ $strip->id }}-{{ $loop->iteration }}" tabindex="0">
+                    <p class="faq-box__naam eb">{{ $tabblad['naam'] }}</p>
+                    <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
+                </div>
             @endforeach
         </div>
-    </div>
+    @else
+        @php($tabblad = $tabbladen[0])
+        <div class="faq-box" data-reveal>
+            <span class="faq-box__tab eb" data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span>
+            <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
+        </div>
+    @endif
 </section>

@@ -19,6 +19,10 @@
  * Zonder JavaScript staan de mappen onder elkaar en zijn de tabjes
  * verborgen. Met prefers-reduced-motion: reduce scrolt het zonder
  * animatie.
+ *
+ * De strook faq gebruikt dezelfde tabjes voor zijn tabbladen met vragen,
+ * zonder vegen en zonder mapjes-stapel: die zoeken hier naar .tf__stack
+ * en .tf-m, en slaan over wat er niet is.
  */
 const VEEG_AFSTAND = 50; // pixels
 
