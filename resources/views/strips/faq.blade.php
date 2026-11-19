@@ -33,26 +33,28 @@
 @push('jsonld')
     <x-json-ld :data="$strip->schema" />
 @endpush
-<section class="wrap" style="max-width:920px;padding-top:56px;padding-bottom:var(--sec)" data-cms-strip="{{ $strip->id }}">
-    @if (count($tabbladen) > 1)
-        <div class="faq-box faq-box--tabbladen" data-tabfolders data-reveal>
-            <div class="faq-box__tabs" role="tablist" aria-label="Veelgestelde vragen">
+<section data-cms-strip="{{ $strip->id }}">
+    <div class="wrap wrap--smal" style="padding-top:56px;padding-bottom:var(--sec)">
+        @if (count($tabbladen) > 1)
+            <div class="faq-box faq-box--tabbladen" data-tabfolders data-reveal>
+                <div class="faq-box__tabs" role="tablist" aria-label="Veelgestelde vragen">
+                    @foreach ($tabbladen as $tabblad)
+                        <button type="button" class="faq-box__tab eb" role="tab" id="faq-{{ $strip->id }}-{{ $loop->iteration }}" aria-controls="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-selected="{{ $loop->first ? 'true' : 'false' }}" @unless ($loop->first) tabindex="-1" @endunless><span data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span></button>
+                    @endforeach
+                </div>
                 @foreach ($tabbladen as $tabblad)
-                    <button type="button" class="faq-box__tab eb" role="tab" id="faq-{{ $strip->id }}-{{ $loop->iteration }}" aria-controls="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-selected="{{ $loop->first ? 'true' : 'false' }}" @unless ($loop->first) tabindex="-1" @endunless><span data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span></button>
+                    <div @class(['faq-box__panel', 'is-active' => $loop->first]) role="tabpanel" id="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-labelledby="faq-{{ $strip->id }}-{{ $loop->iteration }}" tabindex="0">
+                        <p class="faq-box__naam eb">{{ $tabblad['naam'] }}</p>
+                        <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
+                    </div>
                 @endforeach
             </div>
-            @foreach ($tabbladen as $tabblad)
-                <div @class(['faq-box__panel', 'is-active' => $loop->first]) role="tabpanel" id="faq-{{ $strip->id }}-{{ $loop->iteration }}-vragen" aria-labelledby="faq-{{ $strip->id }}-{{ $loop->iteration }}" tabindex="0">
-                    <p class="faq-box__naam eb">{{ $tabblad['naam'] }}</p>
-                    <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
-                </div>
-            @endforeach
-        </div>
-    @else
-        @php($tabblad = $tabbladen[0])
-        <div class="faq-box" data-reveal>
-            <span class="faq-box__tab eb" data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span>
-            <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
-        </div>
-    @endif
+        @else
+            @php($tabblad = $tabbladen[0])
+            <div class="faq-box" data-reveal>
+                <span class="faq-box__tab eb" data-cms-field="{{ $tabblad['naamveld'] }}">{{ $tabblad['naam'] }}</span>
+                <x-faq-vragen :lijst="$tabblad['lijst']" :vragen="$tabblad['vragen']" :prijzenzin="$strip->prijzenzin" />
+            </div>
+        @endif
+    </div>
 </section>

@@ -15,31 +15,33 @@
     De veldwrappers hebben display:contents, zodat de alinea's en koppen
     de opmaak van .legal .prose houden.
 --}}
-<section class="wrap legal" data-cms-strip="{{ $strip->id }}">
-    <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
-    <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-    @if (filled($strip->bijgewerkt))
-        <p class="legal__meta">Laatst bijgewerkt: <span data-cms-field="bijgewerkt">{{ $strip->bijgewerkt }}</span></p>
-    @endif
-    <div class="prose">
-        @if (filled($strip->inleiding))
-            <div style="display:contents" data-cms-field="inleiding">{!! $strip->inleiding !!}</div>
+<section data-cms-strip="{{ $strip->id }}">
+    <div class="wrap wrap--smal legal">
+        <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
+        @if (filled($strip->bijgewerkt))
+            <p class="legal__meta">Laatst bijgewerkt: <span data-cms-field="bijgewerkt">{{ $strip->bijgewerkt }}</span></p>
         @endif
-        @if (filled($strip->secties))
-            <div style="display:contents" data-cms-items="secties">
-                @foreach ($strip->secties as $sectie)
-                    <div style="display:contents">
-                        <h2 class="h3" data-cms-field="kop">{{ $sectie['kop'] }}</h2>
-                        <div style="display:contents" data-cms-field="tekst">{!! $sectie['tekst'] !!}</div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-        @if (filled($strip->cookieknop))
-            <p><x-knop variant="secundair" data-cookie-open data-cms-field="cookieknop">{{ $strip->cookieknop }}</x-knop></p>
-        @endif
-        @if (filled($strip->afsluiting))
-            <div style="display:contents" data-cms-field="afsluiting">{!! $strip->afsluiting !!}</div>
-        @endif
+        <div class="prose">
+            @if (filled($strip->inleiding))
+                <div style="display:contents" data-cms-field="inleiding">{!! $strip->inleiding !!}</div>
+            @endif
+            @if (filled($strip->secties))
+                <div style="display:contents" data-cms-items="secties">
+                    @foreach ($strip->secties as $sectie)
+                        <div style="display:contents">
+                            <h2 class="h3" data-cms-field="kop">{{ $sectie['kop'] }}</h2>
+                            <div style="display:contents" data-cms-field="tekst">{!! $sectie['tekst'] !!}</div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            @if (filled($strip->cookieknop))
+                <p><x-knop variant="secundair" data-cookie-open data-cms-field="cookieknop">{{ $strip->cookieknop }}</x-knop></p>
+            @endif
+            @if (filled($strip->afsluiting))
+                <div style="display:contents" data-cms-field="afsluiting">{!! $strip->afsluiting !!}</div>
+            @endif
+        </div>
     </div>
 </section>

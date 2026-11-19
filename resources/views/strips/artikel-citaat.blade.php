@@ -5,8 +5,10 @@
     Velden: citaat. Anders dan de strook citaat heeft dit geen kop en geen
     monogram.
 --}}
-<div class="reviews" style="margin:40px 0" data-cms-strip="{{ $strip->id }}">
-    <div class="wrap" style="max-width:760px;padding-block:80px;display:flex;justify-content:center">
-        <blockquote class="review review--groot art-quote" data-reveal style="transform:rotate(-1.5deg)" data-cms-field="citaat"><x-regels :tekst="$strip->citaat" /></blockquote>
+<div style="padding:40px 0" data-cms-strip="{{ $strip->id }}">
+    <div class="reviews">
+        <div class="wrap wrap--smal" style="padding-block:80px;display:flex;justify-content:center">
+            <blockquote class="review review--groot art-quote" data-reveal style="transform:rotate(-1.5deg)" data-cms-field="citaat"><x-regels :tekst="$strip->citaat" /></blockquote>
+        </div>
     </div>
 </div>

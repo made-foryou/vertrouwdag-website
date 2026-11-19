@@ -42,7 +42,7 @@
     @endpush
 @endif
 <header data-cms-strip="{{ $strip->id }}">
-    <div class="art-head" data-reveal>
+    <div class="wrap wrap--midden art-head" data-reveal>
         <x-kruimelpad :links="['Home' => url('/'), 'Blog' => url(Blogs::ADRES)]" :huidig="$blog?->categorie->label()" />
         @if ($blog)
             <div class="row" style="gap:12px;justify-content:center">
@@ -54,7 +54,7 @@
         @endif
         <x-made-cms::heading :heading="$strip->titel" field="titel" emphasis class="h1" />
     </div>
-    <div class="art-hero" data-reveal>
+    <div class="wrap art-hero" data-reveal>
         <div class="art-hero__img"><img src="{{ $foto['url'] }}" alt="{{ $foto['alt'] }}" width="{{ $foto['width'] ?? 1100 }}" height="{{ $foto['height'] ?? 733 }}" fetchpriority="high" data-cms-field="foto" data-foto></div>
         @if (filled($strip->sticker))
             <div class="sticker sticker--aub art-hero__sticker" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>

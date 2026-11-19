@@ -17,7 +17,7 @@ describe('the seeded legal pages', function () {
         $this->get($url)->assertOk()->assertViewIs('page');
 
         $document = documentVoor($url);
-        $strook = $document->querySelector('main > section.wrap.legal');
+        $strook = $document->querySelector('main > section[data-cms-strip] > .wrap.legal');
 
         expect($document->querySelector('title')?->textContent)->toBe($titel)
             ->and(striptypenOp($url, $document))->toBe(['juridisch'])

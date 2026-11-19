@@ -114,6 +114,45 @@ test('every strip type of the cms renders its view with its default values', fun
 })->with('striptypes');
 
 /**
+ * De klassen die het stylesheet in een regel van alleen die klasse een breedte of een marge geeft, zoals .wrap.
+ *
+ * @return list<string>
+ */
+function klassenMetBreedteOfMarge(): array
+{
+    $css = preg_replace('#/\*.*?\*/#s', '', (string) file_get_contents(resource_path('css/style.css')));
+    preg_match_all('/([^{}]+)\{([^{}]*)\}/', (string) $css, $regels, PREG_SET_ORDER);
+
+    $klassen = [];
+
+    foreach ($regels as [, $selectors, $declaraties]) {
+        if (preg_match('/(?:^|;)\s*(?:max-width|width|margin)/', $declaraties) !== 1) {
+            continue;
+        }
+
+        foreach (explode(',', $selectors) as $selector) {
+            if (preg_match('/^\.([\w-]+)$/', trim($selector), $klasse) === 1) {
+                $klassen[] = $klasse[1];
+            }
+        }
+    }
+
+    return array_values(array_unique($klassen));
+}
+
+/**
+ * De bewerkschil legt een kader over het element met data-cms-strip. Dat element loopt daarom over de volle breedte
+ * en sluit zonder marge aan op de strook erboven en eronder; de breedte van de inhoud zit op een .wrap in de strook.
+ */
+test('every strip type spans the full width, so the edit frame outlines it from edge to edge', function (string $striptype) {
+    $strook = strookMetStandaardwaarden(new $striptype);
+    $klassen = array_filter(explode(' ', $strook?->getAttribute('class') ?? ''));
+
+    expect(array_values(array_intersect($klassen, klassenMetBreedteOfMarge())))->toBe([])
+        ->and($strook?->getAttribute('style') ?? '')->not->toMatch('/width|margin/');
+})->with('striptypes');
+
+/**
  * Het frame van de bewerkschil zoekt een veld op zijn data-cms-field, en een veld in een lijst binnen het item: elk
  * direct kind van data-cms-items is één item, en een lijst mag op meer plekken staan (resources/launcher/edit.js in het
  * package). Een keuze herlaadt het frame altijd, en de velden hieronder bewust: daar staat in de view waarom. Een veld

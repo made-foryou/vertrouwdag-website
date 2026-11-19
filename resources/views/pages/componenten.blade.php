@@ -16,7 +16,7 @@
     og-title="Componenten · vertrouwdag"
     noindex
 >
-    <section class="wrap legal">
+    <section class="wrap wrap--smal legal">
         <p class="eb">Alleen lokaal</p>
         <h1 class="h1">Compo<em>nenten</em></h1>
         <p class="legal__meta">De bouwstenen uit resources/views/components, met de inhoud uit het ontwerp. Test op 375, 768 en 1440 px, en met "Verminder beweging" aan.</p>
@@ -178,7 +178,7 @@
     </section>
 
     {{-- FAQ (veelgestelde-vragen.html) --}}
-    <section class="wrap" style="max-width:920px;padding-top:56px;padding-bottom:var(--sec)">
+    <section class="wrap wrap--smal" style="padding-top:56px;padding-bottom:var(--sec)">
         <div class="faq-box" data-reveal>
             <span class="faq-box__tab eb">FAQ-items</span>
             <x-faq-item open>
