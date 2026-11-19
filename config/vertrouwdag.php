@@ -22,20 +22,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Canoniek adres
-    |--------------------------------------------------------------------------
-    |
-    | Het adres van de live site, zonder slash aan het eind. De canonical
-    | en og:url van elke pagina wijzen hierheen, ook op staging en lokaal,
-    | zodat zoekmachines alleen de live site als de echte zien. Alleen voor
-    | een lokale meting met Lighthouse zet je hier tijdelijk het lokale adres.
-    |
-    */
-
-    'canonieke_url' => env('VERTROUWDAG_CANONIEKE_URL', 'https://vertrouwdag.nl'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Btw
     |--------------------------------------------------------------------------
     |

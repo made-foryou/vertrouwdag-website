@@ -40,21 +40,23 @@ test('a published page of the cms shows its strips in the layout of the site', f
 
     $document = documentVoor('/testpagina');
 
-    expect(tekstenVan($document->querySelectorAll('title')))->toBe(['Testpagina | vertrouwdag'])
-        ->and($document->querySelector('meta[name="description"]')?->getAttribute('content'))->toBe('Weddingplanner in Zuid-Holland. Warm en persoonlijk, en tegelijk strak georganiseerd.')
+    expect(tekstenVan($document->querySelectorAll('title')))->toBe(['Testpagina · vertrouwdag'])
+        ->and($document->querySelector('meta[name="description"]'))->toBeNull()
         ->and($document->querySelector('header.site-header #site-nav'))->not->toBeNull()
         ->and($document->querySelector('footer.site-footer'))->not->toBeNull()
         ->and($document->querySelector('main [data-cms-strip] [data-cms-field="kop"] em')?->textContent)->toBe('kennismaken?');
 });
 
-test('a page of the cms at an address of the fixed list takes its title and description from that list', function () {
-    $page = Page::factory()->published()->at('/werkwijze')->create(['title' => 'Een andere titel']);
+test('the title and description in google come from the cms, not from the name of the page', function () {
+    $page = Page::factory()->published()->at('/werkwijze')
+        ->withMeta('Werkwijze: zo plan ik jullie bruiloft | vertrouwdag', 'Van het eerste kennismakingsgesprek tot de dag na de bruiloft.')
+        ->create(['title' => 'Een andere titel']);
 
     $document = HTMLDocument::createFromString((string) $this->view('page', ['page' => $page]), LIBXML_NOERROR);
 
     expect(tekstenVan($document->querySelectorAll('title')))->toBe(['Werkwijze: zo plan ik jullie bruiloft | vertrouwdag'])
-        ->and($document->querySelector('meta[name="description"]')?->getAttribute('content'))->toBe('Van het eerste kennismakingsgesprek tot de dag na de bruiloft: zo werk ik als weddingplanner in Zuid-Holland, stap voor stap.')
-        ->and($document->querySelector('meta[property="og:title"]')?->getAttribute('content'))->toBe('Werkwijze: zo plan ik jullie bruiloft · vertrouwdag');
+        ->and($document->querySelector('meta[name="description"]')?->getAttribute('content'))->toBe('Van het eerste kennismakingsgesprek tot de dag na de bruiloft.')
+        ->and($document->querySelector('meta[property="og:title"]')?->getAttribute('content'))->toBe('Werkwijze: zo plan ik jullie bruiloft | vertrouwdag');
 });
 
 test('a page made, filled and published in the cms is at its address', function () {

@@ -35,19 +35,19 @@ test('the open graph description falls back to the description and the type to w
         ->and($document->querySelector('meta[property="og:type"]')?->getAttribute('content'))->toBe('website');
 });
 
-test('the canonical points to the same path on the live address from the config, without the query string', function (string $url, string $canonical) {
+test('the canonical of a page of the cms is its path on the url of the site, without the query string', function (string $url, string $path) {
     $this->withoutVite();
-    config(['vertrouwdag.canonieke_url' => 'https://voorbeeld.nl/']);
     $this->seed(HomepaginaSeeder::class);
     Page::factory()->published()->at('/blog/archief')->create(['title' => 'Archief']);
 
     $document = documentVoor($url);
+    $canonical = rtrim(url('/'), '/').$path;
 
     expect($document->querySelector('link[rel="canonical"]')?->getAttribute('href'))->toBe($canonical)
         ->and($document->querySelector('meta[property="og:url"]')?->getAttribute('content'))->toBe($canonical);
 })->with([
-    'homepage' => ['/?utm_source=nieuwsbrief', 'https://voorbeeld.nl/'],
-    'subpage' => ['/blog/archief?pagina=2', 'https://voorbeeld.nl/blog/archief'],
+    'homepage' => ['/?utm_source=nieuwsbrief', '/'],
+    'subpage' => ['/blog/archief?pagina=2', '/blog/archief'],
 ]);
 
 test('a page with noindex asks search engines to skip it and has no canonical', function () {

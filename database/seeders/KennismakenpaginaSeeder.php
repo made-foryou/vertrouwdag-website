@@ -18,6 +18,21 @@ class KennismakenpaginaSeeder extends PaginaSeeder
         return 'Kennismaken';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Plan een kennismaking | vertrouwdag weddingplanner';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Plan een vrijblijvend kennismakingsgesprek van 30 minuten, online of op locatie. Vertel over jullie plannen, ik vertel hoe ik kan helpen.';
+    }
+
+    protected function shareImage(): ?string
+    {
+        return 'romy.jpg';
+    }
+
     protected function inMenu(): bool
     {
         return false;

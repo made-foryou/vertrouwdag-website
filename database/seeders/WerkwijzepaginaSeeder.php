@@ -20,6 +20,16 @@ class WerkwijzepaginaSeeder extends PaginaSeeder
         return 'Werkwijze';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Werkwijze: zo plan ik jullie bruiloft | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Van het eerste kennismakingsgesprek tot de dag na de bruiloft: zo werk ik als weddingplanner in Zuid-Holland, stap voor stap.';
+    }
+
     protected function stroken(): array
     {
         return [

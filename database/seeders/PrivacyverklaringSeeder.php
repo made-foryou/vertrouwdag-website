@@ -21,6 +21,16 @@ class PrivacyverklaringSeeder extends PaginaSeeder
         return 'Privacyverklaring';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Privacyverklaring | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Hoe vertrouwdag omgaat met jullie persoonsgegevens.';
+    }
+
     protected function inMenu(): bool
     {
         return false;

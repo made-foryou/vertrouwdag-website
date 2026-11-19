@@ -19,6 +19,16 @@ class CookiebeleidSeeder extends PaginaSeeder
         return 'Cookiebeleid';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Cookiebeleid | vertrouwdag';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Welke cookies vertrouwdag.nl gebruikt, waarvoor, en hoe jullie je keuze aanpassen.';
+    }
+
     protected function inMenu(): bool
     {
         return false;

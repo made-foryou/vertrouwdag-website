@@ -3,10 +3,8 @@
     van de site met de stroken van de pagina. Elke strook rendert met zijn
     view in resources/views/strips.
 
-    Titel en omschrijving komen uit app/Support/PaginaSeo.php: uit de
-    vaste lijst op het adres van de pagina, van een artikel uit zijn
-    artikelkop, en anders de titel uit het CMS met de algemene
-    omschrijving. Kan het CMS dat per pagina, dan vervalt dit (#23).
+    Titel, omschrijving, Open Graph en noindex komen uit het CMS: de
+    layout krijgt de pagina mee (#23).
 
     De homepage beschrijft het bedrijf voor zoekmachines (JSON-LD uit
     App\Support\BedrijfSchema). Dat hangt aan het adres en niet aan een
@@ -20,9 +18,8 @@
 --}}
 @use('App\Support\BedrijfSchema')
 @use('App\Support\Blogs')
-@use('App\Support\PaginaSeo')
 @use('Made\CmsPackage\Content\Data\PagePath')
-<x-layouts::site :seo="PaginaSeo::voorPagina($page)">
+<x-layouts::site :page="$page">
     @if ($page->route?->path === PagePath::HOME)
         @push('jsonld')
             <x-json-ld :data="BedrijfSchema::uitConfig()" />

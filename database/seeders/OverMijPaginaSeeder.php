@@ -19,6 +19,21 @@ class OverMijPaginaSeeder extends PaginaSeeder
         return 'Over mij';
     }
 
+    protected function metaTitle(): ?string
+    {
+        return 'Over Romy | Persoonlijke weddingplanner in Zuid-Holland';
+    }
+
+    protected function metaDescription(): ?string
+    {
+        return 'Ik ben Romy, de weddingplanner achter vertrouwdag. Punctueel, met oog voor detail en vanuit het hart, zodat jullie op jullie trouwdag alleen maar hoeven te genieten.';
+    }
+
+    protected function shareImage(): ?string
+    {
+        return 'romy.jpg';
+    }
+
     protected function stroken(): array
     {
         return [
