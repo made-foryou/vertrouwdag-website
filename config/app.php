@@ -78,7 +78,8 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    // The site is Dutch only, on every environment, so the locale does not depend on the .env file.
+    'locale' => 'nl',
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 

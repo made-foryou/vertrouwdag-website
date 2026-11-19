@@ -74,6 +74,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Checklist
+    |--------------------------------------------------------------------------
+    |
+    | De pdf die de link in de checklist-mail opent (#25). Hij staat buiten
+    | public/, zodat alleen wie zich aanmeldt hem krijgt. Een nieuwe versie
+    | komt met een deploy. De bestandsnaam is wat de bezoeker ziet als hij
+    | de pdf opslaat.
+    |
+    */
+
+    'checklist' => [
+        'pdf' => resource_path('downloads/vertrouwdag-trouwplanning-checklist.pdf'),
+        'filename' => 'vertrouwdag-trouwplanning-checklist.pdf',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Google Analytics 4
     |--------------------------------------------------------------------------
     |

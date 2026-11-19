@@ -33,7 +33,8 @@ test('the checklist page asks for a first name, email address, optional wedding 
 
     expect(platteTekst($hero?->querySelector('h1')))->toBe('Wat regel je wanneer?')
         ->and($hero?->querySelector('h1 em')?->textContent)->toBe('wanneer?')
-        ->and(attributenVan($formulier?->querySelectorAll('input'), 'name'))->toBe(['voornaam', 'email', 'trouwdatum', 'avg'])
+        ->and(attributenVan($formulier?->querySelectorAll('input'), 'name'))->toBe(['_token', 'bron', 'website', 'voornaam', 'email', 'trouwdatum', 'avg'])
+        ->and($formulier?->querySelector('input[name="bron"]')?->getAttribute('value'))->toBe('checklist')
         ->and(attributenVan($formulier?->querySelectorAll('input[required]'), 'name'))->toBe(['voornaam', 'email', 'avg'])
         ->and($formulier?->querySelector('input[name="email"]')?->getAttribute('type'))->toBe('email')
         ->and($formulier?->querySelector('.check a')?->getAttribute('href'))->toBe(url('/privacyverklaring'))

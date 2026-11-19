@@ -524,6 +524,18 @@ describe('checklist-formulier', function () {
             ->and($formulier?->querySelector('.form-msg[role="status"]')?->hasAttribute('hidden'))->toBeTrue();
     });
 
+    test('the form posts the signup with a csrf token and hides the honeypot from people', function () {
+        $document = renderComponent('<x-checklist-formulier />');
+        $form = $document->querySelector('form#checklist-form');
+        $honeypot = $form?->querySelector('input[name="website"]');
+
+        expect($form?->getAttribute('action'))->toBe(route('checklist.signup'))
+            ->and($form?->querySelector('input[name="_token"]')?->getAttribute('type'))->toBe('hidden')
+            ->and($honeypot?->getAttribute('tabindex'))->toBe('-1')
+            ->and($honeypot?->getAttribute('autocomplete'))->toBe('off')
+            ->and($honeypot?->closest('[aria-hidden="true"]'))->not->toBeNull();
+    });
+
     test('the form can ask for an optional wedding date', function () {
         $document = renderComponent('<x-checklist-formulier trouwdatum />');
         $datum = $document->querySelector('input[name="trouwdatum"]');

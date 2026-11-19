@@ -18,6 +18,13 @@ return [
         'key' => env('POSTMARK_API_KEY'),
     ],
 
+    // The newsletter list of vertrouwdag (#25): see App\Checklist\MailerLite.
+    'mailerlite' => [
+        'url' => 'https://connect.mailerlite.com/api',
+        'key' => env('MAILERLITE_API_KEY'),
+        'group' => env('MAILERLITE_GROUP_ID'),
+    ],
+
     'resend' => [
         'key' => env('RESEND_API_KEY'),
     ],

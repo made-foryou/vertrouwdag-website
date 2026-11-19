@@ -1,42 +1,113 @@
 /*
- * Checklist-formulier: na versturen een bedankmelding.
+ * Checklist-formulier: aanmelden zonder de pagina te verlaten (#25).
  *
- * Het formulier verstuurt nog niets, dat komt in #25. De browser
- * controleert eerst de verplichte velden en het e-mailadres; pas als
- * die kloppen komt het submit-event. Staat er een bedankblok (#bedankt)
- * op de pagina, zoals op /checklist, dan verschijnt dat en wordt het
- * formulier leeggemaakt. De focus gaat naar de kop van het bedankblok,
- * zodat ook een schermlezer de bevestiging hoort. Anders toont het
- * formulier de melding uit zijn data-bedankt in .form-msg.
+ * De browser controleert eerst de verplichte velden en het e-mailadres;
+ * pas als die kloppen komt het submit-event. Dan post deze module het
+ * formulier op de achtergrond en vraagt om JSON.
+ *
+ * Gelukt: staat er een bedankblok (#bedankt) op de pagina, zoals op
+ * /checklist, dan verschijnt dat en wordt het formulier leeggemaakt. De
+ * focus gaat naar de kop van het bedankblok, zodat ook een schermlezer de
+ * bevestiging hoort. Anders toont het formulier de melding uit zijn
+ * data-bedankt in .form-msg.
+ *
+ * Niet gelukt: de eerste fout van de server, of de melding voor een
+ * verlopen pagina (419), te veel aanvragen (429) of een storing, komt in
+ * .form-msg. Een afgekeurd veld krijgt aria-invalid.
+ *
+ * Zonder JavaScript post het formulier gewoon en komt de bezoeker terug
+ * op het formulier, met dezelfde meldingen.
  */
 export default function checklistFormulier() {
-    const formulieren = document.querySelectorAll('form[data-bedankt]');
+    const forms = document.querySelectorAll('form[data-bedankt]');
 
-    if (!formulieren.length) {
+    if (!forms.length) {
         return;
     }
 
-    const minderBeweging = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    formulieren.forEach((formulier) => {
-        formulier.addEventListener('submit', (event) => {
+    forms.forEach((form) => {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const bedankt = document.getElementById('bedankt');
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            clearInvalidFields(form);
 
-            if (bedankt) {
-                bedankt.hidden = false;
-                bedankt.scrollIntoView({ behavior: minderBeweging ? 'auto' : 'smooth', block: 'center' });
-                bedankt.querySelector('[data-cms-field="kop"]')?.focus({ preventScroll: true });
-                formulier.reset();
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { Accept: 'application/json' },
+                });
 
-                return;
+                if (response.ok) {
+                    showThanks(form, prefersReducedMotion);
+
+                    return;
+                }
+
+                const body = await response.json().catch(() => ({}));
+
+                markInvalidFields(form, body.errors ?? {});
+                showMessage(form, messageFor(form, response.status, body));
+            } catch {
+                showMessage(form, form.dataset.messageFailed);
+            } finally {
+                button.disabled = false;
             }
-
-            const melding = formulier.querySelector('.form-msg');
-
-            melding.textContent = formulier.dataset.bedankt;
-            melding.hidden = false;
         });
     });
+}
+
+function showThanks(form, prefersReducedMotion) {
+    const thanks = document.getElementById('bedankt');
+
+    if (thanks) {
+        thanks.hidden = false;
+        thanks.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+        thanks.querySelector('[data-cms-field="kop"]')?.focus({ preventScroll: true });
+        form.reset();
+        form.querySelector('.form-msg').hidden = true;
+
+        return;
+    }
+
+    showMessage(form, form.dataset.bedankt);
+}
+
+function messageFor(form, status, body) {
+    if (status === 422) {
+        const [firstErrors] = Object.values(body.errors ?? {});
+
+        return firstErrors?.[0] ?? form.dataset.messageFailed;
+    }
+
+    if (status === 419) {
+        return form.dataset.messageExpired;
+    }
+
+    if (status === 429) {
+        return body.message ?? form.dataset.messageThrottled;
+    }
+
+    return form.dataset.messageFailed;
+}
+
+function showMessage(form, text) {
+    const message = form.querySelector('.form-msg');
+
+    message.textContent = text;
+    message.hidden = false;
+}
+
+function markInvalidFields(form, errors) {
+    Object.keys(errors).forEach((name) => {
+        form.querySelector(`[name="${CSS.escape(name)}"]`)?.setAttribute('aria-invalid', 'true');
+    });
+}
+
+function clearInvalidFields(form) {
+    form.querySelectorAll('[aria-invalid]').forEach((field) => field.removeAttribute('aria-invalid'));
 }

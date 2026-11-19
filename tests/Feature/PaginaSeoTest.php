@@ -84,11 +84,11 @@ test('the pages above cover every page of the site, so a new page cannot skip th
     $this->seed(PaginasSeeder::class);
 
     /**
-     * Adressen zonder vaste pagina voor bezoekers: de health check, de stijlgids (alleen lokaal, noindex) en de
-     * catch-all van het CMS. Die laatste serveert de pagina's uit het CMS. Die tellen hieronder mee zoals de seeders
-     * ze zetten; hun SEO komt uit dezelfde lijst (App\Support\PaginaSeo).
+     * Adressen zonder vaste pagina voor bezoekers: de health check, de stijlgids (alleen lokaal, noindex), de link
+     * naar de checklist-pdf (#25, noindex) en de catch-all van het CMS. Die laatste serveert de pagina's uit het CMS.
+     * Die tellen hieronder mee zoals de seeders ze zetten; hun SEO komt uit dezelfde lijst (App\Support\PaginaSeo).
      */
-    $geenPagina = ['up', 'componenten', '{path?}'];
+    $geenPagina = ['up', 'componenten', 'checklist/openen/{signup}', '{path?}'];
     $adressen = [];
 
     foreach (Router::getRoutes()->getRoutes() as $route) {
