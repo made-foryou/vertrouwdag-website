@@ -8,6 +8,7 @@ use App\Support\Pakket;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
 use Made\CmsPackage\Content\Strips\Fields\Choice;
+use Made\CmsPackage\Content\Strips\Fields\Field;
 use Made\CmsPackage\Content\Strips\Fields\Items;
 use Made\CmsPackage\Content\Strips\Fields\RichText;
 use Made\CmsPackage\Content\Strips\Fields\Text;
@@ -18,6 +19,12 @@ use Made\CmsPackage\Content\Strips\StripType;
  * tabje, waarvan de eerste openstaat. Hij rendert met de view
  * resources/views/strips/faq.blade.php.
  *
+ * De vragen staan in hooguit drie tabbladen, elk met een naam en een eigen
+ * lijst (TABBLADEN). Het package kent geen lijst in een lijst, daarom zijn
+ * het drie vaste lijsten. Het eerste tabblad is er altijd; het tweede en
+ * derde alleen als er een vraag in staat. Met één tabblad is de naam het
+ * tabje boven de kaart, zoals voor de tabbladen er waren.
+ *
  * Een antwoord is opgemaakte tekst. De prijzen staan alleen in de strook
  * pakketten op /diensten (#17). Daarom typt een redacteur geen bedragen,
  * maar zet hij per vraag de keuze prijzen aan. De strook zet dan boven het
@@ -25,9 +32,9 @@ use Made\CmsPackage\Content\Strips\StripType;
  * App\Support\Aanbod (besluit Menno, 2026-11-12, zie #18). Heeft niet elk
  * pakket een prijs, dan valt die zin weg.
  *
- * with() geeft de zin als prijzenzin, en de vragen als FAQPage voor
- * zoekmachines als schema, met de zin erbij. Zo zijn de pagina en de
- * gestructureerde gegevens altijd gelijk.
+ * with() geeft de zin als prijzenzin, en de vragen van alle tabbladen als
+ * FAQPage voor zoekmachines als schema, met de zin erbij. Zo zijn de pagina
+ * en de gestructureerde gegevens altijd gelijk.
  */
 final class Faq extends StripType
 {
@@ -35,6 +42,23 @@ final class Faq extends StripType
      * De waarde van de keuze prijzen die de zin boven het antwoord zet.
      */
     public const string MET_PRIJZEN = 'noemen';
+
+    /**
+     * Per tabblad het veld met zijn naam en de lijst met zijn vragen, in de
+     * volgorde van de tabjes.
+     *
+     * @var array<string, string>
+     */
+    public const array TABBLADEN = [
+        'label' => 'vragen',
+        'label_2' => 'vragen_2',
+        'label_3' => 'vragen_3',
+    ];
+
+    /**
+     * De naam van een tabblad met vragen waarvan de naam leeg is.
+     */
+    public const string NAAMLOOS_TABBLAD = 'Vragen';
 
     public function key(): string
     {
@@ -48,22 +72,18 @@ final class Faq extends StripType
 
     public function description(): string
     {
-        return 'Vragen met een antwoord dat openklapt, ook voor zoekmachines. Een antwoord kan de prijzen van de pakketten noemen.';
+        return 'Vragen met een antwoord dat openklapt, ook voor zoekmachines, in hooguit drie tabbladen. Een antwoord kan de prijzen van de pakketten noemen.';
     }
 
     public function fields(): array
     {
         return [
             Text::make('label')
+                ->label('Tabblad 1')
                 ->default('Alle vragen')
-                ->hint('Het tabje boven de kaart.'),
-            Items::make('vragen', [
-                Text::make('vraag')->required(),
-                RichText::make('antwoord')->required(),
-                Choice::make('prijzen', [
-                    self::MET_PRIJZEN => 'Noem de vanaf-prijzen boven het antwoord',
-                ])->hint('De prijzen inclusief btw komen uit de pakketten op Diensten. Leeg: alleen het antwoord.'),
-            ])
+                ->hint('De naam op het tabje boven de kaart. Met een tweede of derde tabblad de naam van deze groep vragen; houd hem dan kort, want op een telefoon staan de tabjes naast elkaar.'),
+            Items::make('vragen', self::vraagvelden())
+                ->label('Vragen in tabblad 1')
                 ->min(1)
                 ->itemLabel('Vraag')
                 ->default([
@@ -114,6 +134,69 @@ final class Faq extends StripType
                     ],
                 ])
                 ->hint('De eerste vraag staat open.'),
+            Text::make('label_2')
+                ->label('Tabblad 2')
+                ->hint('Het tabblad verschijnt zodra er een vraag in staat. Houd de naam kort, want op een telefoon staan de tabjes naast elkaar.'),
+            Items::make('vragen_2', self::vraagvelden())
+                ->label('Vragen in tabblad 2')
+                ->itemLabel('Vraag')
+                ->hint('De eerste vraag staat open.'),
+            Text::make('label_3')
+                ->label('Tabblad 3')
+                ->hint('Het tabblad verschijnt zodra er een vraag in staat. Houd de naam kort, want op een telefoon staan de tabjes naast elkaar.'),
+            Items::make('vragen_3', self::vraagvelden())
+                ->label('Vragen in tabblad 3')
+                ->itemLabel('Vraag')
+                ->hint('De eerste vraag staat open.'),
+        ];
+    }
+
+    /**
+     * De tabbladen die de strook toont, in hun volgorde: het eerste altijd,
+     * het tweede en derde alleen met vragen. Een tabblad zonder naam heet
+     * NAAMLOOS_TABBLAD.
+     *
+     * @param  array<string, mixed>  $values
+     * @return list<array{naamveld: string, naam: string, lijst: string, vragen: list<array<string, mixed>>}>
+     */
+    public static function tabbladen(array $values): array
+    {
+        $tabbladen = [];
+
+        foreach (self::TABBLADEN as $naamveld => $lijst) {
+            $vragen = array_values($values[$lijst] ?? []);
+            $isEerste = $naamveld === array_key_first(self::TABBLADEN);
+
+            if ($vragen === [] && ! $isEerste) {
+                continue;
+            }
+
+            $naam = $values[$naamveld] ?? null;
+
+            $tabbladen[] = [
+                'naamveld' => $naamveld,
+                'naam' => is_string($naam) && trim($naam) !== '' ? $naam : self::NAAMLOOS_TABBLAD,
+                'lijst' => $lijst,
+                'vragen' => $vragen,
+            ];
+        }
+
+        return $tabbladen;
+    }
+
+    /**
+     * De velden van één vraag, gelijk in elk tabblad.
+     *
+     * @return list<Field>
+     */
+    private static function vraagvelden(): array
+    {
+        return [
+            Text::make('vraag')->required(),
+            RichText::make('antwoord')->required(),
+            Choice::make('prijzen', [
+                self::MET_PRIJZEN => 'Noem de vanaf-prijzen boven het antwoord',
+            ])->hint('De prijzen inclusief btw komen uit de pakketten op Diensten. Leeg: alleen het antwoord.'),
         ];
     }
 
@@ -126,7 +209,7 @@ final class Faq extends StripType
         $prijzenzin = $this->prijzenzin(app(Aanbod::class));
         $vragen = [];
 
-        foreach ($values['vragen'] ?? [] as $vraag) {
+        foreach (array_merge(...array_column(self::tabbladen($values), 'vragen')) as $vraag) {
             $metPrijzen = $prijzenzin !== null && ($vraag['prijzen'] ?? null) === self::MET_PRIJZEN;
 
             $vragen[] = [

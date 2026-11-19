@@ -5,6 +5,7 @@ use App\Support\Blogcategorie;
 use App\Support\Dienst;
 use App\Support\Pakket;
 use App\Support\Prijs;
+use Dom\Element;
 use Illuminate\View\ViewException;
 
 beforeEach(function () {
@@ -370,6 +371,67 @@ test('the FAQ strip shows no sentence with the prices when there is none', funct
     $document = renderStrip('faq', ['label' => 'Alle vragen', 'vragen' => $vragen, 'prijzenzin' => null]);
 
     expect($document->querySelector('details.faq summary + p'))->toBeNull();
+});
+
+/**
+ * Vragen voor de strook faq, met elk hetzelfde korte antwoord.
+ *
+ * @return list<array{id: null, vraag: string, antwoord: string}>
+ */
+function faqVragen(string ...$vragen): array
+{
+    return array_map(fn (string $vraag): array => ['id' => null, 'vraag' => $vraag, 'antwoord' => '<p>Antwoord.</p>'], $vragen);
+}
+
+test('the FAQ strip puts each group of questions behind its own tab, with the first tab open', function () {
+    $document = renderStrip('faq', [
+        'label' => 'Planning', 'vragen' => faqVragen('Wanneer beginnen we?', 'Hoeveel contact hebben we?'),
+        'label_2' => 'Kosten', 'vragen_2' => faqVragen('Wat kost het?'),
+        'label_3' => 'De dag zelf', 'vragen_3' => faqVragen('Wat als het regent?'),
+    ]);
+    $tabjes = $document->querySelectorAll('.faq-box > [role="tablist"] > [role="tab"]');
+    $panelen = $document->querySelectorAll('.faq-box > [role="tabpanel"]');
+
+    expect(tekstenVan($tabjes))->toBe(['Planning', 'Kosten', 'De dag zelf'])
+        ->and(attributenVan($tabjes, 'aria-selected'))->toBe(['true', 'false', 'false'])
+        ->and(attributenVan($tabjes, 'tabindex'))->toBe([null, '-1', '-1'])
+        ->and(attributenVan($tabjes, 'aria-controls'))->toBe(attributenVan($panelen, 'id'))
+        ->and(attributenVan($panelen, 'aria-labelledby'))->toBe(attributenVan($tabjes, 'id'))
+        ->and(array_map(fn (Element $paneel): bool => $paneel->classList->contains('is-active'), iterator_to_array($panelen)))->toBe([true, false, false])
+        ->and(attributenVan($document->querySelectorAll('[role="tab"] [data-cms-field]'), 'data-cms-field'))->toBe(['label', 'label_2', 'label_3'])
+        ->and(attributenVan($document->querySelectorAll('[role="tabpanel"] > [data-cms-items]'), 'data-cms-items'))->toBe(['vragen', 'vragen_2', 'vragen_3'])
+        ->and(array_map(fn (Element $vraag): bool => $vraag->hasAttribute('open'), iterator_to_array($document->querySelectorAll('details.faq'))))->toBe([true, false, true, true]);
+});
+
+test('the FAQ strip leaves out a tab without questions', function () {
+    $document = renderStrip('faq', [
+        'label' => 'Planning', 'vragen' => faqVragen('Wanneer beginnen we?'),
+        'label_2' => 'Kosten', 'vragen_2' => [],
+        'label_3' => 'De dag zelf', 'vragen_3' => faqVragen('Wat als het regent?'),
+    ]);
+
+    expect(tekstenVan($document->querySelectorAll('[role="tab"]')))->toBe(['Planning', 'De dag zelf'])
+        ->and(attributenVan($document->querySelectorAll('[role="tabpanel"] > [data-cms-items]'), 'data-cms-items'))->toBe(['vragen', 'vragen_3']);
+});
+
+test('the FAQ strip keeps its single tab above the card when only the first group has questions', function () {
+    $document = renderStrip('faq', [
+        'label' => 'Alle vragen', 'vragen' => faqVragen('Wanneer beginnen we?'),
+        'label_2' => 'Kosten', 'vragen_2' => [],
+    ]);
+
+    expect($document->querySelector('[role="tablist"]'))->toBeNull()
+        ->and($document->querySelector('.faq-box > .faq-box__tab[data-cms-field="label"]')?->textContent)->toBe('Alle vragen')
+        ->and($document->querySelectorAll('.faq-box > [data-cms-items="vragen"] > details.faq'))->toHaveCount(1);
+});
+
+test('the FAQ strip names a tab without a name after its questions', function () {
+    $document = renderStrip('faq', [
+        'label' => 'Planning', 'vragen' => faqVragen('Wanneer beginnen we?'),
+        'label_2' => null, 'vragen_2' => faqVragen('Wat kost het?'),
+    ]);
+
+    expect(tekstenVan($document->querySelectorAll('[role="tab"]')))->toBe(['Planning', 'Vragen']);
 });
 
 test('the notes of the FAQ hero start again with the first colour after the third', function () {
