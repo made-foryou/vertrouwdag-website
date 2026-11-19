@@ -3,6 +3,8 @@
 namespace App\Cms\Strips;
 
 use App\Cms\Velden;
+use App\Support\Icoon;
+use Made\CmsPackage\Content\Strips\Fields\Choice;
 use Made\CmsPackage\Content\Strips\Fields\Items;
 use Made\CmsPackage\Content\Strips\Fields\LongText;
 use Made\CmsPackage\Content\Strips\Fields\Text;
@@ -13,9 +15,10 @@ use Made\CmsPackage\Content\Strips\StripType;
  * bruidsparen als briefjes. Hij rendert met de view
  * resources/views/strips/herkenning.blade.php.
  *
- * Kleur, draaiing en icoon horen bij de plek van een briefje en beginnen
- * na het vierde opnieuw; die liggen vast in de view. De knop is de
- * kennismaking uit config/vertrouwdag.php.
+ * Kleur en draaiing horen bij de plek van een briefje en beginnen na het
+ * vierde opnieuw; die liggen vast in de view. Het icoon kiest de
+ * redacteur per citaat uit App\Support\Icoon; zonder keuze is het dat
+ * van de plek. De knop is de kennismaking uit config/vertrouwdag.php.
  */
 final class Herkenning extends StripType
 {
@@ -45,6 +48,8 @@ final class Herkenning extends StripType
                 ->default('Klinkt dit *een beetje* als jullie?'),
             Items::make('citaten', [
                 LongText::make('tekst')->required(),
+                Choice::make('icoon', Icoon::class)
+                    ->hint('Zonder keuze krijgt het briefje het icoon van zijn plek: klok, hart, lijstje of telefoon.'),
             ])
                 ->min(1)
                 ->itemLabel('Citaat')
@@ -54,7 +59,7 @@ final class Herkenning extends StripType
                     ['tekst' => '"Drie offertes, vijf tabbladen en nog steeds geen overzicht."'],
                     ['tekst' => '"Wie belt de bloemist als er op de dag iets misgaat?"'],
                 ])
-                ->hint('Kleur en icoon horen bij de plek en beginnen na het vierde citaat opnieuw.'),
+                ->hint('De kleur hoort bij de plek en begint na het vierde citaat opnieuw.'),
             Text::make('slotzin')
                 ->default('Jullie hoeven op jullie dag niets meer te regelen, en jullie familie ook niet.'),
         ];

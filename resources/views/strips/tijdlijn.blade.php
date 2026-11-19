@@ -22,7 +22,7 @@
 <section @if ($opBand) class="band" @endif data-cms-strip="{{ $strip->id }}">
     <ol class="tl wrap wrap--midden sec" @if ($eersteNummer !== 1) start="{{ $eersteNummer }}" @endif data-cms-items="fases">
         @foreach ($strip->fases as $fase)
-            <li @class(['tl__step', 'tl__step--r' => $loop->even]) data-reveal><x-fasenummer :nummer="$eersteNummer + $loop->index" /><div class="tl__card"><p class="eb eb--sm eb--grijs" data-cms-field="periode">{{ $fase['periode'] }}</p><h2 class="h3" data-cms-field="titel">{{ $fase['titel'] }}</h2><p class="tl__txt" data-cms-field="tekst"><x-regels :tekst="$fase['tekst']" /></p></div></li>
+            <li @class(['tl__step', 'tl__step--r' => $loop->even]) data-reveal><x-fasenummer :nummer="$eersteNummer + $loop->index" /><div class="tl__card"><p class="eb eb--sm eb--grijs" data-cms-field="periode">{{ $fase['periode'] }}</p><h3 class="h3" data-cms-field="titel">{{ $fase['titel'] }}</h3><p class="tl__txt" data-cms-field="tekst"><x-regels :tekst="$fase['tekst']" /></p></div></li>
         @endforeach
     </ol>
 </section>
