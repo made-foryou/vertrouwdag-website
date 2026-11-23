@@ -39,7 +39,8 @@ use Tests\TestCase;
 pest()->extend(TestCase::class)
     ->use(LazilyRefreshDatabase::class)
     ->beforeEach(function () {
-        Storage::fake('public');
+        // Fake the disk the package stores media on, not a fixed one: a local .env may point it at a real bucket.
+        Storage::fake(config()->string('made-cms-package.media.disk'));
         app()->instance(UploadMedia::class, new class
         {
             public function handle(UploadedMedia $upload): Media
