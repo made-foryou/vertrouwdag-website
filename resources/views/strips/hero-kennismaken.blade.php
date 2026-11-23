@@ -44,7 +44,7 @@
         <div class="meet__cal" data-reveal>
             <div class="polaroid tilt meet__pol" style="transform:rotate(-8deg)">
                 <x-foto :foto="$strip->foto" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto" />
-                <span style="font-size:17px;bottom:7px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
+                <span style="font-size:17px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
             </div>
             <div class="cal-box" id="agenda">
                 <div class="cal-box__stripe" aria-hidden="true"></div>

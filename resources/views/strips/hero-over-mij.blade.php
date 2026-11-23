@@ -14,7 +14,7 @@
             <div class="stamp tilt" style="left:0;top:6%;width:112px;height:132px;transform:rotate(-9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" style="width:72px;height:72px"></div>
             <div class="polaroid tilt" style="right:0;bottom:6%;width:42%;padding:10px 10px 40px;transform:rotate(7deg)">
                 <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/kus-zwartwit.jpg" alt="Zwart-witfoto van een bruidspaar" :breedte="1100" :hoogte="641" veld="foto_polaroid" />
-                <span style="font-size:18px;bottom:9px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
+                <span style="font-size:18px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
             </div>
         </div>
         <div class="hero__txt" data-reveal style="gap:24px">

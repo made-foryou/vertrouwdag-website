@@ -24,11 +24,11 @@
         <div class="hero__media hero__media--d ww-media" data-reveal style="aspect-ratio:1/.86">
             <div class="polaroid tilt" style="left:8%;top:4%;width:54%;padding:10px 10px 42px;transform:rotate(-5deg)">
                 <x-foto :foto="$strip->foto_boven" terugval="resources/images/paar-landschap.jpg" alt="Bruidspaar wandelt door een weids landschap" :breedte="1100" :hoogte="733" veld="foto_boven" fetchpriority="high" />
-                <span style="font-size:19px;bottom:10px" data-cms-field="bijschrift_boven">{{ $strip->bijschrift_boven }}</span>
+                <span style="font-size:19px" data-cms-field="bijschrift_boven">{{ $strip->bijschrift_boven }}</span>
             </div>
             <div class="polaroid tilt" style="right:8%;bottom:2%;width:48%;padding:10px 10px 42px;transform:rotate(6deg)">
                 <x-foto :foto="$strip->foto_onder" terugval="resources/images/ringen-goud.jpg" alt="Twee gouden trouwringen" :breedte="1100" :hoogte="733" veld="foto_onder" />
-                <span style="font-size:19px;bottom:10px" data-cms-field="bijschrift_onder">{{ $strip->bijschrift_onder }}</span>
+                <span style="font-size:19px" data-cms-field="bijschrift_onder">{{ $strip->bijschrift_onder }}</span>
             </div>
         </div>
     </div>
