@@ -6,9 +6,9 @@
     App\Support\Blogs, of null. Zonder artikel blijft de strook leeg.
 --}}
 <section data-cms-strip="{{ $strip->id }}">
-    <div class="wrap" style="padding-bottom:72px">
+    <div class="wrap" data-reveal style="padding-bottom:72px">
         @if ($strip->blog)
-            <a class="feature" href="{{ $strip->blog->url() }}" data-reveal>
+            <a class="feature" href="{{ $strip->blog->url() }}">
                 <div class="feature__img"><img src="{{ $strip->blog->afbeelding }}" alt="{{ $strip->blog->alt }}" width="1100" height="733" data-foto></div>
                 <div class="feature__txt">
                     <div class="row" style="gap:12px"><span class="eb eb--sm pill-tag" data-cms-field="label">{{ $strip->label }}</span><span class="eb eb--sm">{{ $strip->blog->kenmerk() }}</span></div>

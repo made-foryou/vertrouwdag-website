@@ -38,13 +38,6 @@ test('the first button of the hero is the one from the cms, and the button to th
     'leeg' => [null, 'Plan een kennismaking', '/kennismaken'],
 ]);
 
-test('the hero enters with the page and never waits for scrolling, so its heading and photo are there at once', function () {
-    $document = renderStrip('hero', ['kop' => kop('Kop', 'h1')]);
-
-    expect($document->querySelectorAll('.hero > [data-entrance]')->length)->toBe(2)
-        ->and($document->querySelector('[data-reveal], [data-reveal-group]'))->toBeNull();
-});
-
 test('the services strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving']];
 

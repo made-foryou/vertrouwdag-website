@@ -427,8 +427,8 @@ html:not(.motion) *{transition:none!important;animation:none!important;scroll-be
    The columns of a hero have data-entrance: their children come
    in one after another as the page paints, in CSS only, so
    nothing waits for JavaScript and a page from the back/forward
-   cache does not play it again. Headings, paragraphs and the
-   photo of the first screen are the candidates for the LCP, so
+   cache does not play it again. Headings, paragraphs, prose and
+   the photo of the first screen are the candidates for the LCP, so
    they only rise and never start invisible (#34, decision 5).
    The header fades in only when a visit arrives (.arrival, see
    components/motion.blade.php), so it stays put between pages.
@@ -441,7 +441,7 @@ html:not(.motion) *{transition:none!important;animation:none!important;scroll-be
 @keyframes entrance-zoom{from{scale:1.04}}
 @keyframes entrance-fade{from{opacity:0}}
 .motion [data-entrance]>*{animation:entrance-in var(--motion-medium) var(--ease) calc(var(--i,0) * var(--motion-stagger)) backwards}
-.motion [data-entrance]>:is(h1,.h1,p:not(.eb)),.motion [data-entrance]>:has(img[fetchpriority="high"]){animation-name:entrance-rise}
+.motion [data-entrance]>:is(h1,.h1,p:not(.eb),.prose),.motion [data-entrance]>:has(img[fetchpriority="high"]){animation-name:entrance-rise}
 .motion [data-entrance] :is(.arch,.art-hero__img)>img[fetchpriority="high"]{animation:entrance-zoom .9s var(--ease) backwards}
 .motion.arrival .site-header{animation:entrance-fade var(--motion-short) var(--ease) backwards}
 

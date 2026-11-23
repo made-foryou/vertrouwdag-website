@@ -11,7 +11,7 @@
 --}}
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap wrap--smal sec tekst">
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
-        <div class="prose" data-reveal data-cms-field="tekst">{!! $strip->tekst !!}</div>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" />
+        <div class="prose" data-reveal="text" data-cms-field="tekst">{!! $strip->tekst !!}</div>
     </div>
 </section>

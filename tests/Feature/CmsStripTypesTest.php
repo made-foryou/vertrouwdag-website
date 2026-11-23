@@ -144,6 +144,27 @@ function klassenMetBreedteOfMarge(): array
 }
 
 /**
+ * Every strip moves the way #37 gives its kind (data-reveal), and a hero enters with the page (data-entrance, #36), so
+ * a strip an editor adds moves along by itself. A hero never waits for scrolling: its heading and photo are the LCP.
+ * The legal strip holds the heading of its page, so it enters like a hero. The marquee moves by itself, and the
+ * thank-you block stays hidden until the form is sent (#40).
+ */
+test('every strip type comes in when it scrolls into view, and a hero enters with the page', function (string $striptype) {
+    $type = new $striptype;
+    $strook = strookMetStandaardwaarden($type);
+    $isHero = str_starts_with($type->key(), 'hero') || in_array($type->key(), ['artikel-kop', 'juridisch'], true);
+
+    if (in_array($type->key(), ['lopende-band', 'checklist-bedankt'], true)) {
+        expect($strook?->querySelector('[data-reveal], [data-reveal-group], [data-entrance]'))->toBeNull();
+
+        return;
+    }
+
+    expect($strook?->querySelector($isHero ? '[data-entrance]' : '[data-reveal], [data-reveal-group]'))->not->toBeNull()
+        ->and($isHero ? $strook?->querySelector('[data-reveal], [data-reveal-group]') : null)->toBeNull();
+})->with('striptypes');
+
+/**
  * De bewerkschil legt een kader over het element met data-cms-strip. Dat element loopt daarom over de volle breedte
  * en sluit zonder marge aan op de strook erboven en eronder; de breedte van de inhoud zit op een .wrap in de strook.
  */

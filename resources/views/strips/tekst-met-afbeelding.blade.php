@@ -24,10 +24,10 @@
 @endphp
 <section data-cms-strip="{{ $strip->id }}">
     <div @class(['wrap sec tekst-foto', 'tekst-foto--rechts' => $rechts])>
-        <div class="tekst-foto__media" data-reveal>
+        <div class="tekst-foto__media" data-reveal="photo">
             <x-foto :foto="$strip->afbeelding" terugval="resources/images/bruid-rozen.jpg" :breedte="1100" :hoogte="1650" veld="afbeelding" loading="lazy" />
         </div>
-        <div class="tekst-foto__txt" data-reveal>
+        <div class="tekst-foto__txt" data-reveal="text">
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             <div class="prose" data-cms-field="tekst">{!! $strip->tekst !!}</div>
         </div>

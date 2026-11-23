@@ -8,7 +8,7 @@
 --}}
 <section class="reviews" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec" style="display:flex;justify-content:center">
-        <x-review groot zegel data-reveal>
+        <x-review groot zegel data-reveal="note">
             @if (filled($strip->kop))
                 <x-slot:kop data-cms-field="kop">{{ $strip->kop }}</x-slot:kop>
             @endif

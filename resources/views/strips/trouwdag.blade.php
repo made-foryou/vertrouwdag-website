@@ -24,9 +24,9 @@
         @if ($nummer !== false)
             <x-fasenummer :nummer="$nummer" groot data-reveal />
         @endif
-        <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
-        <div class="notes" data-deck data-reveal-group data-cms-items="briefjes">
+        <p class="eb eb--lila" data-reveal="text" data-cms-field="label">{{ $strip->label }}</p>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" />
+        <div class="notes" data-deck data-reveal-group="notes" data-cms-items="briefjes">
             @foreach ($strip->briefjes as $briefje)
                 @php($plek = $briefjes[$loop->index % count($briefjes)])
                 <x-briefje :kleur="$plek['kleur']" :draaiing="$plek['draaiing']" style="min-height:190px">
@@ -36,6 +36,6 @@
             @endforeach
         </div>
         <x-stapel-bolletjes :aantal="count($strip->briefjes)" />
-        <p data-reveal style="font-size:21px;max-width:46ch" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
+        <p data-reveal="text" style="font-size:21px;max-width:46ch" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
     </div>
 </section>

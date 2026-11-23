@@ -16,10 +16,10 @@
 @endphp
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:22px;text-align:center">
-        <p class="eb" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal style="max-width:18ch" />
-        <p data-reveal style="font-size:21px;line-height:1.65;max-width:48ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
-        <div class="notes notes--licht" data-deck data-reveal-group style="padding-top:32px" data-cms-items="kwaliteiten">
+        <p class="eb" data-reveal="text" data-cms-field="label">{{ $strip->label }}</p>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" style="max-width:18ch" />
+        <p data-reveal="text" style="font-size:21px;line-height:1.65;max-width:48ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+        <div class="notes notes--licht" data-deck data-reveal-group="notes" style="padding-top:32px" data-cms-items="kwaliteiten">
             @foreach ($strip->kwaliteiten as $kwaliteit)
                 @php($plek = $briefjes[$loop->index % count($briefjes)])
                 <x-briefje :kleur="$plek['kleur']" :draaiing="$plek['draaiing']" style="text-align:left;align-items:flex-start;gap:10px;box-shadow:var(--schaduw)">
