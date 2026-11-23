@@ -34,6 +34,12 @@
   --serif:'Cormorant',Georgia,serif;
   --sans:'Unbounded',system-ui,sans-serif;
   --ease:cubic-bezier(.22,.61,.36,1);
+  /* Motion (#35): calm and short, see #34. Sliding in and fading photos use these; #36, #37 and #40 build on them. */
+  --motion-short:.3s;
+  --motion-medium:.5s;
+  --motion-long:.8s;
+  --motion-distance:24px;
+  --motion-stagger:.12s;  /* between the children of a data-reveal-group */
   --gutter:clamp(16px,6vw,80px);
   --sec:clamp(72px,9vw,112px);   /* ruimte boven/onder elke sectie */
   /* De inhoud van een strook heeft één van drie breedtes, allemaal op dezelfde middenas en met dezelfde marge
@@ -355,9 +361,9 @@ a.folder:hover{transform:translateY(-4px)}
   .split,.cta-split{grid-template-columns:1fr}
 }
 
-@media (prefers-reduced-motion:reduce){
-  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
-}
+/* Without the class motion nothing moves: with prefers-reduced-motion: reduce, in the edit mode of the CMS and
+   without JavaScript (#35, see components/motion.blade.php). */
+html:not(.motion) *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 
 
 /* ==========================================================
@@ -418,27 +424,28 @@ a.folder:hover{transform:translateY(-4px)}
 
 /* ==========================================================
    Inschuiven bij scrollen
-   Alleen actief als JavaScript draait (class .js op <html>),
-   dus zonder JS is alles gewoon zichtbaar.
+   Alleen actief met de class .motion op <html> (#35), dus
+   zonder JS, met reduced motion en in de bewerkmodus van het
+   CMS is alles gewoon zichtbaar. De kinderen van een groep
+   komen na elkaar binnen: inschuiven.js geeft elk zijn --i.
    ========================================================== */
-.js [data-reveal],.js [data-reveal-group]>*,.js [data-reveal-inner]>*{opacity:0;translate:0 28px;transition:opacity .8s var(--ease) var(--d,0s),translate .8s var(--ease) var(--d,0s),transform .5s var(--ease),box-shadow .5s,padding .3s var(--ease)}
-.js [data-reveal].is-in,.js [data-reveal-group].is-in>*,.js [data-reveal-inner].is-in>*{opacity:1;translate:none}
+[data-reveal-group]>*{--d:calc(var(--i,0) * var(--motion-stagger))}
+.motion [data-reveal],.motion [data-reveal-group]>*,.motion [data-reveal-inner]>*{opacity:0;translate:0 var(--motion-distance);transition:opacity var(--motion-long) var(--ease) var(--d,0s),translate var(--motion-long) var(--ease) var(--d,0s),transform .5s var(--ease),box-shadow .5s,padding .3s var(--ease)}
+.motion [data-reveal].is-in,.motion [data-reveal-group].is-in>*,.motion [data-reveal-inner].is-in>*{opacity:1;translate:none}
 
 /* ==========================================================
    Foto's laden (#39)
    Een foto met data-foto blijft onzichtbaar op de plaatshouder
    van het element eromheen tot hij geladen is, en faadt dan in
-   (fotos-laden.js). Alleen met JavaScript en zonder reduced
-   motion. Een animatie en geen transition, zodat het inzoomen
-   bij hover zijn eigen transition houdt. De foto van het eerste
-   scherm (fetchpriority="high") is de LCP en begint nooit
-   onzichtbaar (#34, besluit 5).
+   (fotos-laden.js). Alleen met de class .motion (#35). Een
+   animatie en geen transition, zodat het inzoomen bij hover
+   zijn eigen transition houdt. De foto van het eerste scherm
+   (fetchpriority="high") is de LCP en begint nooit onzichtbaar
+   (#34, besluit 5).
    ========================================================== */
 @keyframes foto-in{from{opacity:0}}
-@media (prefers-reduced-motion:no-preference){
-  .js img[data-foto]:not([fetchpriority="high"],.is-geladen){opacity:0}
-  .js img[data-foto].is-infaden:not([fetchpriority="high"]){animation:foto-in .6s var(--ease)}
-}
+.motion img[data-foto]:not([fetchpriority="high"],.is-geladen){opacity:0}
+.motion img[data-foto].is-infaden:not([fetchpriority="high"]){animation:foto-in var(--motion-medium) var(--ease)}
 
 /* ==========================================================
    Extra mobiele correcties
@@ -457,11 +464,8 @@ a.folder:hover{transform:translateY(-4px)}
   .paper{width:64%;aspect-ratio:auto;height:280px}
   .paper__row{font-size:15px;padding:7px 0}
 }
-@media (prefers-reduced-motion:reduce){
-  .js [data-reveal],.js [data-reveal-group]>*,.js [data-reveal-inner]>*{opacity:1!important;translate:none!important}
-  /* Toegevoegd (#4): de stapelkaarten op mobiel (verderop) hebben een eigen transition!important die *{transition:none!important} wint; .js maakt deze regel specifieker */
-  .js .notes .note,.js .folders[data-deck] .folder{transition:none!important}
-}
+/* Toegevoegd (#4): de stapelkaarten op mobiel (verderop) hebben een eigen transition!important die html:not(.motion) *{transition:none!important} wint; deze regel is specifieker */
+html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{transition:none!important}
 
 
 /* ==========================================================
@@ -480,7 +484,7 @@ a.folder:hover{transform:translateY(-4px)}
   .notes .note{
     flex:0 0 230px;min-height:210px;position:relative;scroll-snap-align:center;
     transform:rotate(var(--r,0deg)) scale(.86)!important;
-    transition:transform .45s var(--ease),box-shadow .45s,opacity .8s var(--ease) var(--d,0s),translate .8s var(--ease) var(--d,0s)!important;
+    transition:transform .45s var(--ease),box-shadow .45s,opacity var(--motion-long) var(--ease) var(--d,0s),translate var(--motion-long) var(--ease) var(--d,0s)!important;
   }
   /* Aangepast (#4): overlap en bolletjes alleen met JavaScript; zonder JS een gewone rij om door te vegen */
   .notes .note+.note{margin-left:16px}
@@ -510,7 +514,7 @@ a.folder:hover{transform:translateY(-4px)}
   .folders[data-deck] .folder{
     flex:0 0 min(78vw,300px);scroll-snap-align:center;padding-top:110px;
     transform:scale(.88);transform-origin:center 60%;
-    transition:transform .45s var(--ease),opacity .8s var(--ease) var(--d,0s),translate .8s var(--ease) var(--d,0s)!important;
+    transition:transform .45s var(--ease),opacity var(--motion-long) var(--ease) var(--d,0s),translate var(--motion-long) var(--ease) var(--d,0s)!important;
   }
   /* Aangepast (#4): overlap alleen met JavaScript, zie de briefjes hierboven */
   .folders[data-deck] .folder+.folder{margin-left:16px}
@@ -1022,7 +1026,7 @@ a.folder:hover{transform:translateY(-4px)}
   .notes .note{-webkit-backface-visibility:visible;backface-visibility:visible;will-change:auto}
   .notes .note:not(.is-active){transform:rotate(var(--r,0deg))!important}
   .notes .note.is-active{transform:none!important}
-  .js [data-deck][data-reveal-group]>*{opacity:1!important;translate:none!important}
+  .motion [data-deck][data-reveal-group]>*{opacity:1!important;translate:none!important}
   .folders[data-deck] .folder:not(.is-active) .folder__body::after{opacity:1;background:rgba(45,51,31,.08)}
   .folders[data-deck] .folder__body>*:not(.folder__tab):not(.folder__icon){position:relative;z-index:1}
   .folders[data-deck] .folder__icon{z-index:1}

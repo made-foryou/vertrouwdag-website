@@ -17,13 +17,14 @@
  * swipe-stapel.js haalt hem naar voren en laat zijn bolletje oplichten.
  *
  * Zonder JavaScript staan de mappen onder elkaar en zijn de tabjes
- * verborgen. Met prefers-reduced-motion: reduce scrolt het zonder
- * animatie.
+ * verborgen. Zonder beweging (#35) scrolt het zonder animatie.
  *
  * De strook faq gebruikt dezelfde tabjes voor zijn tabbladen met vragen,
  * zonder vegen en zonder mapjes-stapel: die zoeken hier naar .tf__stack
  * en .tf-m, en slaan over wat er niet is.
  */
+import { isMotionAllowed } from '../motion';
+
 const VEEG_AFSTAND = 50; // pixels
 
 export default function dienstmappen() {
@@ -34,7 +35,6 @@ export default function dienstmappen() {
     }
 
     const mobiel = window.matchMedia('(max-width: 720px)');
-    const minderBeweging = window.matchMedia('(prefers-reduced-motion: reduce)');
     const header = document.querySelector('.site-header');
 
     // De plek op de pagina zonder transforms: de mappen schuiven bij het
@@ -54,7 +54,7 @@ export default function dienstmappen() {
 
         window.scrollTo({
             top: paginaTop(element) - ruimte,
-            behavior: animatie && !minderBeweging.matches ? 'smooth' : 'auto',
+            behavior: animatie && isMotionAllowed() ? 'smooth' : 'auto',
         });
     };
 
@@ -148,7 +148,7 @@ export default function dienstmappen() {
             scrolNaar(mobieleStapel.parentElement, animatie);
             mobieleStapel.scrollTo({
                 left: kaart.offsetLeft - (mobieleStapel.clientWidth - kaart.offsetWidth) / 2,
-                behavior: animatie && !minderBeweging.matches ? 'smooth' : 'auto',
+                behavior: animatie && isMotionAllowed() ? 'smooth' : 'auto',
             });
         };
 

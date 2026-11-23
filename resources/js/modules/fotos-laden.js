@@ -9,9 +9,12 @@
  * knippert.
  *
  * Een foto die niet laadt, wordt ook getoond: dan staat zijn alt-tekst
- * er, zoals zonder deze module. In de bewerkmodus van het CMS faadt niets
- * (#34, besluit 4), dus daar staat elke foto er meteen.
+ * er, zoals zonder deze module. Zonder beweging (reduced motion of de
+ * bewerkmodus van het CMS, #35) faadt niets, dus daar staat elke foto er
+ * meteen.
  */
+import { isMotionAllowed } from '../motion';
+
 export default function fotosLaden() {
     const fotos = document.querySelectorAll('img[data-foto]');
 
@@ -19,10 +22,8 @@ export default function fotosLaden() {
         return;
     }
 
-    const bewerkmodus = new URLSearchParams(window.location.search).get('made-cms') === 'edit';
-
     fotos.forEach((foto) => {
-        if (bewerkmodus || foto.complete) {
+        if (!isMotionAllowed() || foto.complete) {
             foto.classList.add('is-geladen');
 
             return;

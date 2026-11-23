@@ -7,8 +7,11 @@
  * het terug, wat niet te zien is omdat de kloon er dan precies staat.
  * Het loopt via een script (niet via CSS), zodat het overal gelijk loopt.
  *
- * Met prefers-reduced-motion: reduce staat de band stil, wel vol.
+ * Zonder beweging (reduced motion of de bewerkmodus van het CMS, #35)
+ * staat de band stil, wel vol.
  */
+import { isMotionAllowed } from '../motion';
+
 const SNELHEID = 45; // pixels per seconde
 
 export default function lopendeBand() {
@@ -66,13 +69,21 @@ export default function lopendeBand() {
         }, 200);
     });
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!isMotionAllowed()) {
         return;
     }
 
     let vorige = null;
 
     const stap = (nu) => {
+        // Zet de bezoeker reduced motion aan terwijl de pagina open is, dan blijft de band staan waar hij is.
+        if (!isMotionAllowed()) {
+            vorige = null;
+            requestAnimationFrame(stap);
+
+            return;
+        }
+
         if (vorige !== null) {
             // Na een pauze (ander tabblad) niet ineens verspringen.
             const verstreken = Math.min((nu - vorige) / 1000, 0.1);
