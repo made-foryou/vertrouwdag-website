@@ -3,12 +3,16 @@
  *
  * Een element met data-reveal schuift in zodra het in beeld komt. Bij
  * data-reveal-group komen de kinderen na elkaar binnen, bij
- * data-reveal-inner tegelijk. De stylesheet verbergt ze alleen als de
- * html de klasse js heeft, dus zonder JavaScript is alles zichtbaar.
+ * data-reveal-inner tegelijk: elk kind krijgt zijn plek in de groep als
+ * --i, de stylesheet rekent daar de vertraging mee uit. De stylesheet
+ * verbergt ze alleen als de html de klasse motion heeft (#35), dus zonder
+ * JavaScript is alles zichtbaar.
  *
- * Met prefers-reduced-motion: reduce (of zonder IntersectionObserver)
- * staat alles meteen op zijn plek.
+ * Zonder beweging (reduced motion of de bewerkmodus van het CMS) of zonder
+ * IntersectionObserver staat alles meteen op zijn plek.
  */
+import { isMotionAllowed } from '../motion';
+
 export default function inschuiven() {
     const elementen = document.querySelectorAll('[data-reveal],[data-reveal-group],[data-reveal-inner]');
 
@@ -17,12 +21,10 @@ export default function inschuiven() {
     }
 
     document.querySelectorAll('[data-reveal-group]').forEach((groep) => {
-        [...groep.children].forEach((kind, index) => kind.style.setProperty('--d', `${index * 0.12}s`));
+        [...groep.children].forEach((kind, index) => kind.style.setProperty('--i', index));
     });
 
-    const minderBeweging = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (minderBeweging || !('IntersectionObserver' in window)) {
+    if (!isMotionAllowed() || !('IntersectionObserver' in window)) {
         elementen.forEach((element) => element.classList.add('is-in'));
 
         return;

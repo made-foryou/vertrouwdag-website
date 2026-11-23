@@ -11,9 +11,10 @@
  * naar voren zodra hij (of een link erin) de focus krijgt, en Enter
  * opent een link meteen. Een stapel zonder links of knoppen (briefjes)
  * wordt op mobiel zelf focusbaar; de pijltjes bladeren dan door de
- * kaarten. Met prefers-reduced-motion: reduce schuift de stapel zonder
- * animatie.
+ * kaarten. Zonder beweging (#35) schuift de stapel zonder animatie.
  */
+import { isMotionAllowed } from '../motion';
+
 const FOCUSBAAR = 'a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])';
 
 const LABEL = 'Briefjes, blader met de pijltjestoetsen';
@@ -26,7 +27,6 @@ export default function swipeStapel() {
     }
 
     const mobiel = window.matchMedia('(max-width: 720px)');
-    const minderBeweging = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     stapels.forEach((stapel) => {
         const kaarten = [...stapel.children];
@@ -81,7 +81,7 @@ export default function swipeStapel() {
 
         const naarVoren = (kaart) => {
             kaart.scrollIntoView({
-                behavior: minderBeweging.matches ? 'auto' : 'smooth',
+                behavior: isMotionAllowed() ? 'smooth' : 'auto',
                 inline: 'center',
                 block: 'nearest',
             });

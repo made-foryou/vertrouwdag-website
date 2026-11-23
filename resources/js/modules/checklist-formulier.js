@@ -18,14 +18,14 @@
  * Zonder JavaScript post het formulier gewoon en komt de bezoeker terug
  * op het formulier, met dezelfde meldingen.
  */
+import { isMotionAllowed } from '../motion';
+
 export default function checklistFormulier() {
     const forms = document.querySelectorAll('form[data-bedankt]');
 
     if (!forms.length) {
         return;
     }
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     forms.forEach((form) => {
         form.addEventListener('submit', async (event) => {
@@ -43,7 +43,7 @@ export default function checklistFormulier() {
                 });
 
                 if (response.ok) {
-                    showThanks(form, prefersReducedMotion);
+                    showThanks(form);
 
                     return;
                 }
@@ -61,12 +61,12 @@ export default function checklistFormulier() {
     });
 }
 
-function showThanks(form, prefersReducedMotion) {
+function showThanks(form) {
     const thanks = document.getElementById('bedankt');
 
     if (thanks) {
         thanks.hidden = false;
-        thanks.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+        thanks.scrollIntoView({ behavior: isMotionAllowed() ? 'smooth' : 'auto', block: 'center' });
         thanks.querySelector('[data-cms-field="kop"]')?.focus({ preventScroll: true });
         form.reset();
         form.querySelector('.form-msg').hidden = true;

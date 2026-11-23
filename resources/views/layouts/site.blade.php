@@ -65,7 +65,7 @@
     <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/monogram-groen.png') }}">
     <link rel="preload" href="{{ Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
     <x-consent-mode />
-    <script>document.documentElement.classList.add('js')</script>
+    <x-motion />
     @vite(['resources/css/style.css', 'resources/js/app.js'])
     @stack('jsonld')
 </head>
