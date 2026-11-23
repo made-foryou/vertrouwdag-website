@@ -7,6 +7,9 @@ export default defineConfig({
             input: ['resources/css/style.css', 'resources/js/app.js'],
             assets: ['resources/images/**', 'resources/fonts/**'],
             refresh: true,
+            // The Herd site is vertrouwdag.test, not the directory name, so point the plugin at that certificate.
+            // Without it the dev server silently falls back to http, which browsers block as mixed content.
+            detectTls: 'vertrouwdag.test',
         }),
     ],
     server: {
