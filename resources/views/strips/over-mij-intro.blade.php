@@ -14,7 +14,7 @@
             <div class="arch"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto_boog" loading="lazy" /></div>
             <div class="polaroid tilt" style="right:0;bottom:8%;width:44%;padding:10px 10px 40px;transform:rotate(6deg)">
                 <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/ringen-pioenen.jpg" alt="Trouwringen tussen roze pioenrozen" :breedte="1100" :hoogte="733" veld="foto_polaroid" loading="lazy" />
-                <span style="font-size:18px;bottom:9px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
+                <span style="font-size:18px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
             </div>
         </div>
         <div class="about__txt" data-reveal>

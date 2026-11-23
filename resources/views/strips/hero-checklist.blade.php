@@ -14,7 +14,7 @@
         <div class="hero__media cl-media" data-reveal aria-hidden="true">
             <div class="polaroid tilt" style="left:6%;top:4%;width:58%;padding:10px 10px 42px;transform:rotate(-7deg);z-index:1">
                 <x-foto :foto="$strip->foto" terugval="resources/images/ringen-pioenen.jpg" :breedte="1100" :hoogte="733" decoratief veld="foto" fetchpriority="high" />
-                <span style="font-size:19px;bottom:10px">nog 12 maanden</span>
+                <span style="font-size:19px">nog 12 maanden</span>
             </div>
             <div class="cl-paper">
                 <p class="eb" style="font-size:9px;margin-bottom:10px">Trouwplanning-checklist</p>

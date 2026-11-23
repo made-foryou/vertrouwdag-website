@@ -145,6 +145,10 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .hero{display:flex;flex-wrap:wrap;align-items:center;gap:56px;padding-top:64px;padding-bottom:88px}
 .hero__txt{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:26px}
 .hero__media{flex:1 1 460px;min-width:0;position:relative;aspect-ratio:1/1.02}
+/* With an arch the aspect ratio is the minimum height: next to a longer text the arch grows along with the text
+   column, instead of floating in the middle with white space above and below it. A collage of loose polaroids and
+   notes keeps its composition. */
+@media (min-width:721px){.hero__media:has(>.arch){align-self:stretch}}
 .hero__media--d{flex-basis:400px;aspect-ratio:1/.92}
 .arch{position:absolute;overflow:hidden;border-radius:999px 999px 28px 28px;background:var(--plaatshouder)}
 .arch img{width:100%;height:100%;object-fit:cover}
@@ -152,7 +156,13 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .polaroid{position:absolute;background:linear-gradient(var(--plaatshouder) 0 0) center/calc(100% - 2px) calc(100% - 2px) no-repeat content-box,var(--papier);padding:12px 12px 46px;box-shadow:0 18px 48px rgba(45,51,31,.14);border-radius:6px}
 .polaroid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:3px}
 .polaroid--wide img{aspect-ratio:4/3}
-.polaroid span{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:20px;font-style:italic;color:var(--aubergine);line-height:1.2}
+/* The caption lies in the flow below the photo and is the white strip at the bottom itself. A long caption wraps and
+   the polaroid grows, instead of the text running out of the frame. The bottom padding of the polaroid (also the inline
+   ones in the strips) is therefore only for a polaroid without a caption. The caption covers the placeholder, which
+   fills the content box. The negative margin gives it the side padding of the polaroid (at least 8px) as well, as wide
+   as the old caption over the whole polaroid. */
+.polaroid:has(>:is(span,figcaption)){padding-bottom:0!important}
+.polaroid>:is(span,figcaption){display:block;margin-inline:-8px;padding:.45em 2px .55em;background:var(--papier);text-align:center;font-size:20px;font-style:italic;color:var(--aubergine);line-height:1.2;text-wrap:balance}
 .stamp{position:absolute;width:120px;height:140px;background:var(--papier);border:9px dotted var(--cream);outline:1px solid rgba(64,72,48,.10);outline-offset:-9px;display:flex;align-items:center;justify-content:center;box-shadow:var(--schaduw-sm)}
 .stamp img{width:78px;height:78px;object-fit:contain}
 .sticker{position:absolute;width:92px;height:92px;border-radius:999px;background:var(--lila);display:flex;align-items:center;justify-content:center;box-shadow:var(--schaduw-sm);font-size:17px;line-height:1.05;font-style:italic;color:var(--aubergine);text-align:center}
@@ -199,9 +209,10 @@ a.folder:hover{transform:translateY(-4px)}
 .price small{font-size:16px;font-weight:400}
 .price .incl{display:block;font-size:15px;font-weight:400}
 
-.f-lila{color:var(--aubergine)}.f-lila .folder__body{background:var(--lila)}.f-lila .folder__desc,.f-lila .hl{color:var(--groen-donker)}
-.f-cream{color:var(--groen-donker)}.f-cream .folder__body{background:var(--cream);border:1px solid rgba(64,72,48,.10)}.f-cream .folder__tab{top:-31px;right:-1px;border:1px solid rgba(64,72,48,.10);border-bottom:0}.f-cream .muted{color:var(--grijs)}
-.f-groen{color:var(--cream)}.f-groen .folder__body{background:var(--groen)}.f-groen .muted{color:var(--lila)}
+/* Also on :hover: on the homepage the card is a link, and a:hover would turn its text green (invisible on the green card). */
+.f-lila,.f-lila:hover{color:var(--aubergine)}.f-lila .folder__body{background:var(--lila)}.f-lila .folder__desc,.f-lila .hl{color:var(--groen-donker)}
+.f-cream,.f-cream:hover{color:var(--groen-donker)}.f-cream .folder__body{background:var(--cream);border:1px solid rgba(64,72,48,.10)}.f-cream .folder__tab{top:-31px;right:-1px;border:1px solid rgba(64,72,48,.10);border-bottom:0}.f-cream .muted{color:var(--grijs)}
+.f-groen,.f-groen:hover{color:var(--cream)}.f-groen .folder__body{background:var(--groen)}.f-groen .muted{color:var(--lila)}
 
 /* Lijst met hartjes */
 .hl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;flex-grow:1}
@@ -312,7 +323,7 @@ a.folder:hover{transform:translateY(-4px)}
   .stamp{width:78px;height:92px;border-width:6px;outline-offset:-6px}
   .stamp img{width:50px;height:50px}
   .polaroid{padding:8px 8px 34px}
-  .polaroid span{font-size:16px;bottom:8px}
+  .polaroid span{font-size:16px}
   .sticker{width:76px;height:76px;font-size:14px}
   .sticker--aub{width:92px;height:92px;font-size:16px}
   .split__photo{min-height:440px}
@@ -648,7 +659,7 @@ a.folder:hover{transform:translateY(-4px)}
 /* padding en geen marge: een marge valt buiten de strook, en dan sluit het kader van de bewerkschil niet aan */
 .art-pols{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;padding:20px 0 44px}
 .art-pols .polaroid{position:relative;margin:0;width:260px;max-width:100%;padding:10px 10px 40px}
-.art-pols figcaption{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-size:18px;font-style:italic;color:var(--aubergine)}
+.art-pols figcaption{font-size:18px}
 .art-quote{margin:0;font-style:italic;color:var(--aubergine);text-align:center}
 .todo{background:#FFF6C9;color:#5a4a00;padding:4px 10px;border-radius:6px;display:inline-block}
 .author{display:flex;flex-wrap:wrap;gap:24px;align-items:center;padding:28px;border-radius:28px;background:var(--salie)}
@@ -664,11 +675,12 @@ a.folder:hover{transform:translateY(-4px)}
   .review--groot{padding:34px 24px}
   .faq-notes{display:none}
   .faq-box{padding:14px 18px 10px;border-radius:0 22px 22px 22px}
-  .faq-box__tabs{right:20px;gap:4px;align-items:stretch}
-  /* de tabjes houden hier 20px van de rechterrand vrij: daar blijft de hoek rond */
-  .js .faq-box--tabbladen{border-top-right-radius:22px}
-  .faq-box__tabs .faq-box__tab{flex:1 1 0;min-width:auto;justify-content:center;text-align:center;padding:8px;font-size:10px;letter-spacing:.08em}
-  .faq-box__tabs .faq-box__tab[aria-selected="false"]{margin-top:6px}
+  /* On a phone the names of the tabs do not fit next to each other as folder tabs, and the last one would fall off
+     the screen. Here they are a row of chips at the top of the card, which wraps when they need more room. */
+  .faq-box__tabs{position:static;flex-wrap:wrap;justify-content:center;gap:8px;padding:6px 0 16px;border-bottom:1px dashed rgba(64,24,56,.28)}
+  .js .faq-box--tabbladen{margin-top:0;border-radius:22px}
+  .faq-box__tabs .faq-box__tab,.faq-box__tabs .faq-box__tab:hover,.faq-box__tabs .faq-box__tab[aria-selected="true"]{min-height:40px;margin:0;padding:8px 16px;border:1px solid var(--lijn);border-radius:20px;justify-content:center;text-align:center;font-size:10px;letter-spacing:.1em}
+  .faq-box__tabs .faq-box__tab[aria-selected="true"]{border-color:var(--lila)}
   .faq summary{padding:20px 2px;gap:16px}
   .faq summary::after{width:34px;height:34px;font-size:22px}
   .faq p{font-size:18px}
@@ -716,8 +728,8 @@ a.folder:hover{transform:translateY(-4px)}
   #vergelijk .sec-head .sticker{position:static;margin-top:6px;width:96px;height:96px;font-size:16px;transform:rotate(8deg)}
   /* Checklist-pagina: foto en briefje naast elkaar, zodat het bijschrift vrij blijft */
   .cl-media{aspect-ratio:1/.92}
-  .cl-media .polaroid{left:0!important;top:2%!important;width:50%!important;padding:8px 8px 34px!important}
-  .cl-media .polaroid span{font-size:15px!important;bottom:8px!important}
+  .cl-media .polaroid{left:0!important;top:2%!important;width:50%!important;padding:8px 8px 0!important}
+  .cl-media .polaroid span{font-size:15px!important}
   .cl-paper{right:0;bottom:2%;width:56%}
   .cl-media .sticker{right:2%!important;top:0!important;width:78px!important;height:78px!important;font-size:16px!important}
 }
@@ -730,7 +742,7 @@ a.folder:hover{transform:translateY(-4px)}
   .eb{letter-spacing:.14em}
   .btn{letter-spacing:.1em;padding:0 22px}
   /* fotobijschriften */
-  .polaroid span{font-size:15px;bottom:9px;white-space:nowrap}
+  .polaroid span{font-size:15px}
   .polaroid{padding-bottom:36px}
   /* werkwijze-hero: foto's naast elkaar */
   .ww-media{aspect-ratio:1/1.05!important}
@@ -877,7 +889,9 @@ a.folder:hover{transform:translateY(-4px)}
 @media (max-width:720px){.founding__acties{align-items:stretch;width:100%}.founding__alt{text-align:center}}
 
 /* Reviews: één lijst voor leveranciers én bruidsparen */
-.review-list{display:flex;flex-wrap:wrap;justify-content:center;gap:40px}
+/* Full width of the strip: otherwise the 420px of a card is the minimum width of the list, and on a phone the list
+   sticks out on both sides. */
+.review-list{display:flex;flex-wrap:wrap;justify-content:center;gap:40px;width:100%}
 .review-list .review:nth-child(odd){--rest:rotate(-2deg);transform:rotate(-2deg)}
 .review-list .review:nth-child(even){--rest:rotate(2deg);transform:rotate(2deg)}
 .review__label{color:var(--grijs)}
@@ -1018,13 +1032,13 @@ a.folder:hover{transform:translateY(-4px)}
 
 /* Werkwijze-hero: grotere fotolijsten, bijschriften altijd vrij */
 .ww-media .polaroid{padding:12px 12px 52px}
-.ww-media .polaroid span{font-size:21px;bottom:14px}
+.ww-media .polaroid span{font-size:21px}
 .ww-media .polaroid:nth-child(1){left:2%!important;top:0!important;width:56%!important;z-index:2}
 .ww-media .polaroid:nth-child(2){right:0!important;bottom:0!important;width:52%!important;z-index:1}
 @media (max-width:720px){
   .ww-media{aspect-ratio:1/1.12!important}
   .ww-media .polaroid{padding:9px 9px 42px}
-  .ww-media .polaroid span{font-size:17px;bottom:11px}
+  .ww-media .polaroid span{font-size:17px}
   .ww-media .polaroid:nth-child(1){left:0!important;width:58%!important}
   .ww-media .polaroid:nth-child(2){width:54%!important}
 }
