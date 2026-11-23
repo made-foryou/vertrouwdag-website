@@ -423,15 +423,55 @@ html:not(.motion) *{transition:none!important;animation:none!important;scroll-be
 /* Lopende band pauzeert bij hover */
 
 /* ==========================================================
-   Inschuiven bij scrollen
+   Entrance of the page (#36)
+   The columns of a hero have data-entrance: their children come
+   in one after another as the page paints, in CSS only, so
+   nothing waits for JavaScript and a page from the back/forward
+   cache does not play it again. Headings, paragraphs and the
+   photo of the first screen are the candidates for the LCP, so
+   they only rise and never start invisible (#34, decision 5).
+   The header fades in only when a visit arrives (.arrival, see
+   components/motion.blade.php), so it stays put between pages.
+   ========================================================== */
+[data-entrance]>:nth-child(2){--i:1}
+[data-entrance]>:nth-child(3){--i:2}
+[data-entrance]>:nth-child(n+4){--i:3}
+@keyframes entrance-in{from{opacity:0;translate:0 calc(var(--motion-distance) / 2)}}
+@keyframes entrance-rise{from{translate:0 calc(var(--motion-distance) / 2)}}
+@keyframes entrance-zoom{from{scale:1.04}}
+@keyframes entrance-fade{from{opacity:0}}
+.motion [data-entrance]>*{animation:entrance-in var(--motion-medium) var(--ease) calc(var(--i,0) * var(--motion-stagger)) backwards}
+.motion [data-entrance]>:is(h1,.h1,p:not(.eb)),.motion [data-entrance]>:has(img[fetchpriority="high"]){animation-name:entrance-rise}
+.motion [data-entrance] :is(.arch,.art-hero__img)>img[fetchpriority="high"]{animation:entrance-zoom .9s var(--ease) backwards}
+.motion.arrival .site-header{animation:entrance-fade var(--motion-short) var(--ease) backwards}
+
+/* ==========================================================
+   Inschuiven bij scrollen (#37)
    Alleen actief met de class .motion op <html> (#35), dus
    zonder JS, met reduced motion en in de bewerkmodus van het
    CMS is alles gewoon zichtbaar. De kinderen van een groep
-   komen na elkaar binnen: inschuiven.js geeft elk zijn --i.
+   komen na elkaar binnen: inschuiven.js geeft elk zijn --i,
+   en na de derde wacht er geen meer, zodat wat in beeld komt
+   er binnen .8s staat. html.motion, omdat een regel als
+   .contact-notes .note anders de transition overschrijft.
+
+   De waarde van data-reveal, of van data-reveal-group voor de
+   kinderen, kiest hoe iets binnenkomt. Zonder waarde: een fade
+   en een stap omhoog (blokken, kaarten). text: alleen een fade.
+   photo: een fade terwijl hij op maat groeit. note(s): landt van
+   boven en draait in zijn eigen schuinte. step(s): het nummer
+   komt vóór de tekst.
    ========================================================== */
-[data-reveal-group]>*{--d:calc(var(--i,0) * var(--motion-stagger))}
-.motion [data-reveal],.motion [data-reveal-group]>*,.motion [data-reveal-inner]>*{opacity:0;translate:0 var(--motion-distance);transition:opacity var(--motion-long) var(--ease) var(--d,0s),translate var(--motion-long) var(--ease) var(--d,0s),transform .5s var(--ease),box-shadow .5s,padding .3s var(--ease)}
-.motion [data-reveal].is-in,.motion [data-reveal-group].is-in>*,.motion [data-reveal-inner].is-in>*{opacity:1;translate:none}
+[data-reveal-group]>*{--d:calc(min(var(--i,0), 2) * var(--motion-stagger));--reveal-duration:var(--motion-medium)}
+html.motion :is([data-reveal],[data-reveal-group]>*){opacity:0;translate:0 var(--motion-distance);transition:opacity var(--reveal-duration,var(--motion-long)) var(--ease) var(--d,0s),translate var(--reveal-duration,var(--motion-long)) var(--ease) var(--d,0s),scale var(--reveal-duration,var(--motion-long)) var(--ease) var(--d,0s),rotate var(--reveal-duration,var(--motion-long)) var(--ease) var(--d,0s),transform .5s var(--ease),box-shadow .5s,padding .3s var(--ease)}
+html.motion :is([data-reveal="text"],[data-reveal-group="text"]>*){translate:none}
+html.motion :is([data-reveal="photo"],[data-reveal-group="photo"]>*){translate:none;scale:.96}
+html.motion :is([data-reveal="note"],[data-reveal-group="notes"]>*){translate:0 calc(var(--motion-distance) / -2);rotate:4deg}
+html.motion :is([data-reveal="step"],[data-reveal-group="steps"]>*) :is(.step__nr,.tl__badge){scale:.6;transition:scale var(--reveal-duration,var(--motion-long)) var(--ease) var(--d,0s)}
+html.motion :is([data-reveal="step"],[data-reveal-group="steps"]>*)>:not(.step__nr,.tl__badge){opacity:0;transition:opacity var(--reveal-duration,var(--motion-long)) var(--ease) calc(var(--d,0s) + var(--motion-stagger))}
+html.motion :is([data-reveal].is-in,[data-reveal-group].is-in>*){opacity:1;translate:none;scale:none;rotate:none}
+html.motion :is([data-reveal="step"].is-in,[data-reveal-group="steps"].is-in>*) :is(.step__nr,.tl__badge){scale:none}
+html.motion :is([data-reveal="step"].is-in,[data-reveal-group="steps"].is-in>*)>:not(.step__nr,.tl__badge){opacity:1}
 
 /* ==========================================================
    Foto's laden (#39)
@@ -1026,7 +1066,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .notes .note{-webkit-backface-visibility:visible;backface-visibility:visible;will-change:auto}
   .notes .note:not(.is-active){transform:rotate(var(--r,0deg))!important}
   .notes .note.is-active{transform:none!important}
-  .motion [data-deck][data-reveal-group]>*{opacity:1!important;translate:none!important}
+  html.motion [data-deck][data-reveal-group]>*{opacity:1!important;translate:none!important;scale:none!important;rotate:none!important}
   .folders[data-deck] .folder:not(.is-active) .folder__body::after{opacity:1;background:rgba(45,51,31,.08)}
   .folders[data-deck] .folder__body>*:not(.folder__tab):not(.folder__icon){position:relative;z-index:1}
   .folders[data-deck] .folder__icon{z-index:1}

@@ -20,7 +20,7 @@
 @endphp
 <section class="band" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="gap:32px">
-        <div class="sec-head" data-reveal>
+        <div class="sec-head" data-reveal="text">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
         </div>

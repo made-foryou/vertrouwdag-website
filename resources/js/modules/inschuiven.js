@@ -2,9 +2,9 @@
  * Inschuiven bij scrollen.
  *
  * Een element met data-reveal schuift in zodra het in beeld komt. Bij
- * data-reveal-group komen de kinderen na elkaar binnen, bij
- * data-reveal-inner tegelijk: elk kind krijgt zijn plek in de groep als
- * --i, de stylesheet rekent daar de vertraging mee uit. De stylesheet
+ * data-reveal-group komen de kinderen na elkaar binnen: elk kind krijgt
+ * zijn plek in de groep als --i, de stylesheet rekent daar de vertraging
+ * mee uit. De waarde van het attribuut kiest de variant (#37). De stylesheet
  * verbergt ze alleen als de html de klasse motion heeft (#35), dus zonder
  * JavaScript is alles zichtbaar.
  *
@@ -14,7 +14,7 @@
 import { isMotionAllowed } from '../motion';
 
 export default function inschuiven() {
-    const elementen = document.querySelectorAll('[data-reveal],[data-reveal-group],[data-reveal-inner]');
+    const elementen = document.querySelectorAll('[data-reveal],[data-reveal-group]');
 
     if (!elementen.length) {
         return;
@@ -30,6 +30,7 @@ export default function inschuiven() {
         return;
     }
 
+    // Threshold 0: a strip taller than the screen, such as a long text, still comes in.
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -37,7 +38,7 @@ export default function inschuiven() {
                 observer.unobserve(entry.target);
             }
         });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
 
     elementen.forEach((element) => observer.observe(element));
 
