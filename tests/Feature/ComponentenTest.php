@@ -436,7 +436,8 @@ describe('cta-split', function () {
         $blok = $document->querySelector('section.cta-split[data-cms-strip="12"]');
         $knop = $blok?->querySelector('.cta-split__txt a.btn.btn--l');
 
-        expect($blok?->querySelector('.cta-split__txt')?->hasAttribute('data-reveal-inner'))->toBeTrue()
+        expect($blok?->querySelector('.cta-split__txt')?->getAttribute('data-reveal'))->toBe('text')
+            ->and($blok?->querySelector('.cta-split__photo')?->getAttribute('data-reveal'))->toBe('photo')
             ->and($blok?->querySelector('h2[data-cms-field="kop"] em')?->textContent)->toBe('vraag?')
             ->and($blok?->querySelector('.cta-split__txt p, .cta-split__txt svg'))->toBeNull()
             ->and($blok?->querySelector('.cta-split__photo')?->hasAttribute('style'))->toBeFalse()

@@ -13,7 +13,7 @@
     van .art-prose houden.
 --}}
 <div data-cms-strip="{{ $strip->id }}">
-    <div class="wrap wrap--smal prose art-prose">
+    <div class="wrap wrap--smal prose art-prose" data-reveal="text">
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h3" />
         @if (filled($strip->inleiding))
             <p class="art-lead" data-cms-field="inleiding"><x-regels :tekst="$strip->inleiding" /></p>

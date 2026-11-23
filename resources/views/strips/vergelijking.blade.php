@@ -29,7 +29,7 @@
 @endphp
 <section id="vergelijk" data-cms-strip="{{ $strip->id }}">
     <div class="wrap stack" style="padding-top:112px;padding-bottom:96px;gap:36px">
-        <div class="sec-head" style="position:relative">
+        <div class="sec-head" data-reveal="text" style="position:relative">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             @if ($strip->sticker)
@@ -37,7 +37,7 @@
             @endif
         </div>
         @if (count($kolommen) > 0)
-            <div class="cmp-wrap" tabindex="0" role="region" aria-label="Vergelijking van de pakketten">
+            <div class="cmp-wrap" data-reveal="text" tabindex="0" role="region" aria-label="Vergelijking van de pakketten">
                 <table class="cmp">
                     <thead>
                         <tr>

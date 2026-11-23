@@ -19,8 +19,8 @@
     'tekst' => null,
 ])
 <section {{ $attributes->class(['cta-split']) }}>
-    <div class="cta-split__photo" @if ($fotoHoogte) style="min-height:{{ $fotoHoogte }}px" @endif><x-foto :foto="$foto" terugval="resources/images/romy-gesprek.jpg" alt="Romy aan tafel met haar telefoon, klaar voor een kennismakingsgesprek" :breedte="1400" :hoogte="933" veld="foto" class="cta-romy" loading="lazy" /></div>
-    <div class="cta-split__txt" data-reveal-inner @if ($groot) style="padding-top:80px;padding-bottom:80px;gap:22px" @endif>
+    <div class="cta-split__photo" data-reveal="photo" @if ($fotoHoogte) style="min-height:{{ $fotoHoogte }}px" @endif><x-foto :foto="$foto" terugval="resources/images/romy-gesprek.jpg" alt="Romy aan tafel met haar telefoon, klaar voor een kennismakingsgesprek" :breedte="1400" :hoogte="933" veld="foto" class="cta-romy" loading="lazy" /></div>
+    <div class="cta-split__txt" data-reveal="text" @if ($groot) style="padding-top:80px;padding-bottom:80px;gap:22px" @endif>
         @if ($hart)
             <svg width="30" height="27" fill="#E0D0E0" aria-hidden="true"><use href="#heart"/></svg>
         @endif

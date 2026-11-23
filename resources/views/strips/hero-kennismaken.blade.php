@@ -27,7 +27,7 @@
 @endphp
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap meet">
-        <div class="meet__txt" data-reveal>
+        <div class="meet__txt" data-entrance>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
             <p style="font-size:21px;line-height:1.65;max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
@@ -41,7 +41,7 @@
             @endif
         </div>
 
-        <div class="meet__cal" data-reveal>
+        <div class="meet__cal" data-entrance>
             <div class="polaroid tilt meet__pol" style="transform:rotate(-8deg)">
                 <x-foto :foto="$strip->foto" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto" />
                 <span style="font-size:17px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>

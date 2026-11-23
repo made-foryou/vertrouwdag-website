@@ -47,7 +47,7 @@
 @endphp
 <section class="band" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec">
-        <div class="sec-head" data-reveal style="margin-bottom:40px">
+        <div class="sec-head" data-reveal="text" style="margin-bottom:40px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" />
             @if ($strip->hint)

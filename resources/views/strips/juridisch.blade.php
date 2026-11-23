@@ -16,7 +16,7 @@
     de opmaak van .legal .prose houden.
 --}}
 <section data-cms-strip="{{ $strip->id }}">
-    <div class="wrap wrap--smal legal">
+    <div class="wrap wrap--smal legal" data-entrance>
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
         @if (filled($strip->bijgewerkt))

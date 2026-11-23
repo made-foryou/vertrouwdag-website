@@ -11,7 +11,7 @@
 --}}
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap hero" style="padding-bottom:80px">
-        <div class="hero__txt" style="gap:24px">
+        <div class="hero__txt" data-entrance style="gap:24px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
             <p class="lead" style="max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
@@ -22,7 +22,7 @@
                 @endif
             </div>
         </div>
-        <div class="hero__media hero__media--d">
+        <div class="hero__media hero__media--d" data-entrance>
             <div class="arch" style="right:4%;top:0;width:62%;height:96%"><x-foto :foto="$strip->foto_boog" terugval="resources/images/ceremonie-buiten.jpg" alt="Ceremonieplek buiten met witte stoelen en bloemen" :breedte="1100" :hoogte="734" veld="foto_boog" fetchpriority="high" /></div>
             <div class="polaroid tilt" style="left:0;bottom:4%;width:44%;padding:10px 10px 42px;transform:rotate(-6deg)">
                 <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/bruid-rozen.jpg" alt="Bruid met boeket van perzikkleurige rozen" :breedte="1100" :hoogte="1650" veld="foto_polaroid" />

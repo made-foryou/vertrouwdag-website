@@ -19,9 +19,9 @@
 @endphp
 <section class="band--aub" data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:22px;text-align:center">
-        <p class="eb eb--lila" data-reveal data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal />
-        <div class="notes" data-deck data-reveal-group data-cms-items="citaten">
+        <p class="eb eb--lila" data-reveal="text" data-cms-field="label">{{ $strip->label }}</p>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" />
+        <div class="notes" data-deck data-reveal-group="notes" data-cms-items="citaten">
             @foreach ($strip->citaten as $citaat)
                 @php
                     $briefje = $briefjes[$loop->index % count($briefjes)];
@@ -37,7 +37,7 @@
             @endforeach
         </div>
         <x-stapel-bolletjes :aantal="count($strip->citaten)" />
-        <p data-reveal style="font-size:clamp(24px,2.6vw,32px);line-height:1.4;font-style:italic;max-width:var(--midden)" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
+        <p data-reveal="text" style="font-size:clamp(24px,2.6vw,32px);line-height:1.4;font-style:italic;max-width:var(--midden)" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
         <x-knop :href="url(config('vertrouwdag.cta.pad'))" variant="lila" style="margin-top:10px">{{ config('vertrouwdag.cta.label') }}</x-knop>
     </div>
 </section>
