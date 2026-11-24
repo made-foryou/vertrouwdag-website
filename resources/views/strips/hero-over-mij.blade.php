@@ -9,12 +9,14 @@
 --}}
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap hero" style="flex-wrap:wrap-reverse;padding-bottom:96px">
-        <div class="hero__media about-hero" data-entrance>
-            <div class="arch" style="left:6%;top:0;width:76%;height:100%;border:10px solid var(--papier);box-shadow:var(--schaduw)"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto_boog" fetchpriority="high" /></div>
-            <div class="stamp tilt" style="left:0;top:6%;width:112px;height:132px;transform:rotate(-9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" style="width:72px;height:72px"></div>
-            <div class="polaroid tilt" style="right:0;bottom:6%;width:42%;padding:10px 10px 40px;transform:rotate(7deg)">
-                <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/kus-zwartwit.jpg" alt="Zwart-witfoto van een bruidspaar" :breedte="1100" :hoogte="641" veld="foto_polaroid" />
-                <span style="font-size:18px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
+        <div class="hero__media about-hero">
+            <div class="hero__collage" data-entrance>
+                <div class="arch" style="left:6%;top:0;width:76%;height:100%;border:10px solid var(--papier);box-shadow:var(--schaduw)"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" veld="foto_boog" fetchpriority="high" /></div>
+                <div class="stamp tilt" style="left:0;top:6%;width:112px;height:132px;transform:rotate(-9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" style="width:72px;height:72px"></div>
+                <div class="polaroid tilt" style="right:0;bottom:6%;width:42%;padding:10px 10px 40px;transform:rotate(7deg)">
+                    <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/kus-zwartwit.jpg" alt="Zwart-witfoto van een bruidspaar" :breedte="1100" :hoogte="641" veld="foto_polaroid" />
+                    <span style="font-size:18px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
+                </div>
             </div>
         </div>
         <div class="hero__txt" data-entrance style="gap:24px">
