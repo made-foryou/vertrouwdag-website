@@ -17,7 +17,15 @@
  * data-toestemming nu toestemming heeft. De banner kent die scripts niet,
  * alleen hun categorie. Trekt de bezoeker een toestemming in, dan
  * herlaadt de pagina: wat al geladen is, valt niet terug te draaien.
+ *
+ * A stored choice releases the scripts only once the page is really
+ * opened, not while the browser prerenders it (#38). A page that waited
+ * while the visitor chose on another page, prerendered or in the
+ * back/forward cache, follows that choice once it is shown. It goes
+ * through cookiekeuze, so the Calendly agenda follows it as well, and
+ * withdrawn consent reloads the page.
  */
+import { whenActivated } from '../prerender';
 import { bewaarKeuze, leesKeuze } from './toestemming';
 
 export default function cookiebanner() {
@@ -140,9 +148,29 @@ export default function cookiebanner() {
         geefVrij(geldend);
     });
 
-    if (geldend) {
-        geefVrij(geldend);
-    } else {
+    function followChoiceMadeElsewhere() {
+        const stored = leesKeuze();
+
+        if (stored !== null && JSON.stringify(stored) !== JSON.stringify(geldend)) {
+            document.dispatchEvent(new CustomEvent('cookiekeuze', { detail: stored }));
+        }
+    }
+
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            followChoiceMadeElsewhere();
+        }
+    });
+
+    if (!geldend) {
         open();
     }
+
+    whenActivated(() => {
+        followChoiceMadeElsewhere();
+
+        if (geldend) {
+            geefVrij(geldend);
+        }
+    });
 }

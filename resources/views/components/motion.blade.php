@@ -8,14 +8,21 @@
     arrival: the visit arrives from outside the site (another site, a search engine, a typed address), so the header
     fades in (#36). A click within the site leaves it out, so the header stays put between pages.
 
-    In the edit mode of the CMS nothing moves (#34, decision 4): the frame reloads after a save, and a strip that is
-    still invisible or slides in confuses the editor and the outlines. The preview (?made-cms=preview) is what a
-    visitor sees, so it moves. The package turns its EditMode on for both, hence the check on the query as well.
+    Without motion the transition between pages is skipped as well (#38). That has to happen here: pagereveal fires
+    on the new page before its first render, before any module runs. Skipping rejects the ready promise of the
+    transition. Nothing waits for it, so the rejection is caught rather than logged as an error on every click.
+
+    In the edit frame of the CMS nothing moves (App\Support\CmsEditFrame).
 --}}
-@use('Made\CmsPackage\Content\Data\EditMode')
-@use('Made\CmsPackage\Http\Middleware\ResolvePage')
-@if (app(EditMode::class)->active && request()->query(ResolvePage::QUERY) === ResolvePage::EDIT)
-    <script>document.documentElement.classList.add('js')</script>
+@use('App\Support\CmsEditFrame')
+@if (app(CmsEditFrame::class)->contains(request()))
+    <script>
+        document.documentElement.classList.add('js');
+        addEventListener('pagereveal', ({ viewTransition }) => {
+            viewTransition?.ready.catch(() => {});
+            viewTransition?.skipTransition();
+        });
+    </script>
 @else
     <script>
         (() => {
@@ -28,6 +35,12 @@
             root.classList.toggle('arrival', !cameFromThisSite);
             update();
             reducedMotion.addEventListener?.('change', update);
+            addEventListener('pagereveal', ({ viewTransition }) => {
+                if (viewTransition && !root.classList.contains('motion')) {
+                    viewTransition.ready.catch(() => {});
+                    viewTransition.skipTransition();
+                }
+            });
         })();
     </script>
 @endif

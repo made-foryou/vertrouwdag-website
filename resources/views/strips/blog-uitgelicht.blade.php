@@ -4,12 +4,13 @@
     Velden: label (op het labeltje, "Nieuwste blog") en link_tekst. Het
     artikel is extra data (with()): blog, een App\Support\Blog uit
     App\Support\Blogs, of null. Zonder artikel blijft de strook leeg.
+    data-blog-photo: de foto groeit door naar de kop van het artikel (#38).
 --}}
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap" data-reveal style="padding-bottom:72px">
         @if ($strip->blog)
             <a class="feature" href="{{ $strip->blog->url() }}">
-                <div class="feature__img"><img src="{{ $strip->blog->afbeelding }}" alt="{{ $strip->blog->alt }}" width="1100" height="733" data-foto></div>
+                <div class="feature__img"><img src="{{ $strip->blog->afbeelding }}" alt="{{ $strip->blog->alt }}" width="1100" height="733" data-foto data-blog-photo></div>
                 <div class="feature__txt">
                     <div class="row" style="gap:12px"><span class="eb eb--sm pill-tag" data-cms-field="label">{{ $strip->label }}</span><span class="eb eb--sm">{{ $strip->blog->kenmerk() }}</span></div>
                     <h2 class="h2"><x-made-cms::emphasis :text="$strip->blog->titel" /></h2>

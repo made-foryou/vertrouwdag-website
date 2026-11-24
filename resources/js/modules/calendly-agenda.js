@@ -5,7 +5,8 @@
  * Calendly-link in data-calendly-url en de categorie waar de agenda bij
  * hoort in data-toestemming (marketing). Zonder toestemming laadt er
  * niets van Calendly. De agenda laadt als:
- * - de bezoeker al toestemming voor die categorie gaf;
+ * - de bezoeker al toestemming voor die categorie gaf, zodra de pagina
+ *   echt geopend is en niet als de browser hem vooraf laadt (#38);
  * - de bezoeker op "Agenda tonen" (#cal-show) klikt, wat die toestemming
  *   geeft;
  * - de cookiebanner een keuze met die categorie bewaart.
@@ -15,6 +16,7 @@
  * pagina #cal-fallback met een knop naar Calendly in plaats van een leeg
  * vlak.
  */
+import { whenActivated } from '../prerender';
 import { geefToestemming, heeftToestemming } from './toestemming';
 
 const WIDGET_SCRIPT = 'https://assets.calendly.com/assets/external/widget.js';
@@ -109,6 +111,6 @@ export default function calendlyAgenda() {
     });
 
     if (heeftToestemming(categorie)) {
-        laad();
+        whenActivated(() => laad());
     }
 }

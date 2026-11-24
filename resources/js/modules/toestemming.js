@@ -27,6 +27,11 @@
  * zodat de banner na een wijziging opnieuw vraagt en een oude keuze
  * nooit stilletjes geldt. Werkt localStorage niet, dan geldt de keuze
  * alleen voor deze pagina.
+ *
+ * Where localStorage works, it is the only source: a page that the browser
+ * prerendered or kept in the back/forward cache then reads the choice the
+ * visitor made on another page in the meantime (#38). When that choice
+ * reaches the page, the cookie banner fires cookiekeuze as well.
  */
 
 const SLEUTEL = 'vd-cookies';
@@ -87,15 +92,18 @@ export function leesKeuze() {
 }
 
 export function bewaarKeuze(keuze) {
-    keuzeVanDezePagina = alleenCategorieen(keuze);
+    const nieuwe = alleenCategorieen(keuze);
+
+    keuzeVanDezePagina = null;
 
     try {
-        localStorage.setItem(SLEUTEL, JSON.stringify({ versie: leesInstellingen().versie, ...keuzeVanDezePagina }));
+        localStorage.setItem(SLEUTEL, JSON.stringify({ versie: leesInstellingen().versie, ...nieuwe }));
     } catch {
         // Niet te bewaren: de keuze geldt dan alleen voor deze pagina.
+        keuzeVanDezePagina = nieuwe;
     }
 
-    document.dispatchEvent(new CustomEvent('cookiekeuze', { detail: { ...keuzeVanDezePagina } }));
+    document.dispatchEvent(new CustomEvent('cookiekeuze', { detail: { ...nieuwe } }));
 }
 
 export function heeftToestemming(categorie) {
