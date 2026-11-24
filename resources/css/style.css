@@ -446,6 +446,30 @@ html:not(.motion) *{transition:none!important;animation:none!important;scroll-be
 .motion.arrival .site-header{animation:entrance-fade var(--motion-short) var(--ease) backwards}
 
 /* ==========================================================
+   Transition between pages (#38)
+   Only the content fades. The header, the WhatsApp button and
+   the cookie banner have a name of their own, so they stay put
+   while the rest crossfades. Without .motion the transition is
+   skipped (components/motion.blade.php). A browser without
+   cross-document view transitions navigates as before.
+
+   The photo of a blog card grows into the photo of the article
+   (modules/blog-photo-transition.js names the card that was
+   clicked). The arch is named rather than its <img>: a snapshot
+   leaves out the clip of its parent, so the arch would only
+   appear at the end. object-fit keeps the photo from stretching
+   between the shape of the card and the arch.
+   ========================================================== */
+@view-transition{navigation:auto}
+.site-header{view-transition-name:site-header}
+.wa{view-transition-name:whatsapp}
+.cookie{view-transition-name:cookiebanner}
+.art-hero__img{view-transition-name:blog-photo}
+::view-transition-old(root),::view-transition-new(root){animation-duration:var(--motion-short);animation-timing-function:var(--ease)}
+::view-transition-group(blog-photo){animation-duration:var(--motion-medium);animation-timing-function:var(--ease)}
+::view-transition-old(blog-photo),::view-transition-new(blog-photo){height:100%;object-fit:cover}
+
+/* ==========================================================
    Inschuiven bij scrollen (#37)
    Alleen actief met de class .motion op <html> (#35), dus
    zonder JS, met reduced motion en in de bewerkmodus van het

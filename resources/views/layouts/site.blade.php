@@ -66,6 +66,7 @@
     <link rel="preload" href="{{ Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
     <x-consent-mode />
     <x-motion />
+    <x-speculation-rules />
     @vite(['resources/css/style.css', 'resources/js/app.js'])
     @stack('jsonld')
 </head>

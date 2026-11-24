@@ -14,6 +14,10 @@
 
     De strook geeft zoekmachines het artikel als BlogPosting (JSON-LD),
     met deze foto als afbeelding.
+
+    data-blog-photo: the photo of the blog card that was clicked grows into
+    this arch (#38). The name sits on the arch, not on the <img>, so its
+    shape is part of the transition.
 --}}
 @use('App\Support\Blog')
 @use('App\Support\Blogs')
@@ -55,7 +59,7 @@
         <x-made-cms::heading :heading="$strip->titel" field="titel" emphasis class="h1" />
     </div>
     <div class="wrap art-hero" data-entrance>
-        <div class="art-hero__img"><img src="{{ $foto['url'] }}" alt="{{ $foto['alt'] }}" width="{{ $foto['width'] ?? 1100 }}" height="{{ $foto['height'] ?? 733 }}" fetchpriority="high" data-cms-field="foto" data-foto></div>
+        <div class="art-hero__img" data-blog-photo><img src="{{ $foto['url'] }}" alt="{{ $foto['alt'] }}" width="{{ $foto['width'] ?? 1100 }}" height="{{ $foto['height'] ?? 733 }}" fetchpriority="high" data-cms-field="foto" data-foto></div>
         @if (filled($strip->sticker))
             <div class="sticker sticker--aub art-hero__sticker" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
         @endif
