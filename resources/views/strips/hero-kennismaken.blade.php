@@ -30,7 +30,7 @@
         <div class="meet__txt" data-entrance>
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-            <p style="font-size:21px;line-height:1.65;max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+            <p style="font-size:21px;line-height:1.65;max-width:calc(34 * var(--ch))" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
             <ol class="mini-steps" data-cms-items="stappen">
                 @foreach ($strip->stappen ?? [] as $stap)
                     <li><span style="{{ $kleuren[$loop->index % count($kleuren)] }}">{{ $loop->iteration }}</span><p data-cms-field="tekst">{{ $stap['tekst'] }}</p></li>
@@ -52,7 +52,7 @@
                     <div class="stamp" style="position:absolute;right:22px;top:26px;width:96px;height:112px;border-width:8px;outline-offset:-8px;transform:rotate(7deg)" aria-hidden="true"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" style="width:60px;height:60px"></div>
                     <p class="eb">Jullie agenda-moment</p>
                     <h2 class="h3">Kies hier <em>een moment</em></h2>
-                    <p style="font-size:19px;max-width:36ch">De afsprakenplanner van Calendly gebruikt cookies. Die laad ik pas als jullie daar toestemming voor geven.</p>
+                    <p style="font-size:19px;max-width:calc(36 * var(--ch))">De afsprakenplanner van Calendly gebruikt cookies. Die laad ik pas als jullie daar toestemming voor geven.</p>
                     <div class="row" style="justify-content:center;gap:12px">
                         <x-knop id="cal-show">Agenda tonen</x-knop>
                         <x-knop :href="$calendly" variant="secundair" target="_blank" rel="noopener">Open in een nieuw tabblad</x-knop>
@@ -62,7 +62,7 @@
                 <div class="cal-fallback" id="cal-fallback" tabindex="-1" hidden>
                     <p class="eb">Agenda laadt niet</p>
                     <h2 class="h3">Open de agenda <em>in een nieuw tabblad</em></h2>
-                    <p style="font-size:19px;max-width:36ch">De agenda kan hier niet geladen worden, bijvoorbeeld door een adblocker. In een nieuw tabblad werkt hij gewoon.</p>
+                    <p style="font-size:19px;max-width:calc(36 * var(--ch))">De agenda kan hier niet geladen worden, bijvoorbeeld door een adblocker. In een nieuw tabblad werkt hij gewoon.</p>
                     <x-knop :href="$calendly" target="_blank" rel="noopener">Kies een moment</x-knop>
                     <p style="font-size:17px;font-style:italic;color:var(--grijs)">Of stuur een <x-whatsapp-link>appje</x-whatsapp-link> of <x-mail-link>mail</x-mail-link>.</p>
                 </div>

@@ -21,7 +21,7 @@
         <div class="hero__txt" data-entrance style="flex-basis:460px;gap:22px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-            <p class="lead" style="max-width:34ch"><span data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></span> <x-whatsapp-link data-cms-field="app_tekst">{{ $strip->app_tekst }}</x-whatsapp-link>.</p>
+            <p class="lead" style="max-width:calc(34 * var(--ch))"><span data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></span> <x-whatsapp-link data-cms-field="app_tekst">{{ $strip->app_tekst }}</x-whatsapp-link>.</p>
         </div>
         <div class="faq-notes" data-entrance aria-hidden="true" data-cms-items="briefjes">
             @foreach ($strip->briefjes ?? [] as $briefje)

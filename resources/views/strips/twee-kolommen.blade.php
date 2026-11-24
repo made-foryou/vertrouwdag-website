@@ -15,7 +15,7 @@
 <section class="sec-top" data-cms-strip="{{ $strip->id }}">
     <div class="wrap center">
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" />
-        <p data-reveal="text" style="margin:22px auto 56px;max-width:46ch;font-size:21px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+        <p data-reveal="text" style="margin:22px auto 56px;max-width:calc(46 * var(--ch));font-size:21px" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
     </div>
     <div class="split" data-reveal-group="photo" data-cms-items="kolommen">
         @foreach ($strip->kolommen as $kolom)

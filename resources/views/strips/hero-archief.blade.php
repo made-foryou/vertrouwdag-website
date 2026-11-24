@@ -13,7 +13,7 @@
         <x-kruimelpad :links="['Home' => url('/'), 'Blog' => url(Blogs::ADRES)]" huidig="Archief" />
         <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
         <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-        <p class="lead" style="max-width:44ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+        <p class="lead" style="max-width:calc(44 * var(--ch))" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         <div class="chips" role="group" aria-label="Filter op onderwerp">
             <x-chip actief data-filter="alles">Alles</x-chip>
             @foreach (Blogcategorie::cases() as $categorie)

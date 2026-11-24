@@ -15,7 +15,7 @@
         <div class="review review--groot" style="transform:rotate(-1.5deg);align-items:center">
             <svg width="30" height="27" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" tabindex="-1" />
-            <p style="font-size:20px;max-width:40ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+            <p style="font-size:20px;max-width:calc(40 * var(--ch))" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
             @if (filled($strip->vraag))
                 <p style="font-size:22px;font-style:italic;color:var(--aubergine)" data-cms-field="vraag">{{ $strip->vraag }}</p>
             @endif

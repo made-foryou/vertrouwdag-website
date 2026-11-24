@@ -12,6 +12,13 @@
 @font-face{font-family:'Cormorant';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/cormorant-latin-600-normal.woff2) format('woff2')}
 @font-face{font-family:'Unbounded';font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/unbounded-latin-400-normal.woff2) format('woff2')}
 @font-face{font-family:'Unbounded';font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/unbounded-latin-500-normal.woff2) format('woff2')}
+/* Until a web font is in, the text stands in a local font scaled to its width and line height, so it does not shift
+   when the web font swaps in (#39). Measured in Chrome on the text of the site itself: the body text and headings in
+   Cormorant, the italic accents, and the uppercase of the buttons, eyebrows and menu in Unbounded. A device without
+   Georgia or Arial, such as Android, falls back further down the stack, unscaled. */
+@font-face{font-family:'Cormorant fallback';font-style:normal;src:local('Georgia');size-adjust:88.1%;ascent-override:104.9%;descent-override:32.6%;line-gap-override:0%}
+@font-face{font-family:'Cormorant fallback';font-style:italic;src:local('Georgia Italic'),local('Georgia-Italic');size-adjust:78%;ascent-override:118.5%;descent-override:36.8%;line-gap-override:0%}
+@font-face{font-family:'Unbounded fallback';font-style:normal;src:local('Arial'),local('ArialMT');size-adjust:124%;ascent-override:80.2%;descent-override:19.8%;line-gap-override:0%}
 
 /* ---------- Kleuren & basiswaarden ---------- */
 :root{
@@ -31,8 +38,11 @@
   --lijn:rgba(64,72,48,.12);
   --schaduw:0 18px 48px rgba(45,51,31,.10);
   --schaduw-sm:0 8px 24px rgba(45,51,31,.12);
-  --serif:'Cormorant',Georgia,serif;
-  --sans:'Unbounded',system-ui,sans-serif;
+  --serif:'Cormorant','Cormorant fallback',Georgia,serif;
+  --sans:'Unbounded','Unbounded fallback',system-ui,sans-serif;
+  /* What 1ch is in Cormorant. A measure of N characters is calc(N * var(--ch)), not Nch: ch follows the font on screen,
+     so while the fallback stands in, a text block in ch would get wider and wrap differently (#39). */
+  --ch:.477em;
   --ease:cubic-bezier(.22,.61,.36,1);
   /* Motion (#35): calm and short, see #34. Sliding in and fading photos use these; #36, #37 and #40 build on them. */
   --motion-short:.3s;
@@ -100,7 +110,7 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .eb--lila{color:var(--lila)}
 .eb--sm{font-size:10px}
 
-.lead{font-size:22px;line-height:1.6;max-width:32ch}
+.lead{font-size:22px;line-height:1.6;max-width:calc(32 * var(--ch))}
 .heart{flex:none}
 
 /* ---------- Knoppen ---------- */
@@ -282,7 +292,7 @@ a.folder:hover{transform:translateY(-4px)}
 .cta-split__photo{min-height:520px;position:relative;background:var(--plaatshouder)}
 .cta-split__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
 .cta-split__txt{background:var(--aubergine);color:var(--cream);padding:88px clamp(24px,5vw,56px);display:flex;flex-direction:column;justify-content:center;gap:24px;--kop:var(--cream);--kop-accent:var(--lila)}
-.cta-split__txt p{font-size:21px;max-width:36ch}
+.cta-split__txt p{font-size:21px;max-width:calc(36 * var(--ch))}
 
 /* Vergelijkingstabel */
 .cmp-wrap{overflow-x:auto;border-radius:28px;background:var(--papier);border:1px solid var(--lijn);box-shadow:0 18px 48px rgba(45,51,31,.08);padding:12px 20px}
@@ -629,7 +639,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .prose{display:flex;flex-direction:column;gap:22px;flex:1 1 520px;min-width:0}
 .prose p{font-size:21px;line-height:1.75}
 /* hooguit zo'n 65 tekens per regel, ook waar de kolom breder is dan --smal */
-.prose :is(p,ul,ol){max-width:68ch}
+.prose :is(p,ul,ol){max-width:calc(68 * var(--ch))}
 .review--groot{width:640px;padding:48px 44px;gap:18px;align-items:center}
 .review--groot blockquote{font-size:clamp(23px,2.6vw,30px);line-height:1.45}
 .notes--licht .note{box-shadow:var(--schaduw)}
@@ -661,7 +671,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .faq summary::after{content:'+';flex:none;width:40px;height:40px;border-radius:999px;background:var(--lila);color:var(--aubergine);display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;transition:transform .32s var(--ease),background .32s,color .32s}
 .faq summary:hover{--kop:var(--aubergine)}
 .faq[open] summary::after{transform:rotate(45deg);background:var(--aubergine);color:var(--cream)}
-.faq p{padding:0 4px 26px;font-size:20px;line-height:1.7;max-width:60ch}
+.faq p{padding:0 4px 26px;font-size:20px;line-height:1.7;max-width:calc(60 * var(--ch))}
 .faq[open] p{animation:faqIn .4s var(--ease)}
 @keyframes faqIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
@@ -940,7 +950,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 }
 .tf__tab span{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal}
 @media (max-width:400px){.tf__tab{font-size:8px;letter-spacing:.06em}}
-.tl__txt{font-size:19px;line-height:1.7;max-width:60ch}
+.tl__txt{font-size:19px;line-height:1.7;max-width:calc(60 * var(--ch))}
 @media (max-width:720px){.tl__txt{font-size:18px;line-height:1.65}}
 @media (max-width:720px){
   /* boogje 5 (los, niet op een kaartje): gewone ruimte eronder */
@@ -1143,7 +1153,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 /* Over mij: persoonlijke foto's */
 .persoonlijk{display:grid;grid-template-columns:1fr 1.15fr;gap:64px;align-items:center;padding-top:24px;padding-bottom:110px}
 .persoonlijk__txt{display:flex;flex-direction:column;gap:18px}
-.persoonlijk__txt .lead{max-width:40ch}
+.persoonlijk__txt .lead{max-width:calc(40 * var(--ch))}
 .persoonlijk__fotos{position:relative;display:flex;justify-content:center;align-items:flex-start;padding:10px 0 30px}
 .persoonlijk__fotos .polaroid{position:relative;margin:0;width:54%;padding:10px 10px 44px;transition:transform .5s var(--ease)}
 .persoonlijk__fotos .polaroid img{aspect-ratio:4/5;object-position:center 30%}
@@ -1163,7 +1173,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 /* Tekst en tekst met afbeelding: algemene stroken, voor elke pagina */
 .tekst{display:flex;flex-direction:column;gap:28px}
 .tekst .prose{flex:none}
-.tekst-foto .prose{flex:none;max-width:68ch}
+.tekst-foto .prose{flex:none;max-width:calc(68 * var(--ch))}
 .tekst .prose :is(ul,ol),.tekst-foto .prose :is(ul,ol){margin:0;padding-left:1.2em;font-size:21px;line-height:1.75}
 .tekst-foto{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:72px;align-items:center}
 .tekst-foto--rechts{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}

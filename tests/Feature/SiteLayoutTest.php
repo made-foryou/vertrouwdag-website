@@ -96,3 +96,25 @@ test('the homepage loads nothing from an external domain', function () {
     expect($urls)->not->toBeEmpty()
         ->and($externalUrls)->toBe([]);
 });
+
+test('the layout preloads the fonts of the text above the fold, the font of the menu only where the menu shows', function () {
+    metGebouwdeFotos();
+
+    $document = renderComponent('<x-layouts::site title="Titel" description="Omschrijving">Inhoud</x-layouts::site>');
+
+    $preloads = [];
+
+    foreach ($document->querySelectorAll('link[rel="preload"][as="font"]') as $link) {
+        expect($link->getAttribute('type'))->toBe('font/woff2')
+            ->and($link->hasAttribute('crossorigin'))->toBeTrue();
+
+        $preloads[$link->getAttribute('href')] = $link->getAttribute('media');
+    }
+
+    expect($preloads)->toBe([
+        Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') => null,
+        Vite::asset('resources/fonts/cormorant-latin-400-italic.woff2') => null,
+        Vite::asset('resources/fonts/unbounded-latin-500-normal.woff2') => null,
+        Vite::asset('resources/fonts/unbounded-latin-400-normal.woff2') => '(min-width: 1041px)',
+    ]);
+});

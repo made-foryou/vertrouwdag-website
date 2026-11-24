@@ -14,7 +14,7 @@
         <div class="hero__txt" data-entrance style="gap:24px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-            <p class="lead" style="max-width:34ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+            <p class="lead" style="max-width:calc(34 * var(--ch))" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
             <div class="row">
                 <x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop>
                 @if ($strip->knop)
