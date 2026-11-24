@@ -58,7 +58,7 @@
         <x-made-cms::heading :heading="$strip->titel" field="titel" emphasis class="h1" />
     </div>
     <div class="wrap art-hero" data-entrance>
-        <div class="art-hero__img" data-blog-photo><x-foto :foto="$strip->foto" :terugval="Blog::TERUGVALFOTO" :breedte="1100" :hoogte="733" sizes="(max-width:1240px) 88vw, 1080px" veld="foto" fetchpriority="high" /></div>
+        <div class="art-hero__img" data-blog-photo><x-foto :foto="$strip->foto" :terugval="Blog::TERUGVALFOTO" :breedte="1100" :hoogte="733" sizes="(max-width:1240px) 88.1vw, 1080px" veld="foto" fetchpriority="high" /></div>
         @if (filled($strip->sticker))
             <div class="sticker sticker--aub art-hero__sticker" aria-hidden="true" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
         @endif

@@ -23,11 +23,11 @@
         </div>
         <div class="hero__media hero__media--d ww-media" data-entrance style="aspect-ratio:1/.86">
             <div class="polaroid tilt" style="left:8%;top:4%;width:54%;padding:10px 10px 42px;transform:rotate(-5deg)">
-                <x-foto :foto="$strip->foto_boven" terugval="resources/images/paar-landschap.jpg" alt="Bruidspaar wandelt door een weids landschap" :breedte="1100" :hoogte="733" sizes="(max-width:540px) 50vw, (max-width:720px) 270px, (max-width:1030px) 50vw, 280px" veld="foto_boven" fetchpriority="high" />
+                <x-foto :foto="$strip->foto_boven" terugval="resources/images/paar-landschap.jpg" alt="Bruidspaar wandelt door een weids landschap" :breedte="1100" :hoogte="733" sizes="(max-width:540px) 51vw, (max-width:720px) 270px, (max-width:1030px) 51vw, 280px" veld="foto_boven" fetchpriority="high" />
                 <span style="font-size:19px" data-cms-field="bijschrift_boven">{{ $strip->bijschrift_boven }}</span>
             </div>
             <div class="polaroid tilt" style="right:8%;bottom:2%;width:48%;padding:10px 10px 42px;transform:rotate(6deg)">
-                <x-foto :foto="$strip->foto_onder" terugval="resources/images/ringen-goud.jpg" alt="Twee gouden trouwringen" :breedte="1100" :hoogte="733" sizes="(max-width:540px) 47vw, (max-width:720px) 255px, (max-width:1030px) 47vw, 260px" veld="foto_onder" />
+                <x-foto :foto="$strip->foto_onder" terugval="resources/images/ringen-goud.jpg" alt="Twee gouden trouwringen" :breedte="1100" :hoogte="733" sizes="(max-width:540px) 48vw, (max-width:720px) 255px, (max-width:1030px) 48vw, 260px" veld="foto_onder" />
                 <span style="font-size:19px" data-cms-field="bijschrift_onder">{{ $strip->bijschrift_onder }}</span>
             </div>
         </div>
