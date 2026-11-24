@@ -97,7 +97,7 @@ test('the homepage loads nothing from an external domain', function () {
         ->and($externalUrls)->toBe([]);
 });
 
-test('the layout preloads the fonts of the text above the fold, the font of the menu only where the menu shows', function () {
+test('the layout preloads the font of the heading and its italic accent, not the font of the buttons', function () {
     metGebouwdeFotos();
 
     $document = renderComponent('<x-layouts::site title="Titel" description="Omschrijving">Inhoud</x-layouts::site>');
@@ -108,13 +108,11 @@ test('the layout preloads the fonts of the text above the fold, the font of the 
         expect($link->getAttribute('type'))->toBe('font/woff2')
             ->and($link->hasAttribute('crossorigin'))->toBeTrue();
 
-        $preloads[$link->getAttribute('href')] = $link->getAttribute('media');
+        $preloads[] = $link->getAttribute('href');
     }
 
     expect($preloads)->toBe([
-        Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') => null,
-        Vite::asset('resources/fonts/cormorant-latin-400-italic.woff2') => null,
-        Vite::asset('resources/fonts/unbounded-latin-500-normal.woff2') => null,
-        Vite::asset('resources/fonts/unbounded-latin-400-normal.woff2') => '(min-width: 1041px)',
+        Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2'),
+        Vite::asset('resources/fonts/cormorant-latin-400-italic.woff2'),
     ]);
 });

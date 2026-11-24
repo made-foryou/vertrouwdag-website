@@ -64,13 +64,12 @@
     <meta name="theme-color" content="#F6F6F0">
     <link rel="icon" type="image/png" href="{{ Vite::asset('resources/images/monogram-groen.png') }}">
     {{--
-        The fonts above the fold (#39): the heading and its italic accent, which would wrap the heading differently if it
-        came in late, and the buttons and eyebrows. The menu only shows its font from 1041px.
+        The heading and its italic accent (#39): an accent that came in late could wrap a heading that just fits
+        differently. Unbounded is not preloaded: its fallback keeps the buttons and the menu in place, and a preload
+        only took bandwidth from the stylesheet (measured: 80 ms on the LCP, no shift prevented).
     --}}
     <link rel="preload" href="{{ Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/cormorant-latin-400-italic.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/unbounded-latin-500-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/unbounded-latin-400-normal.woff2') }}" as="font" type="font/woff2" media="(min-width: 1041px)" crossorigin>
     <x-consent-mode />
     <x-motion />
     <x-speculation-rules />
