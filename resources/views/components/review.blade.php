@@ -26,6 +26,6 @@
         <figcaption {{ $naam->attributes }}>{{ $naam }}</figcaption>
     @endif
     @if ($zegel)
-        <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="">
+        <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473">
     @endif
 </figure>

@@ -12,7 +12,7 @@
         <div class="checklist" data-reveal>
             <div class="checklist__media" aria-hidden="true">
                 <div class="polaroid polaroid--wide tilt" style="left:6%;top:0;width:70%;padding:10px 10px 40px;transform:rotate(-6deg);z-index:1">
-                    <x-foto :foto="$strip->foto" terugval="resources/images/hand-in-hand.jpg" :breedte="1100" :hoogte="733" decoratief veld="foto" loading="lazy" />
+                    <x-foto :foto="$strip->foto" terugval="resources/images/hand-in-hand.jpg" :breedte="1100" :hoogte="733" decoratief sizes="245px" veld="foto" loading="lazy" />
                     <span style="font-size:18px">12 maanden te gaan</span>
                 </div>
                 <div class="paper">

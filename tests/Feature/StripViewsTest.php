@@ -599,3 +599,13 @@ test('the latest blog shows the line breaks of its intro', function () {
 
     expect($document->querySelectorAll('.feature__txt p br'))->toHaveCount(1);
 });
+
+test('the photo of the latest blog loads first, in the size the page shows it at', function () {
+    $blog = new Blog('Titel', 'Intro', Blogcategorie::Budget, 6, '/foto.webp', 'Foto', url('/blog/titel'), srcset: '/320w.webp 320w, /foto.webp 1920w');
+
+    $foto = renderStrip('blog-uitgelicht', ['label' => 'Nieuwste blog', 'link_tekst' => 'Lees verder', 'blog' => $blog])->querySelector('.feature__img img');
+
+    expect($foto?->getAttribute('srcset'))->toBe('/320w.webp 320w, /foto.webp 1920w')
+        ->and($foto?->getAttribute('sizes'))->not->toBeEmpty()
+        ->and($foto?->getAttribute('fetchpriority'))->toBe('high');
+});

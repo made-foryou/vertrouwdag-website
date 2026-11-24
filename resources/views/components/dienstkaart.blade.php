@@ -46,7 +46,7 @@
     $element = $href !== null ? 'a' : 'article';
 @endphp
 <{{ $element }} @if ($href !== null) href="{{ $href }}" @endif {{ $attributes->class(['folder', 'folder--r' => $gespiegeld, 'f-'.$kleur]) }}>
-    <span class="folder__peek" style="transform:rotate({{ $draaiing }}deg)"><x-foto :foto="$foto" :terugval="$welkeDienst->foto()" :breedte="1100" :hoogte="825" decoratief veld="foto" loading="lazy" /></span>
+    <span class="folder__peek" style="transform:rotate({{ $draaiing }}deg)"><x-foto :foto="$foto" :terugval="$welkeDienst->foto()" :breedte="1100" :hoogte="825" decoratief sizes="(max-width:720px) 224px, (max-width:1110px) 30vw, 245px" veld="foto" loading="lazy" /></span>
     <div class="folder__body">
         <span class="folder__tab" aria-hidden="true"></span>
         <p {{ $soort->attributes->class(array_filter(['eb', 'eb--sm', $stijl->eyebrowKlasse()])) }}>{{ $soort }}</p>

@@ -21,7 +21,7 @@
         @foreach ($strip->kolommen as $kolom)
             @php($terugval = $fotos[$loop->index % count($fotos)])
             <div class="split__photo">
-                <x-foto :foto="$kolom['foto'] ?? null" :terugval="$terugval['src']" :alt="$terugval['alt']" :breedte="1100" :hoogte="733" veld="foto" loading="lazy" />
+                <x-foto :foto="$kolom['foto'] ?? null" :terugval="$terugval['src']" :alt="$terugval['alt']" :breedte="1100" :hoogte="733" sizes="(max-width:620px) 96vw, 48vw" veld="foto" loading="lazy" />
                 <div class="card-float">
                     <p class="eb eb--grijs" data-cms-field="label">{{ $kolom['label'] }}</p>
                     <x-made-cms::heading :heading="$kolom['kop']" field="kop" emphasis class="h3" />

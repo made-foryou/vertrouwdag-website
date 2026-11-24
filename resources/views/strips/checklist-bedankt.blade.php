@@ -20,7 +20,7 @@
                 <p style="font-size:22px;font-style:italic;color:var(--aubergine)" data-cms-field="vraag">{{ $strip->vraag }}</p>
             @endif
             <div class="row" style="justify-content:center"><x-knop :href="url(config('vertrouwdag.cta.pad'))">{{ config('vertrouwdag.cta.label') }}</x-knop></div>
-            <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="">
+            <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473">
         </div>
     </div>
 </section>

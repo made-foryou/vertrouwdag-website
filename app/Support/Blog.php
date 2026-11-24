@@ -15,6 +15,9 @@ use Made\CmsPackage\Content\Strips\Emphasis;
  *
  * De titel heeft de nadruk tussen sterretjes, zoals elke kop op de site
  * (<x-made-cms::emphasis>). De afbeelding is een url.
+ *
+ * srcset holds the narrower sizes of the photo for the browser to choose from (#39), or null for a photo without them
+ * and for the photo used in its place.
  */
 final readonly class Blog
 {
@@ -34,6 +37,7 @@ final readonly class Blog
         public string $alt,
         public ?string $url = null,
         public bool $binnenkort = false,
+        public ?string $srcset = null,
     ) {}
 
     /**
@@ -66,6 +70,7 @@ final readonly class Blog
             alt: is_string($foto['alt'] ?? null) ? $foto['alt'] : '',
             url: $url,
             binnenkort: $binnenkort,
+            srcset: is_string($foto['srcset'] ?? null) ? $foto['srcset'] : null,
         );
     }
 

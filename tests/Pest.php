@@ -287,9 +287,9 @@ function metGebouwdeFotos(): void
  * Een foto zoals een veld Afbeelding hem rendert, met deze velden in plaats van de standaard.
  *
  * @param  array<string, mixed>  $velden
- * @return array{url: string, alt: string, width: int|null, height: int|null, focal: array{x: float, y: float}}
+ * @return array{url: string, alt: string, width: int|null, height: int|null, focal: array{x: float, y: float}, variants: list<array{url: string, width: int, height: int}>, srcset: string|null}
  */
 function fotoUitCms(array $velden = []): array
 {
-    return ['url' => '/storage/media/ringen.webp', 'alt' => 'Twee gouden trouwringen', 'width' => 1920, 'height' => 1280, 'focal' => ['x' => 0.25, 'y' => 0.8], ...$velden];
+    return ['url' => '/storage/media/ringen.webp', 'alt' => 'Twee gouden trouwringen', 'width' => 1920, 'height' => 1280, 'focal' => ['x' => 0.25, 'y' => 0.8], 'variants' => [], 'srcset' => null, ...$velden];
 }

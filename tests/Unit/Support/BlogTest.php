@@ -30,3 +30,13 @@ test('the plain title leaves out the asterisks of the accent', function () {
 
     expect($blog->platteTitel())->toBe('Wanneer schakel je een weddingplanner in? (En waarom eerder dan je denkt)');
 });
+
+test('a blog from the fields of a strip keeps the narrower sizes of its photo', function (?string $srcset) {
+    $blog = Blog::uitVelden(['titel' => 'Titel', 'categorie' => Blogcategorie::Planning->value, 'foto' => ['url' => '/foto.webp', 'alt' => 'Foto', 'srcset' => $srcset]]);
+
+    expect($blog?->afbeelding)->toBe('/foto.webp')
+        ->and($blog?->srcset)->toBe($srcset);
+})->with([
+    'met formaten' => ['/320w.webp 320w, /foto.webp 1920w'],
+    'zonder formaten' => [null],
+]);

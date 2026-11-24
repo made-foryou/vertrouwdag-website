@@ -18,6 +18,6 @@
     $stijl = "transform:rotate({$draaiing})".($positie % 3 === 1 ? ';margin-top:28px' : '');
 @endphp
 <{{ $element }} @if ($blog->isGepubliceerd()) href="{{ $blog->url() }}" @endif {{ $attributes->class(['pol', 'pol--soon' => $blog->binnenkort])->merge(['style' => $stijl]) }} data-post data-cat="{{ $blog->categorie->value }}">
-    <img src="{{ $blog->afbeelding }}" alt="{{ $blog->alt }}" width="1100" height="733" loading="lazy" data-foto data-blog-photo>
+    <img src="{{ $blog->afbeelding }}" alt="{{ $blog->alt }}" width="1100" height="733" @if ($blog->srcset !== null) srcset="{{ $blog->srcset }}" sizes="(max-width:725px) 86vw, (max-width:1130px) 40vw, 320px" @endif loading="lazy" decoding="async" data-foto data-blog-photo>
     <div class="pol__txt"><span class="eb eb--sm">{{ $blog->kenmerk() }}</span><h3 class="h3"><x-made-cms::emphasis :text="$blog->titel" /></h3><p><x-regels :tekst="$blog->intro" /></p></div>
 </{{ $element }}>
