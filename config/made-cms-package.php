@@ -113,10 +113,15 @@ return [
     | A deleted page can be restored for keep_deleted_days. After that the
     | made-cms:prune command, which runs every day, removes it for good.
     |
+    | A draft of a published page that is open longer than stale_draft_days
+    | asks for attention on the screen of the page: visitors still see the
+    | older text.
+    |
     */
 
     'pages' => [
         'keep_deleted_days' => 30,
+        'stale_draft_days' => 5,
     ],
 
     /*
@@ -166,6 +171,8 @@ return [
             'max_width' => 1920,
             'format' => 'webp',
             'quality' => 82,
+            // The narrower sizes a photo also gets, for the srcset of the site: each width narrower than the photo.
+            'variants' => [480, 960, 1440],
         ],
     ],
 
