@@ -172,7 +172,9 @@ return [
             'format' => 'webp',
             'quality' => 82,
             // The narrower sizes a photo also gets, for the srcset of the site: each width narrower than the photo.
-            'variants' => [480, 960, 1440],
+            // Close together at the narrow end (#39): a polaroid on a phone needs 260 to 525 pixels, and between the
+            // defaults of the package (480, 960, 1440) it often loaded a file of twice that.
+            'variants' => [320, 480, 640, 960, 1440],
         ],
     ],
 
