@@ -17,8 +17,8 @@
 <section data-cms-strip="{{ $strip->id }}">
     <div class="wrap sec stack" style="align-items:center;gap:22px;text-align:center">
         <p class="eb" data-reveal="text" data-cms-field="label">{{ $strip->label }}</p>
-        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" style="max-width:18ch" />
-        <p data-reveal="text" style="font-size:21px;line-height:1.65;max-width:48ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+        <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" data-reveal="text" style="max-width:calc(18 * var(--ch))" />
+        <p data-reveal="text" style="font-size:21px;line-height:1.65;max-width:calc(48 * var(--ch))" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
         <div class="notes notes--licht" data-deck data-reveal-group="notes" style="padding-top:32px" data-cms-items="kwaliteiten">
             @foreach ($strip->kwaliteiten as $kwaliteit)
                 @php($plek = $briefjes[$loop->index % count($briefjes)])

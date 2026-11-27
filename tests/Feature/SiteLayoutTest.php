@@ -96,3 +96,23 @@ test('the homepage loads nothing from an external domain', function () {
     expect($urls)->not->toBeEmpty()
         ->and($externalUrls)->toBe([]);
 });
+
+test('the layout preloads the font of the heading and its italic accent, not the font of the buttons', function () {
+    metGebouwdeFotos();
+
+    $document = renderComponent('<x-layouts::site title="Titel" description="Omschrijving">Inhoud</x-layouts::site>');
+
+    $preloads = [];
+
+    foreach ($document->querySelectorAll('link[rel="preload"][as="font"]') as $link) {
+        expect($link->getAttribute('type'))->toBe('font/woff2')
+            ->and($link->hasAttribute('crossorigin'))->toBeTrue();
+
+        $preloads[] = $link->getAttribute('href');
+    }
+
+    expect($preloads)->toBe([
+        Vite::asset('resources/fonts/cormorant-latin-500-normal.woff2'),
+        Vite::asset('resources/fonts/cormorant-latin-400-italic.woff2'),
+    ]);
+});

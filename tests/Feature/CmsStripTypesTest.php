@@ -325,6 +325,19 @@ test('every photo field of a strip type shows the photo chosen in the cms', func
     }
 })->with('striptypes met fotos');
 
+test('every photo field lets the browser choose a narrower size of its photo, by the width the page shows it at', function (string $striptype) {
+    $foto = Media::factory()->withVariants([320, 960])->create();
+
+    $fotos = fotosMetGekozenFoto(new $striptype, $foto);
+
+    foreach ($fotos as $veld => $elementen) {
+        foreach ($elementen as $element) {
+            expect($element->getAttribute('srcset'))->toMatch('#/320w\.webp 320w#', "Het fotoveld {$veld} geeft de browser geen smallere formaten.")
+                ->and($element->getAttribute('sizes'))->not->toBeEmpty("Het fotoveld {$veld} zegt niet hoe breed de foto staat.");
+        }
+    }
+})->with('striptypes met fotos');
+
 test('a decorative photo has an empty alt text, also when its file has one', function (string $striptype) {
     $foto = Media::factory()->withAlt('Twee gouden trouwringen')->create();
 

@@ -36,12 +36,12 @@
         </div>
         <div class="hero__media">
             <div class="hero__collage" data-entrance>
-                <div class="arch" style="right:0;top:0;width:72%;height:92%"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy-portret.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1527" positie="50% 18%" veld="foto_boog" fetchpriority="high" /></div>
+                <div class="arch" style="right:0;top:0;width:72%;height:92%"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy-portret.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1527" positie="50% 18%" sizes="(max-width:1110px) 64vw, 380px" veld="foto_boog" fetchpriority="high" /></div>
                 <div class="polaroid tilt" style="left:0;bottom:2%;width:46%;transform:rotate(-7deg)">
-                    <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/ringen-boeket.jpg" alt="Handen met trouwringen en een boeket" :breedte="1100" :hoogte="733" veld="foto_polaroid" />
+                    <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/ringen-boeket.jpg" alt="Handen met trouwringen en een boeket" :breedte="1100" :hoogte="733" sizes="(max-width:1110px) 42vw, 245px" veld="foto_polaroid" />
                     <span data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
                 </div>
-                <div class="stamp tilt" style="left:10%;top:4%;transform:rotate(9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt=""></div>
+                <div class="stamp tilt" style="left:10%;top:4%;transform:rotate(9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473"></div>
                 <div class="sticker" style="right:-6px;bottom:16%;transform:rotate(-12deg)" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
             </div>
         </div>

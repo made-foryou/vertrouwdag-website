@@ -67,7 +67,7 @@
                     <article @class(['tf__panel', 'tf--'.$dienst['kleur']->value, 'is-active' => $loop->first]) role="tabpanel" id="{{ $dienst['welkeDienst']->anker() }}" aria-labelledby="tab-{{ $dienst['welkeDienst']->value }}" tabindex="0">
                         <div class="tf__media">
                             <div class="polaroid tf__pol" style="transform:rotate({{ $dienst['plaatsing']['polaroid'] }}deg)">
-                                <x-foto :foto="$dienst['foto'] ?? null" :terugval="$dienst['welkeDienst']->foto()" :breedte="1100" :hoogte="825" decoratief veld="foto" loading="lazy" />
+                                <x-foto :foto="$dienst['foto'] ?? null" :terugval="$dienst['welkeDienst']->foto()" :breedte="1100" :hoogte="825" decoratief sizes="(max-width:1100px) 31vw, 342px" veld="foto" loading="lazy" />
                                 <span data-cms-field="bijschrift">{{ $dienst['bijschrift'] }}</span>
                             </div>
                         </div>

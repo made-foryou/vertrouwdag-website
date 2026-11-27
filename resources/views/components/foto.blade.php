@@ -21,10 +21,18 @@
     staat in een visual met aria-hidden. Hij krijgt altijd een lege alt,
     ook als het bestand er een heeft (besluit Menno, 2026-11-10, zie #12).
 
+    sizes: hoe breed de foto op de pagina staat, per schermbreedte (#39).
+    Een foto uit het CMS heeft smallere formaten (srcset), en met sizes
+    kiest de browser het kleinste dat scherp genoeg is: een telefoon laadt
+    zo geen foto van 1920 px. Zonder formaten (een foto van voor de
+    formaten, een svg, of de vaste foto) staan srcset en sizes er niet.
+
     veld: de naam van het veld, voor data-cms-field. Dat staat op de <img>
-    zelf, zonder srcset, zodat de bewerkschil een andere foto meteen toont.
-    De overige attributen, zoals loading, fetchpriority, class en style,
-    gaan door naar de <img>.
+    zelf, zodat de bewerkschil een andere foto meteen toont; het package
+    zet daarbij ook de srcset om en laat sizes staan. De overige
+    attributen, zoals loading, fetchpriority, class en style, gaan door
+    naar de <img>. Een foto met loading="lazy" staat onder de vouw en
+    wordt ook buiten de hoofdthread gedecodeerd (decoding="async").
 
     data-foto: de foto faadt in zodra hij geladen is, op een plaatshouder
     van het element eromheen (fotos-laden.js, #39). Dat element heeft
@@ -36,6 +44,7 @@
     'alt' => '',
     'breedte',
     'hoogte',
+    'sizes',
     'positie' => null,
     'decoratief' => false,
     'veld',
@@ -47,9 +56,12 @@
         $positie = round(($foto['focal']['x'] ?? 0.5) * 100, 2).'% '.round(($foto['focal']['y'] ?? 0.5) * 100, 2).'%';
     }
 
+    $srcset = $uitCms && is_string($foto['srcset'] ?? null) ? $foto['srcset'] : null;
+    $decodeerApart = $attributes->get('loading') === 'lazy' && ! $attributes->has('decoding');
+
     $stijl = implode(';', array_filter([
         rtrim(trim((string) $attributes->get('style')), ';'),
         $positie === null ? null : "object-position:{$positie}",
     ]));
 @endphp
-<img src="{{ $uitCms ? $foto['url'] : Vite::asset($terugval) }}" alt="{{ $decoratief ? '' : ($uitCms ? $foto['alt'] : $alt) }}" width="{{ $uitCms ? ($foto['width'] ?? $breedte) : $breedte }}" height="{{ $uitCms ? ($foto['height'] ?? $hoogte) : $hoogte }}" @if ($stijl !== '') style="{{ $stijl }}" @endif {{ $attributes->except('style') }} data-cms-field="{{ $veld }}" data-foto>
+<img src="{{ $uitCms ? $foto['url'] : Vite::asset($terugval) }}" alt="{{ $decoratief ? '' : ($uitCms ? $foto['alt'] : $alt) }}" width="{{ $uitCms ? ($foto['width'] ?? $breedte) : $breedte }}" height="{{ $uitCms ? ($foto['height'] ?? $hoogte) : $hoogte }}" @if ($srcset !== null) srcset="{{ $srcset }}" sizes="{{ $sizes }}" @endif @if ($stijl !== '') style="{{ $stijl }}" @endif {{ $attributes->except('style') }} @if ($decodeerApart) decoding="async" @endif data-cms-field="{{ $veld }}" data-foto>

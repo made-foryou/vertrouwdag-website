@@ -27,7 +27,7 @@ beforeEach(function () {
 
 describe('foto', function () {
     test('a photo from the cms shows its file with its alt text and size, and its focal point instead of the position of the design', function () {
-        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/romy-portret.jpg" alt="Romy" :breedte="1100" :hoogte="1527" positie="50% 18%" veld="foto_boog" loading="lazy" />', ['foto' => fotoUitCms()]);
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/romy-portret.jpg" alt="Romy" :breedte="1100" :hoogte="1527" positie="50% 18%" sizes="100vw" veld="foto_boog" loading="lazy" />', ['foto' => fotoUitCms()]);
         $img = $document->querySelector('img');
 
         expect($img?->getAttribute('src'))->toBe('/storage/media/ringen.webp')
@@ -42,7 +42,7 @@ describe('foto', function () {
     test('without a photo from the cms it shows the photo of the design with its own alt text, size and position', function () {
         metGebouwdeFotos();
 
-        $document = renderComponent('<x-foto :foto="null" terugval="resources/images/romy-portret.jpg" alt="Romy" :breedte="1100" :hoogte="1527" positie="50% 18%" veld="foto_boog" />');
+        $document = renderComponent('<x-foto :foto="null" terugval="resources/images/romy-portret.jpg" alt="Romy" :breedte="1100" :hoogte="1527" positie="50% 18%" sizes="100vw" veld="foto_boog" />');
         $img = $document->querySelector('img');
 
         expect(basename((string) $img?->getAttribute('src')))->toStartWith('romy-portret-')
@@ -54,7 +54,7 @@ describe('foto', function () {
     });
 
     test('a photo from the cms without a size, like an svg, keeps the size of the photo of the design', function () {
-        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" veld="foto" />', ['foto' => fotoUitCms(['width' => null, 'height' => null])]);
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" sizes="100vw" veld="foto" />', ['foto' => fotoUitCms(['width' => null, 'height' => null])]);
         $img = $document->querySelector('img');
 
         expect($img?->getAttribute('width'))->toBe('1100')
@@ -62,19 +62,49 @@ describe('foto', function () {
     });
 
     test('a photo from the cms keeps the style it was given and adds its focal point', function () {
-        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" veld="foto" style="transform:rotate(-4deg);" />', ['foto' => fotoUitCms()]);
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" sizes="100vw" veld="foto" style="transform:rotate(-4deg);" />', ['foto' => fotoUitCms()]);
 
         expect($document->querySelector('img')?->getAttribute('style'))->toBe('transform:rotate(-4deg);object-position:25% 80%');
     });
 
     test('a decorative photo has an empty alt text, also when its file has one', function (?array $foto) {
-        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/hand-in-hand.jpg" alt="Bruidspaar hand in hand" :breedte="1100" :hoogte="733" decoratief veld="foto" />', ['foto' => $foto]);
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/hand-in-hand.jpg" alt="Bruidspaar hand in hand" :breedte="1100" :hoogte="733" decoratief sizes="100vw" veld="foto" />', ['foto' => $foto]);
 
         expect($document->querySelector('img')?->getAttribute('alt'))->toBe('');
     })->with([
         'foto uit het cms' => [fotoUitCms()],
         'foto uit het ontwerp' => [null],
     ]);
+
+    test('a photo from the cms with narrower sizes lets the browser choose one by the width it shows the photo at', function () {
+        $srcset = '/storage/media/320w.webp 320w, /storage/media/960w.webp 960w, /storage/media/ringen.webp 1920w';
+
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" sizes="(max-width: 720px) 90vw, 400px" veld="foto" />', ['foto' => fotoUitCms(['srcset' => $srcset])]);
+        $img = $document->querySelector('img');
+
+        expect($img?->getAttribute('src'))->toBe('/storage/media/ringen.webp')
+            ->and($img?->getAttribute('srcset'))->toBe($srcset)
+            ->and($img?->getAttribute('sizes'))->toBe('(max-width: 720px) 90vw, 400px');
+    });
+
+    test('a photo without narrower sizes has no srcset and no sizes', function (?array $foto) {
+        $document = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" sizes="(max-width: 720px) 90vw, 400px" veld="foto" />', ['foto' => $foto]);
+        $img = $document->querySelector('img');
+
+        expect($img?->hasAttribute('srcset'))->toBeFalse()
+            ->and($img?->hasAttribute('sizes'))->toBeFalse();
+    })->with([
+        'foto uit het cms zonder formaten' => [fotoUitCms()],
+        'foto uit het ontwerp' => [null],
+    ]);
+
+    test('a photo below the fold is decoded off the main thread, a photo above it as usual', function () {
+        $lazy = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" sizes="100vw" veld="foto" loading="lazy" />', ['foto' => fotoUitCms()]);
+        $hero = renderComponent('<x-foto :foto="$foto" terugval="resources/images/ringen-goud.jpg" :breedte="1100" :hoogte="733" sizes="100vw" veld="foto" fetchpriority="high" />', ['foto' => fotoUitCms()]);
+
+        expect($lazy->querySelector('img')?->getAttribute('decoding'))->toBe('async')
+            ->and($hero->querySelector('img')?->hasAttribute('decoding'))->toBeFalse();
+    });
 });
 
 describe('knop', function () {
@@ -395,6 +425,25 @@ describe('blogkaart', function () {
             ->and($kaart?->querySelector('.pol__txt .eb')?->textContent)->toBe('Planning · 6 min')
             ->and($kaart?->querySelector('h3 em')?->textContent)->toBe('begin')
             ->and($kaart?->querySelector('.pol__txt p')?->textContent)->toBe('Een vroeg begin geeft rust.');
+    });
+
+    test('the photo of a blog with narrower sizes lets the browser choose one, and decodes off the main thread', function () {
+        $blog = new Blog('Titel', 'Intro', Blogcategorie::Budget, null, '/foto.webp', 'Foto', srcset: '/320w.webp 320w, /foto.webp 1920w');
+
+        $foto = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog])->querySelector('img');
+
+        expect($foto?->getAttribute('srcset'))->toBe('/320w.webp 320w, /foto.webp 1920w')
+            ->and($foto?->getAttribute('sizes'))->not->toBeEmpty()
+            ->and($foto?->getAttribute('decoding'))->toBe('async');
+    });
+
+    test('the photo of a blog without narrower sizes has no srcset and no sizes', function () {
+        $blog = new Blog('Titel', 'Intro', Blogcategorie::Budget, null, '/foto.jpg', 'Foto');
+
+        $foto = renderComponent('<x-blogkaart :blog="$blog" />', ['blog' => $blog])->querySelector('img');
+
+        expect($foto?->hasAttribute('srcset'))->toBeFalse()
+            ->and($foto?->hasAttribute('sizes'))->toBeFalse();
     });
 
     test('the intro of a blog shows its line breaks', function () {

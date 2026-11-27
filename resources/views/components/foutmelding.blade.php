@@ -17,9 +17,9 @@
             <svg width="30" height="27" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg>
             <p class="eb">{{ $label }}</p>
             <h1 class="h1"><x-made-cms::emphasis :text="$kop" /></h1>
-            <p style="font-size:20px;max-width:40ch">{{ $slot }}</p>
+            <p style="font-size:20px;max-width:calc(40 * var(--ch))">{{ $slot }}</p>
             <div class="row" style="justify-content:center">{{ $knoppen }}</div>
-            <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="">
+            <img class="review__seal" src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473">
         </div>
     </div>
 </section>

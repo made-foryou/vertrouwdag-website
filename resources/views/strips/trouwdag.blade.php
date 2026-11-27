@@ -36,6 +36,6 @@
             @endforeach
         </div>
         <x-stapel-bolletjes :aantal="count($strip->briefjes)" />
-        <p data-reveal="text" style="font-size:21px;max-width:46ch" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
+        <p data-reveal="text" style="font-size:21px;max-width:calc(46 * var(--ch))" data-cms-field="slotzin">{{ $strip->slotzin }}</p>
     </div>
 </section>

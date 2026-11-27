@@ -13,7 +13,7 @@
     <div class="wrap hero" style="gap:64px;padding-bottom:var(--sec)">
         <div class="hero__media cl-media" data-entrance aria-hidden="true">
             <div class="polaroid tilt" style="left:6%;top:4%;width:58%;padding:10px 10px 42px;transform:rotate(-7deg);z-index:1">
-                <x-foto :foto="$strip->foto" terugval="resources/images/ringen-pioenen.jpg" :breedte="1100" :hoogte="733" decoratief veld="foto" fetchpriority="high" />
+                <x-foto :foto="$strip->foto" terugval="resources/images/ringen-pioenen.jpg" :breedte="1100" :hoogte="733" decoratief sizes="(max-width:480px) 45vw, (max-width:720px) 216px, (max-width:1070px) 302px, 270px" veld="foto" fetchpriority="high" />
                 <span style="font-size:19px">nog 12 maanden</span>
             </div>
             <div class="cl-paper">
@@ -28,7 +28,7 @@
         <div class="hero__txt" data-entrance style="gap:20px">
             <p class="eb" data-cms-field="label">{{ $strip->label }}</p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-            <p style="font-size:21px;max-width:36ch" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+            <p style="font-size:21px;max-width:calc(36 * var(--ch))" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
             <x-checklist-formulier class="cl-form" trouwdatum />
         </div>
     </div>
