@@ -161,7 +161,11 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
      be fixed to the header. */
   .site-header::after{content:'';position:absolute;left:0;right:0;top:100%;z-index:-1;height:100dvh;background:rgba(45,51,31,.22);visibility:hidden;opacity:0;transition:opacity var(--motion-short) var(--ease),visibility 0s var(--motion-short)}
   .site-header:has(.site-nav.is-open)::after{visibility:visible;opacity:1;transition-delay:0s}
-  html:has(.site-nav.is-open){overflow:hidden;scrollbar-gutter:stable}
+  /* The page stands still behind the open menu. The lock is on <body>, not <html>: with overflow on <html>, the
+     overflow-x of <body> no longer passes to the viewport, so <body> becomes the scroll container and the sticky header
+     sticks to it, at the top of the page and out of sight. */
+  html:has(.site-nav.is-open){scrollbar-gutter:stable}
+  html:has(.site-nav.is-open) body{overflow:hidden}
   .site-nav a{padding:16px 0;border-bottom:1px dashed rgba(64,72,48,.18);font-size:12px}
   .site-nav .btn{display:inline-flex;margin-top:18px;border-bottom:0;padding:0 28px;color:var(--cream)}
   .nav-toggle[aria-expanded="true"] .l1{transform:translateY(6px) rotate(45deg);transform-origin:center}
