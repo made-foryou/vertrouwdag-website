@@ -923,7 +923,8 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   /* tabel-labels: mogen afbreken en staan altijd op twee regels hoogte */
   .cmp td::before{hyphens:manual;-webkit-hyphens:manual;min-height:2.6em}
   /* WhatsApp: rond icoon zodat hij niets afdekt */
-  .wa{width:52px;height:52px;min-height:0;padding:0;justify-content:center;font-size:0;letter-spacing:0;border-radius:999px}
+  /* The hidden label still counts as a flex item, so any gap would push the heart off-centre. */
+  .wa{width:52px;height:52px;min-height:0;padding:0;gap:0;justify-content:center;font-size:0;letter-spacing:0;border-radius:999px}
   .wa svg{width:20px;height:18px}
 }
 @media (max-width:720px){
