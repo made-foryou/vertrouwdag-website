@@ -397,8 +397,11 @@ a.folder:hover{transform:translateY(-4px)}
 }
 
 /* Without the class motion nothing moves: with prefers-reduced-motion: reduce, in the edit mode of the CMS and
-   without JavaScript (#35, see components/motion.blade.php). */
-html:not(.motion) *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+   without JavaScript (#35, see components/motion.blade.php). The universal selector skips <html> itself and
+   pseudo-elements, such as the plus of a question, so they are named as well (#40). ::details-content has a rule of its
+   own: a browser that does not know it drops the whole rule it is in. */
+html:not(.motion),html:not(.motion) *,html:not(.motion) *::before,html:not(.motion) *::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+html:not(.motion) *::details-content{transition:none!important}
 
 
 /* ==========================================================
