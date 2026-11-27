@@ -117,11 +117,16 @@ return [
     | asks for attention on the screen of the page: visitors still see the
     | older text.
     |
+    | Every publication of a page is a version an editor can put back as the
+    | draft. made-cms:prune keeps the keep_versions newest of every page (at
+    | least the one visitors see) and removes the older ones.
+    |
     */
 
     'pages' => [
         'keep_deleted_days' => 30,
         'stale_draft_days' => 5,
+        'keep_versions' => 20,
     ],
 
     /*
