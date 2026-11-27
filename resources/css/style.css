@@ -50,6 +50,8 @@
   --motion-long:.8s;
   --motion-distance:24px;
   --motion-stagger:.12s;  /* between the children of a data-reveal-group */
+  /* The focus ring: cream, lila and a thin green edge, so it shows on light and dark backgrounds alike. */
+  --focus-ring:0 0 0 2px var(--cream),0 0 0 5px var(--lila),0 0 0 6px var(--groen);
   --gutter:clamp(16px,6vw,80px);
   --sec:clamp(72px,9vw,112px);   /* ruimte boven/onder elke sectie */
   /* De inhoud van een strook heeft één van drie breedtes, allemaal op dezelfde middenas en met dezelfde marge
@@ -62,7 +64,8 @@
 /* ---------- Basis ---------- */
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+/* scroll-padding-top: an element that gets the focus, or an anchor, is never left under the sticky header (#40). */
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--made-cms-bar-height,0px) + 96px);-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--cream);color:var(--groen);font-family:var(--serif);font-size:19px;line-height:1.6;overflow-x:hidden}
 main,.site-footer{overflow-x:clip}
 /* Unbounded maakt in het Nederlands van IJ een glyph die op U lijkt; dit zet dat uit */
@@ -86,7 +89,11 @@ h5,.h5{font-size:clamp(20px,1.7vw,22px);line-height:1.3;letter-spacing:normal}  
 h6,.h6{font-size:19px;line-height:1.4;letter-spacing:normal}                     /* nog niet in gebruik; de maat van de lopende tekst */
 p{margin:0}
 a{color:var(--aubergine)}a:hover{color:var(--groen)}
-:focus-visible{outline:none;box-shadow:0 0 0 2px var(--cream),0 0 0 5px var(--lila),0 0 0 6px var(--groen)}
+/* The focus ring is there at once and stays put (#40). !important, as the hover shadow of a button or card would
+   replace it otherwise. No transition, as many elements let their box-shadow slide and the ring would grow in with it.
+   The transparent outline is what shows in forced colors, where box-shadows are dropped. An element with a ring of its
+   own sets it with a more specific selector, and !important as well. */
+:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)!important;transition:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--groen);color:var(--cream);padding:12px 20px;border-radius:999px;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .skip:focus{top:12px;color:var(--cream)}
@@ -361,7 +368,7 @@ html.motion :is(.form-msg,#bedankt):not([hidden]){animation:entrance-in var(--mo
 @keyframes cookie-out{to{opacity:0;translate:0 var(--motion-distance)}}
 .motion .cookie.is-sliding-in .cookie__box{animation:cookie-in var(--motion-short) var(--ease)}
 .motion .cookie.is-leaving .cookie__box{animation:cookie-out var(--motion-short) var(--ease) forwards}
-.cookie__box:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lila),0 18px 48px rgba(45,51,31,.18)}
+.cookie__box:focus-visible{box-shadow:0 0 0 3px var(--lila),0 18px 48px rgba(45,51,31,.18)!important}
 .cookie__main{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px}
 .cookie__txt{flex:1 1 360px;display:flex;flex-direction:column;gap:8px}
 .cookie__txt p:not(.cookie__title){font-size:18px;line-height:1.55}
@@ -942,7 +949,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf__tab[aria-selected="false"]{filter:brightness(.95) saturate(.9)}
 .tf__tab[aria-selected="false"]:hover{transform:translateY(3px);filter:none}
 .tf__tab[aria-selected="true"]{transform:none;z-index:5;min-height:62px;box-shadow:none}
-.tf__tab:focus-visible{outline:none;box-shadow:inset 0 0 0 2px currentColor}
+.tf__tab:focus-visible{box-shadow:inset 0 0 0 2px currentColor!important}
 .tf__nr{opacity:.6;font-size:9px}
 .tf__stack{position:relative;z-index:3}
 /* dieptelaagjes onder de map */
@@ -950,7 +957,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf__stack::after{left:36px;right:36px;bottom:-24px;background:#D3D7C4;z-index:-2}
 .tf__panel{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:48px;align-items:center;padding:52px clamp(28px,4.5vw,56px);border-radius:0 0 28px 28px;box-shadow:0 22px 50px rgba(45,51,31,.14)}
 .tf__panel+.tf__panel{margin-top:32px}
-.tf__panel:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lila),0 22px 50px rgba(45,51,31,.14)}
+.tf__panel:focus-visible{box-shadow:0 0 0 3px var(--lila),0 22px 50px rgba(45,51,31,.14)!important}
 .tf__media{display:flex;justify-content:center}
 .tf__pol{position:relative;width:min(100%,340px);padding:12px 12px 48px}
 .tf__pol img{aspect-ratio:1/1}
