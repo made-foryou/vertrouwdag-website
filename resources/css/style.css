@@ -698,13 +698,23 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .faq:last-of-type{border-bottom:0}
 .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 4px;border-radius:12px}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary>h3{transition:color .25s}
-.faq summary::after{content:'+';flex:none;width:40px;height:40px;border-radius:999px;background:var(--lila);color:var(--aubergine);display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;transition:transform .32s var(--ease),background .32s,color .32s}
+.faq summary>h3{transition:color var(--motion-short)}
+.faq summary::after{content:'+';flex:none;width:40px;height:40px;border-radius:999px;background:var(--lila);color:var(--aubergine);display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;transition:transform var(--motion-short) var(--ease),background var(--motion-short),color var(--motion-short)}
 .faq summary:hover{--kop:var(--aubergine)}
 .faq[open] summary::after{transform:rotate(45deg);background:var(--aubergine);color:var(--cream)}
 .faq p{padding:0 4px 26px;font-size:20px;line-height:1.7;max-width:calc(60 * var(--ch))}
-.faq[open] p{animation:faqIn .4s var(--ease)}
+.faq[open] p{animation:faqIn var(--motion-short) var(--ease)}
 @keyframes faqIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+/* A question opens and closes softly (#40): the answer grows from nothing to its own height while it fades in, and the
+   other way round. That takes animating to height auto, which only a browser with interpolate-size can do. Elsewhere,
+   such as Safari, the answer fades in on opening (faqIn above) and a question closes at once. It stays a real <details>,
+   so finding a word on the page still opens its question. The clip margin keeps the focus ring of a link whole. */
+@supports (interpolate-size:allow-keywords) and selector(::details-content){
+  html.motion .faq{interpolate-size:allow-keywords}
+  html.motion .faq::details-content{block-size:0;overflow:clip;overflow-clip-margin:8px;opacity:0;transition:block-size var(--motion-short) var(--ease),opacity var(--motion-short) var(--ease),content-visibility var(--motion-short) allow-discrete}
+  html.motion .faq[open]::details-content{block-size:auto;opacity:1}
+  html.motion .faq[open] p{animation:none}
+}
 
 /* Kennismaken */
 .meet{display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;padding-top:72px;padding-bottom:var(--sec)}
