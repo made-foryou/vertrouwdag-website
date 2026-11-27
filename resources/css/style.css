@@ -351,6 +351,13 @@ a.folder:hover{transform:translateY(-4px)}
 .cookie[hidden]{display:none}
 /* De maximale hoogte laat bovenaan ruimte, zodat de banner met open voorkeuren nooit over de skiplink valt. */
 .cookie__box{pointer-events:auto;width:100%;max-width:920px;max-height:calc(100vh - 96px);max-height:calc(100dvh - 96px);overflow:auto;background:var(--papier);border:1px solid rgba(64,72,48,.14);border-radius:28px;padding:28px 32px;box-shadow:0 18px 48px rgba(45,51,31,.18)}
+/* The banner slides in and out calmly (#40). modules/cookiebanner.js decides when: on a visit that arrives it waits for
+   the entrance of the page, and after a click within the site it is simply there, so it stays put in the transition
+   between pages. A new keyframe for leaving, as the same name with other settings would not start again. */
+@keyframes cookie-in{from{opacity:0;translate:0 var(--motion-distance)}}
+@keyframes cookie-out{to{opacity:0;translate:0 var(--motion-distance)}}
+.motion .cookie.is-sliding-in .cookie__box{animation:cookie-in var(--motion-short) var(--ease)}
+.motion .cookie.is-leaving .cookie__box{animation:cookie-out var(--motion-short) var(--ease) forwards}
 .cookie__box:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lila),0 18px 48px rgba(45,51,31,.18)}
 .cookie__main{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px}
 .cookie__txt{flex:1 1 360px;display:flex;flex-direction:column;gap:8px}
