@@ -1,7 +1,7 @@
 <footer class="site-footer">
     <div class="wrap site-footer__grid">
         <div class="site-footer__col" style="gap:18px">
-            <img class="site-footer__logo" src="{{ Vite::asset('resources/images/logo-cream.png') }}" alt="vertrouwdag" width="941" height="473">
+            <x-brand-image name="logo-cream" sizes="(max-width:720px) 104px, 152px" class="site-footer__logo" alt="vertrouwdag" />
             <p style="font-size:22px;font-style:italic">Jullie dag in vertrouwde handen</p>
         </div>
         <div class="site-footer__col">

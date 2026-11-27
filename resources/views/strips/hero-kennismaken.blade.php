@@ -49,7 +49,7 @@
             <div class="cal-box" id="agenda">
                 <div class="cal-box__stripe" aria-hidden="true"></div>
                 <div class="cal-gate" id="cal-gate">
-                    <div class="stamp" style="position:absolute;right:22px;top:26px;width:96px;height:112px;border-width:8px;outline-offset:-8px;transform:rotate(7deg)" aria-hidden="true"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473" style="width:60px;height:60px"></div>
+                    <div class="stamp" style="position:absolute;right:22px;top:26px;width:96px;height:112px;border-width:8px;outline-offset:-8px;transform:rotate(7deg)" aria-hidden="true"><x-brand-image name="monogram-groen" sizes="60px" alt="" style="width:60px;height:60px" /></div>
                     <p class="eb">Jullie agenda-moment</p>
                     <h2 class="h3">Kies hier <em>een moment</em></h2>
                     <p style="font-size:19px;max-width:calc(36 * var(--ch))">De afsprakenplanner van Calendly gebruikt cookies. Die laad ik pas als jullie daar toestemming voor geven.</p>
