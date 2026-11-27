@@ -12,7 +12,7 @@
         <div class="hero__media about-hero">
             <div class="hero__collage" data-entrance>
                 <div class="arch" style="left:6%;top:0;width:76%;height:100%;border:10px solid var(--papier);box-shadow:var(--schaduw)"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1571" sizes="(max-width:620px) 67vw, (max-width:1085px) 410px, (max-width:1290px) 30vw, 374px" veld="foto_boog" fetchpriority="high" /></div>
-                <div class="stamp tilt" style="left:0;top:6%;width:112px;height:132px;transform:rotate(-9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473" style="width:72px;height:72px"></div>
+                <div class="stamp tilt" style="left:0;top:6%;width:112px;height:132px;transform:rotate(-9deg)"><x-brand-image name="monogram-groen" sizes="(max-width:720px) 54px, 72px" alt="" style="width:72px;height:72px" /></div>
                 <div class="polaroid tilt" style="right:0;bottom:6%;width:42%;padding:10px 10px 40px;transform:rotate(7deg)">
                     <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/kus-zwartwit.jpg" alt="Zwart-witfoto van een bruidspaar" :breedte="1100" :hoogte="641" sizes="(max-width:620px) 44vw, (max-width:720px) 270px, (max-width:1085px) 227px, (max-width:1290px) 17vw, 207px" veld="foto_polaroid" />
                     <span style="font-size:18px" data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>

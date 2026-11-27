@@ -41,7 +41,7 @@
                     <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/ringen-boeket.jpg" alt="Handen met trouwringen en een boeket" :breedte="1100" :hoogte="733" sizes="(max-width:523px) 41vw, (max-width:720px) 218px, (max-width:860px) 42vw, (max-width:1240px) 20vw, 245px" veld="foto_polaroid" />
                     <span data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
                 </div>
-                <div class="stamp tilt" style="left:10%;top:4%;transform:rotate(9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473"></div>
+                <div class="stamp tilt" style="left:10%;top:4%;transform:rotate(9deg)"><x-brand-image name="monogram-groen" sizes="(max-width:720px) 50px, 78px" alt="" /></div>
                 <div class="sticker" style="right:-6px;bottom:16%;transform:rotate(-12deg)" data-cms-field="sticker"><x-regels :tekst="$strip->sticker" /></div>
             </div>
         </div>

@@ -359,6 +359,23 @@ describe('review', function () {
     });
 });
 
+describe('brand-image', function () {
+    test('a brand image offers a narrow and a wide size, so the browser picks the one its place needs', function () {
+        metGebouwdeFotos();
+
+        $document = renderComponent('<x-brand-image name="logo-groen" sizes="(max-width:1040px) 92px, 112px" alt="vertrouwdag" class="logo" />');
+        $img = $document->querySelector('img');
+
+        expect($img?->getAttribute('src'))->toMatch('#/build/assets/logo-groen-320-[\w-]+\.webp$#')
+            ->and($img?->getAttribute('srcset'))->toMatch('#^\S+/logo-groen-200-[\w-]+\.webp 200w, \S+/logo-groen-320-[\w-]+\.webp 320w$#')
+            ->and($img?->getAttribute('sizes'))->toBe('(max-width:1040px) 92px, 112px')
+            ->and($img?->getAttribute('width'))->toBe('320')
+            ->and($img?->getAttribute('height'))->toBe('161')
+            ->and($img?->getAttribute('alt'))->toBe('vertrouwdag')
+            ->and($img?->getAttribute('class'))->toBe('logo');
+    });
+});
+
 describe('faq-item', function () {
     test('a question is only open when asked', function (bool $open) {
         $document = renderComponent(<<<'BLADE'

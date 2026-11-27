@@ -23,7 +23,7 @@
     </svg>
     <header class="site-header">
         <div class="site-header__in">
-            <a class="site-header__logo" href="{{ url('/') }}" aria-label="vertrouwdag, naar de homepage"><img src="{{ Vite::asset('resources/images/logo-groen.png') }}" alt="vertrouwdag" width="941" height="473"></a>
+            <a class="site-header__logo" href="{{ url('/') }}" aria-label="vertrouwdag, naar de homepage"><x-brand-image name="logo-groen" sizes="(max-width:1040px) 92px, 112px" alt="vertrouwdag" /></a>
         </div>
     </header>
 
