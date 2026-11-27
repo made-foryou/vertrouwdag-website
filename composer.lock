@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44147477e8a65bc8fab3124f2421a474",
+    "content-hash": "dca0e80f2f0be594489319346c670155",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2781,16 +2781,16 @@
         },
         {
             "name": "made-foryou/made-cms-package",
-            "version": "dev-main",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:made-foryou/made-cms-package.git",
-                "reference": "5c60acaf54e1fc8b320c382eab315660ea90e919"
+                "reference": "0bae52b49cf115b167b491eaae4547dfad220605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/5c60acaf54e1fc8b320c382eab315660ea90e919",
-                "reference": "5c60acaf54e1fc8b320c382eab315660ea90e919",
+                "url": "https://api.github.com/repos/made-foryou/made-cms-package/zipball/0bae52b49cf115b167b491eaae4547dfad220605",
+                "reference": "0bae52b49cf115b167b491eaae4547dfad220605",
                 "shasum": ""
             },
             "require": {
@@ -2818,14 +2818,13 @@
                 "pestphp/pest-plugin-laravel": "^4.1||^5.0",
                 "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
                 "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "<2.3.6"
+                "phpstan/phpstan": "<2.3.8"
             },
             "suggest": {
                 "ext-exif": "Turns uploaded photos from a phone or camera upright by their EXIF orientation.",
                 "ext-gd": "Scales uploaded photos down to WebP (media.image.driver gd, the default); needs WebP support.",
                 "ext-imagick": "Scales uploaded photos down with Imagick instead (media.image.driver imagick)."
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -2909,7 +2908,7 @@
                 "made-cms-package",
                 "made-foryou"
             ],
-            "time": "2026-11-23T15:40:20+00:00"
+            "time": "2026-11-27T15:14:08+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -11640,9 +11639,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "made-foryou/made-cms-package": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
