@@ -168,9 +168,14 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
   html:has(.site-nav.is-open) body{overflow:hidden}
   .site-nav a{padding:16px 0;border-bottom:1px dashed rgba(64,72,48,.18);font-size:12px}
   .site-nav .btn{display:inline-flex;margin-top:18px;border-bottom:0;padding:0 28px;color:var(--cream)}
-  .nav-toggle[aria-expanded="true"] .l1{transform:translateY(6px) rotate(45deg);transform-origin:center}
-  .nav-toggle[aria-expanded="true"] .l2{opacity:0}
-  .nav-toggle[aria-expanded="true"] .l3{transform:translate(0,-6px) rotate(-45deg) scaleX(1.5);transform-origin:center}
+  /* The cross is made of the two 18px lines, turned about the middle of the icon (10,7 in its view box):
+     the top line first moves down onto the middle line, then turns. The short bottom line fades out.
+     The turned lines' round caps reach just past the view box, hence overflow:visible. */
+  .nav-toggle svg{overflow:visible}
+  .nav-toggle svg path{transform-box:view-box;transform-origin:center}
+  .nav-toggle[aria-expanded="true"] .l1{transform:rotate(45deg) translateY(6px)}
+  .nav-toggle[aria-expanded="true"] .l2{transform:rotate(-45deg)}
+  .nav-toggle[aria-expanded="true"] .l3{opacity:0}
 }
 
 /* ---------- Secties ---------- */
