@@ -17,6 +17,11 @@
  *
  * Zonder JavaScript post het formulier gewoon en komt de bezoeker terug
  * op het formulier, met dezelfde meldingen.
+ *
+ * The message and the thanks block come in softly (#40, in the
+ * stylesheet). A new message where one already stood comes in again, so
+ * the change is seen; that leaves hidden and role="status" alone, so a
+ * screen reader reads it as before.
  */
 import { isMotionAllowed } from '../motion';
 
@@ -98,8 +103,18 @@ function messageFor(form, status, body) {
 function showMessage(form, text) {
     const message = form.querySelector('.form-msg');
 
+    if (!message.hidden) {
+        replayAnimation(message);
+    }
+
     message.textContent = text;
     message.hidden = false;
+}
+
+function replayAnimation(element) {
+    element.style.animation = 'none';
+    void element.offsetWidth;
+    element.style.animation = '';
 }
 
 function markInvalidFields(form, errors) {

@@ -314,6 +314,9 @@ a.folder:hover{transform:translateY(-4px)}
 .check{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.5}
 .check input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--groen)}
 .form-msg{font-size:18px;font-style:italic;color:var(--aubergine)}
+/* A message under the form and the thanks block of /checklist come in softly, without shaking (#40). The keyframes are
+   those of the entrance of a page. */
+html.motion :is(.form-msg,#bedankt):not([hidden]){animation:entrance-in var(--motion-short) var(--ease)}
 
 /* Afsluitende CTA */
 .cta-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
