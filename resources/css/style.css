@@ -608,7 +608,10 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .notes{
     flex-wrap:nowrap;justify-content:flex-start;gap:0;
     width:100vw;margin-inline:calc(50% - 50vw);
-    padding:24px calc(50vw - 115px) 36px;
+    /* A scroller clips everything outside its padding box, and the shadow of the front card
+       reaches 80px below it. The deeper bottom padding gives the shadow room; the negative
+       margin of the same size keeps everything below the deck where it was. */
+    padding:24px calc(50vw - 115px) 84px;margin-bottom:-48px;
     overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;
   }
