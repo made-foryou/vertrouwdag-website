@@ -111,7 +111,7 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .eb--sm{font-size:10px}
 
 .lead{font-size:22px;line-height:1.6;max-width:calc(32 * var(--ch))}
-/* The intro of the heroes of the homepage and /over-mij, as in the design (Romy, 2026-11-27): about 46 characters wide,
+/* The intro of the heroes of the homepage, /over-mij and /diensten, as in the design (Romy, 2026-11-27): about 46 characters wide,
    so a longer text stays a short column and the arch beside it keeps its shape. */
 .lead--breed{max-width:calc(46 * var(--ch));font-size:20px;line-height:1.65}
 .heart{flex:none}
@@ -176,14 +176,15 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
   .hero__collage{margin-block:auto;height:clamp(var(--hero-ratio) * 100cqw, 100% - 2 * clamp(24px, 4vw, 56px), var(--hero-ratio) * 110cqw)}
 }
 .hero__media--d{flex-basis:400px;--hero-ratio:.92}
-/* The hero of the homepage, as in the design (Romy, 2026-11-27): from 861px the text and a larger photo side stand in
-   two columns of 1 : 1.08, and from 1280px both buttons fit on one line. In a grid a stretched column with an aspect
-   ratio takes its width from its height, hence the width of the photo column. */
+/* The heroes of the homepage and /diensten, as in the design (Romy, 2026-11-27): from 861px the text and a larger photo
+   side stand in two columns of 1 : 1.08, and on the homepage from 1280px both buttons fit on one line. In a grid a
+   stretched column with an aspect ratio takes its width from its height, hence the width of the photo column. */
 @media (min-width:861px){
-  .hero--home{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(40px,5vw,80px);padding-top:56px}
-  .hero--home .hero__txt{gap:22px}
-  .hero--home .hero__media{width:100%;--hero-ratio:1.12}
-  .hero--home .row{margin-top:8px}
+  :is(.hero--home,.hero--diensten){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(40px,5vw,80px);padding-top:56px}
+  :is(.hero--home,.hero--diensten) .hero__txt{gap:22px}
+  :is(.hero--home,.hero--diensten) .hero__media{width:100%}
+  .hero--home .hero__media{--hero-ratio:1.12}
+  :is(.hero--home,.hero--diensten) .row{margin-top:8px}
 }
 @media (min-width:1100px){.hero--home .h1{font-size:clamp(64px,6vw,88px)}}
 @media (min-width:1280px){
