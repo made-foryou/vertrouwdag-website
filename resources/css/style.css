@@ -137,15 +137,24 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .site-nav a[aria-current="page"]{color:var(--aubergine);text-decoration:underline;text-underline-offset:8px;text-decoration-color:var(--lila-mid)}
 .site-nav .btn{display:none}
 .nav-toggle{display:none;width:48px;height:48px;border-radius:999px;border:0;background:var(--lila);align-items:center;justify-content:center;cursor:pointer}
-.nav-toggle svg path{transition:transform .3s var(--ease),opacity .2s}
+.nav-toggle svg path{transition:transform var(--motion-short) var(--ease),opacity var(--motion-short) var(--ease)}
 
 @media (max-width:1040px){
   .site-header__logo img{height:46px}
   .site-header__in{padding-top:8px;padding-bottom:8px}
   .site-header__cta{display:none}
   .nav-toggle{display:flex}
-  .site-nav{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--cream);border-bottom:1px solid var(--lijn);padding:8px var(--gutter) 24px;box-shadow:var(--schaduw);display:none}
-  .site-nav.is-open{display:flex}
+  /* The menu slides open and closed (#40). Closed it is hidden rather than display:none, so it can fade, and its links
+     stay out of the tab order and away from a screen reader. It scrolls on its own when it is taller than the screen,
+     because the page behind it does not scroll (below). */
+  .site-nav{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--cream);border-bottom:1px solid var(--lijn);padding:8px var(--gutter) 24px;box-shadow:var(--schaduw);max-height:calc(100dvh - 100% - var(--made-cms-bar-height,0px));overflow-y:auto;overscroll-behavior:contain;visibility:hidden;opacity:0;translate:0 -8px;transition:opacity var(--motion-short) var(--ease),translate var(--motion-short) var(--ease),visibility 0s var(--motion-short)}
+  .site-nav.is-open{visibility:visible;opacity:1;translate:none;transition-delay:0s}
+  /* A light haze over the page behind the open menu: a click on it closes the menu (modules/mobiel-menu.js) instead
+     of opening a link underneath. It hangs from the sticky header, as position:fixed inside its backdrop-filter would
+     be fixed to the header. */
+  .site-header::after{content:'';position:absolute;left:0;right:0;top:100%;z-index:-1;height:100dvh;background:rgba(45,51,31,.22);visibility:hidden;opacity:0;transition:opacity var(--motion-short) var(--ease),visibility 0s var(--motion-short)}
+  .site-header:has(.site-nav.is-open)::after{visibility:visible;opacity:1;transition-delay:0s}
+  html:has(.site-nav.is-open){overflow:hidden;scrollbar-gutter:stable}
   .site-nav a{padding:16px 0;border-bottom:1px dashed rgba(64,72,48,.18);font-size:12px}
   .site-nav .btn{display:inline-flex;margin-top:18px;border-bottom:0;padding:0 28px;color:var(--cream)}
   .nav-toggle[aria-expanded="true"] .l1{transform:translateY(6px) rotate(45deg);transform-origin:center}
