@@ -24,7 +24,16 @@
  * back/forward cache, follows that choice once it is shown. It goes
  * through cookiekeuze, so the Calendly agenda follows it as well, and
  * withdrawn consent reloads the page.
+ *
+ * The banner slides in and out (#40). On a visit that arrives from
+ * outside the site it waits until the entrance of the page has played
+ * (#36), so it does not interrupt the hero; if the script runs later than
+ * that, it slides in at once. After a click within the site it is simply
+ * there, so it stays put in the transition between pages (#38). Opened
+ * with data-cookie-open it slides in straight away. While it slides out
+ * it is inert; without motion it opens and closes at once.
  */
+import { isMotionAllowed } from '../motion';
 import { whenActivated } from '../prerender';
 import { bewaarKeuze, leesKeuze } from './toestemming';
 
@@ -51,11 +60,14 @@ export default function cookiebanner() {
         voorkeurenKnop.setAttribute('aria-expanded', String(open));
     }
 
-    function open({ metVoorkeuren = false, door = null } = {}) {
+    function open({ metVoorkeuren = false, door = null, slidesIn = true } = {}) {
         vinkjes.forEach((vinkje) => {
             vinkje.checked = geldend?.[vinkje.value] === true;
         });
         toonVoorkeuren(metVoorkeuren);
+        banner.classList.remove('is-leaving');
+        banner.classList.toggle('is-sliding-in', slidesIn);
+        banner.inert = false;
         banner.hidden = false;
 
         if (door) {
@@ -67,13 +79,55 @@ export default function cookiebanner() {
     function sluit() {
         const focusStondErin = banner.contains(document.activeElement);
 
-        banner.hidden = true;
-
         if (focusStondErin && opener?.isConnected) {
             opener.focus({ preventScroll: true });
         }
 
         opener = null;
+        slideOut();
+    }
+
+    function slideOut() {
+        if (banner.hidden) {
+            return;
+        }
+
+        if (!isMotionAllowed()) {
+            banner.hidden = true;
+
+            return;
+        }
+
+        banner.inert = true;
+        banner.classList.add('is-leaving');
+    }
+
+    box.addEventListener('animationend', () => {
+        if (!banner.classList.contains('is-leaving')) {
+            return;
+        }
+
+        banner.classList.remove('is-leaving');
+        banner.inert = false;
+        banner.hidden = true;
+    });
+
+    function openOnceThePageHasArrived() {
+        const arrives = document.documentElement.classList.contains('arrival') && isMotionAllowed();
+
+        if (!arrives) {
+            open({ slidesIn: false });
+
+            return;
+        }
+
+        const entrance = document.getAnimations().filter((animation) => animation.animationName?.startsWith('entrance-'));
+
+        Promise.allSettled(entrance.map((animation) => animation.finished)).then(() => {
+            if (geldend === null && banner.hidden) {
+                open();
+            }
+        });
     }
 
     function geefVrij(keuze) {
@@ -163,7 +217,7 @@ export default function cookiebanner() {
     });
 
     if (!geldend) {
-        open();
+        openOnceThePageHasArrived();
     }
 
     whenActivated(() => {

@@ -50,6 +50,8 @@
   --motion-long:.8s;
   --motion-distance:24px;
   --motion-stagger:.12s;  /* between the children of a data-reveal-group */
+  /* The focus ring: cream, lila and a thin green edge, so it shows on light and dark backgrounds alike. */
+  --focus-ring:0 0 0 2px var(--cream),0 0 0 5px var(--lila),0 0 0 6px var(--groen);
   --gutter:clamp(16px,6vw,80px);
   --sec:clamp(72px,9vw,112px);   /* ruimte boven/onder elke sectie */
   /* De inhoud van een strook heeft één van drie breedtes, allemaal op dezelfde middenas en met dezelfde marge
@@ -62,7 +64,8 @@
 /* ---------- Basis ---------- */
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+/* scroll-padding-top: an element that gets the focus, or an anchor, is never left under the sticky header (#40). */
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--made-cms-bar-height,0px) + 96px);-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--cream);color:var(--groen);font-family:var(--serif);font-size:19px;line-height:1.6;overflow-x:hidden}
 main,.site-footer{overflow-x:clip}
 /* Unbounded maakt in het Nederlands van IJ een glyph die op U lijkt; dit zet dat uit */
@@ -86,7 +89,11 @@ h5,.h5{font-size:clamp(20px,1.7vw,22px);line-height:1.3;letter-spacing:normal}  
 h6,.h6{font-size:19px;line-height:1.4;letter-spacing:normal}                     /* nog niet in gebruik; de maat van de lopende tekst */
 p{margin:0}
 a{color:var(--aubergine)}a:hover{color:var(--groen)}
-:focus-visible{outline:none;box-shadow:0 0 0 2px var(--cream),0 0 0 5px var(--lila),0 0 0 6px var(--groen)}
+/* The focus ring is there at once and stays put (#40). !important, as the hover shadow of a button or card would
+   replace it otherwise. No transition, as many elements let their box-shadow slide and the ring would grow in with it.
+   The transparent outline is what shows in forced colors, where box-shadows are dropped. An element with a ring of its
+   own sets it with a more specific selector, and !important as well. */
+:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)!important;transition:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--groen);color:var(--cream);padding:12px 20px;border-radius:999px;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .skip:focus{top:12px;color:var(--cream)}
@@ -137,15 +144,28 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .site-nav a[aria-current="page"]{color:var(--aubergine);text-decoration:underline;text-underline-offset:8px;text-decoration-color:var(--lila-mid)}
 .site-nav .btn{display:none}
 .nav-toggle{display:none;width:48px;height:48px;border-radius:999px;border:0;background:var(--lila);align-items:center;justify-content:center;cursor:pointer}
-.nav-toggle svg path{transition:transform .3s var(--ease),opacity .2s}
+.nav-toggle svg path{transition:transform var(--motion-short) var(--ease),opacity var(--motion-short) var(--ease)}
 
 @media (max-width:1040px){
   .site-header__logo img{height:46px}
   .site-header__in{padding-top:8px;padding-bottom:8px}
   .site-header__cta{display:none}
   .nav-toggle{display:flex}
-  .site-nav{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--cream);border-bottom:1px solid var(--lijn);padding:8px var(--gutter) 24px;box-shadow:var(--schaduw);display:none}
-  .site-nav.is-open{display:flex}
+  /* The menu slides open and closed (#40). Closed it is hidden rather than display:none, so it can fade, and its links
+     stay out of the tab order and away from a screen reader. It scrolls on its own when it is taller than the screen,
+     because the page behind it does not scroll (below). */
+  .site-nav{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--cream);border-bottom:1px solid var(--lijn);padding:8px var(--gutter) 24px;box-shadow:var(--schaduw);max-height:calc(100dvh - 100% - var(--made-cms-bar-height,0px));overflow-y:auto;overscroll-behavior:contain;visibility:hidden;opacity:0;translate:0 -8px;transition:opacity var(--motion-short) var(--ease),translate var(--motion-short) var(--ease),visibility 0s var(--motion-short)}
+  .site-nav.is-open{visibility:visible;opacity:1;translate:none;transition-delay:0s}
+  /* A light haze over the page behind the open menu: a click on it closes the menu (modules/mobiel-menu.js) instead
+     of opening a link underneath. It hangs from the sticky header, as position:fixed inside its backdrop-filter would
+     be fixed to the header. */
+  .site-header::after{content:'';position:absolute;left:0;right:0;top:100%;z-index:-1;height:100dvh;background:rgba(45,51,31,.22);visibility:hidden;opacity:0;transition:opacity var(--motion-short) var(--ease),visibility 0s var(--motion-short)}
+  .site-header:has(.site-nav.is-open)::after{visibility:visible;opacity:1;transition-delay:0s}
+  /* The page stands still behind the open menu. The lock is on <body>, not <html>: with overflow on <html>, the
+     overflow-x of <body> no longer passes to the viewport, so <body> becomes the scroll container and the sticky header
+     sticks to it, at the top of the page and out of sight. */
+  html:has(.site-nav.is-open){scrollbar-gutter:stable}
+  html:has(.site-nav.is-open) body{overflow:hidden}
   .site-nav a{padding:16px 0;border-bottom:1px dashed rgba(64,72,48,.18);font-size:12px}
   .site-nav .btn{display:inline-flex;margin-top:18px;border-bottom:0;padding:0 28px;color:var(--cream)}
   .nav-toggle[aria-expanded="true"] .l1{transform:translateY(6px) rotate(45deg);transform-origin:center}
@@ -305,6 +325,9 @@ a.folder:hover{transform:translateY(-4px)}
 .check{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.5}
 .check input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--groen)}
 .form-msg{font-size:18px;font-style:italic;color:var(--aubergine)}
+/* A message under the form and the thanks block of /checklist come in softly, without shaking (#40). The keyframes are
+   those of the entrance of a page. */
+html.motion :is(.form-msg,#bedankt):not([hidden]){animation:entrance-in var(--motion-short) var(--ease)}
 
 /* Afsluitende CTA */
 .cta-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
@@ -342,7 +365,14 @@ a.folder:hover{transform:translateY(-4px)}
 .cookie[hidden]{display:none}
 /* De maximale hoogte laat bovenaan ruimte, zodat de banner met open voorkeuren nooit over de skiplink valt. */
 .cookie__box{pointer-events:auto;width:100%;max-width:920px;max-height:calc(100vh - 96px);max-height:calc(100dvh - 96px);overflow:auto;background:var(--papier);border:1px solid rgba(64,72,48,.14);border-radius:28px;padding:28px 32px;box-shadow:0 18px 48px rgba(45,51,31,.18)}
-.cookie__box:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lila),0 18px 48px rgba(45,51,31,.18)}
+/* The banner slides in and out calmly (#40). modules/cookiebanner.js decides when: on a visit that arrives it waits for
+   the entrance of the page, and after a click within the site it is simply there, so it stays put in the transition
+   between pages. A new keyframe for leaving, as the same name with other settings would not start again. */
+@keyframes cookie-in{from{opacity:0;translate:0 var(--motion-distance)}}
+@keyframes cookie-out{to{opacity:0;translate:0 var(--motion-distance)}}
+.motion .cookie.is-sliding-in .cookie__box{animation:cookie-in var(--motion-short) var(--ease)}
+.motion .cookie.is-leaving .cookie__box{animation:cookie-out var(--motion-short) var(--ease) forwards}
+.cookie__box:focus-visible{box-shadow:0 0 0 3px var(--lila),0 18px 48px rgba(45,51,31,.18)!important}
 .cookie__main{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px}
 .cookie__txt{flex:1 1 360px;display:flex;flex-direction:column;gap:8px}
 .cookie__txt p:not(.cookie__title){font-size:18px;line-height:1.55}
@@ -397,8 +427,11 @@ a.folder:hover{transform:translateY(-4px)}
 }
 
 /* Without the class motion nothing moves: with prefers-reduced-motion: reduce, in the edit mode of the CMS and
-   without JavaScript (#35, see components/motion.blade.php). */
-html:not(.motion) *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+   without JavaScript (#35, see components/motion.blade.php). The universal selector skips <html> itself and
+   pseudo-elements, such as the plus of a question, so they are named as well (#40). ::details-content has a rule of its
+   own: a browser that does not know it drops the whole rule it is in. */
+html:not(.motion),html:not(.motion) *,html:not(.motion) *::before,html:not(.motion) *::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+html:not(.motion) *::details-content{transition:none!important}
 
 
 /* ==========================================================
@@ -674,25 +707,35 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .js .faq-box__tabs{display:flex}
 /* rechtsboven recht, zodat het laatste tabje aansluit als de tabjes de hele breedte vullen */
 .js .faq-box--tabbladen{border-top-right-radius:0}
-.faq-box__tabs .faq-box__tab{position:static;flex:0 1 auto;min-width:0;height:auto;min-height:36px;margin-bottom:2px;padding:8px 24px;border:1px solid var(--lijn);border-bottom:0;background:var(--papier);cursor:pointer;transition:min-height .3s var(--ease),background .3s,border-color .3s}
+.faq-box__tabs .faq-box__tab{position:static;flex:0 1 auto;min-width:0;height:auto;min-height:36px;margin-bottom:2px;padding:8px 24px;border:1px solid var(--lijn);border-bottom:0;background:var(--papier);cursor:pointer;transition:min-height var(--motion-short) var(--ease),background var(--motion-short),border-color var(--motion-short)}
 .faq-box__tabs .faq-box__tab:hover{min-height:39px}
 .faq-box__tabs .faq-box__tab[aria-selected="true"]{min-height:42px;margin-bottom:0;border-color:var(--lila);background:var(--lila)}
 .faq-box__naam{padding:20px 4px 0}
 :root:not(.js) .faq-box__panel+.faq-box__panel{border-top:1px dashed rgba(64,24,56,.28)}
 .js .faq-box__naam{display:none}
 .js .faq-box__panel:not(.is-active){display:none}
-.js .faq-box__panel.is-active{animation:faqIn .4s var(--ease)}
+.js .faq-box__panel.is-active{animation:faqIn var(--motion-short) var(--ease)}
 .faq{border-bottom:1px dashed rgba(64,24,56,.28)}
 .faq:last-of-type{border-bottom:0}
 .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 4px;border-radius:12px}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary>h3{transition:color .25s}
-.faq summary::after{content:'+';flex:none;width:40px;height:40px;border-radius:999px;background:var(--lila);color:var(--aubergine);display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;transition:transform .32s var(--ease),background .32s,color .32s}
+.faq summary>h3{transition:color var(--motion-short)}
+.faq summary::after{content:'+';flex:none;width:40px;height:40px;border-radius:999px;background:var(--lila);color:var(--aubergine);display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;transition:transform var(--motion-short) var(--ease),background var(--motion-short),color var(--motion-short)}
 .faq summary:hover{--kop:var(--aubergine)}
 .faq[open] summary::after{transform:rotate(45deg);background:var(--aubergine);color:var(--cream)}
 .faq p{padding:0 4px 26px;font-size:20px;line-height:1.7;max-width:calc(60 * var(--ch))}
-.faq[open] p{animation:faqIn .4s var(--ease)}
+.faq[open] p{animation:faqIn var(--motion-short) var(--ease)}
 @keyframes faqIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+/* A question opens and closes softly (#40): the answer grows from nothing to its own height while it fades in, and the
+   other way round. That takes animating to height auto, which only a browser with interpolate-size can do. Elsewhere,
+   such as Safari, the answer fades in on opening (faqIn above) and a question closes at once. It stays a real <details>,
+   so finding a word on the page still opens its question. The clip margin keeps the focus ring of a link whole. */
+@supports (interpolate-size:allow-keywords) and selector(::details-content){
+  html.motion .faq{interpolate-size:allow-keywords}
+  html.motion .faq::details-content{block-size:0;overflow:clip;overflow-clip-margin:8px;opacity:0;transition:block-size var(--motion-short) var(--ease),opacity var(--motion-short) var(--ease),content-visibility var(--motion-short) allow-discrete}
+  html.motion .faq[open]::details-content{block-size:auto;opacity:1}
+  html.motion .faq[open] p{animation:none}
+}
 
 /* Kennismaken */
 .meet{display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start;padding-top:72px;padding-bottom:var(--sec)}
@@ -904,13 +947,13 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf-hint{font-size:17px;font-style:italic;color:var(--grijs)}
 .tf{position:relative;max-width:1080px;margin:0 auto}
 .tf__tabs{display:flex;align-items:flex-end;padding:0 8px;position:relative;z-index:2}
-.tf__tab{flex:1 1 0;min-width:0;position:relative;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:12px 18px 14px;border:0;border-radius:18px 18px 0 0;font-family:var(--sans);font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;cursor:pointer;text-align:center;box-shadow:0 -6px 18px rgba(45,51,31,.06);transform:translateY(10px);transition:transform .4s var(--ease),filter .3s,box-shadow .3s}
+.tf__tab{flex:1 1 0;min-width:0;position:relative;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:12px 18px 14px;border:0;border-radius:18px 18px 0 0;font-family:var(--sans);font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;cursor:pointer;text-align:center;box-shadow:0 -6px 18px rgba(45,51,31,.06);transform:translateY(10px);transition:transform var(--motion-short) var(--ease),filter var(--motion-short),box-shadow var(--motion-short)}
 .tf__tab+.tf__tab{margin-left:-14px}
 .tf__tab:nth-child(1){z-index:1}.tf__tab:nth-child(2){z-index:2}.tf__tab:nth-child(3){z-index:3}
 .tf__tab[aria-selected="false"]{filter:brightness(.95) saturate(.9)}
 .tf__tab[aria-selected="false"]:hover{transform:translateY(3px);filter:none}
 .tf__tab[aria-selected="true"]{transform:none;z-index:5;min-height:62px;box-shadow:none}
-.tf__tab:focus-visible{outline:none;box-shadow:inset 0 0 0 2px currentColor}
+.tf__tab:focus-visible{box-shadow:inset 0 0 0 2px currentColor!important}
 .tf__nr{opacity:.6;font-size:9px}
 .tf__stack{position:relative;z-index:3}
 /* dieptelaagjes onder de map */
@@ -918,7 +961,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf__stack::after{left:36px;right:36px;bottom:-24px;background:#D3D7C4;z-index:-2}
 .tf__panel{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:48px;align-items:center;padding:52px clamp(28px,4.5vw,56px);border-radius:0 0 28px 28px;box-shadow:0 22px 50px rgba(45,51,31,.14)}
 .tf__panel+.tf__panel{margin-top:32px}
-.tf__panel:focus-visible{outline:none;box-shadow:0 0 0 3px var(--lila),0 22px 50px rgba(45,51,31,.14)}
+.tf__panel:focus-visible{box-shadow:0 0 0 3px var(--lila),0 22px 50px rgba(45,51,31,.14)!important}
 .tf__media{display:flex;justify-content:center}
 .tf__pol{position:relative;width:min(100%,340px);padding:12px 12px 48px}
 .tf__pol img{aspect-ratio:1/1}
@@ -940,13 +983,14 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf__panel.tf--cream .muted{color:var(--grijs)}
 .tf--groen{background:var(--groen);color:var(--cream)}
 .tf__panel.tf--groen .muted{color:var(--lila)}
-/* met JavaScript: één map tegelijk, alle mappen op dezelfde plek */
+/* met JavaScript: één map tegelijk, alle mappen op dezelfde plek. The new folder fades in over the old one within
+   --motion-short, the longest motion that stays under 400 ms (#40). */
 .tf__tabs{display:none}
 .js .tf__tabs{display:flex}
 .js .tf__stack{display:grid}
-.js .tf__panel{grid-area:1/1;margin:0;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .45s var(--ease),transform .45s var(--ease),visibility 0s .45s}
-.js .tf__panel.is-active{opacity:1;visibility:visible;transform:none;transition:opacity .45s var(--ease),transform .45s var(--ease),visibility 0s}
-.js .tf__panel.is-active .tf__pol{animation:tfPol .6s var(--ease)}
+.js .tf__panel{grid-area:1/1;margin:0;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity var(--motion-short) var(--ease),transform var(--motion-short) var(--ease),visibility 0s var(--motion-short)}
+.js .tf__panel.is-active{opacity:1;visibility:visible;transform:none;transition:opacity var(--motion-short) var(--ease),transform var(--motion-short) var(--ease),visibility 0s}
+.js .tf__panel.is-active .tf__pol{animation:tfPol var(--motion-short) var(--ease)}
 @keyframes tfPol{from{transform:rotate(-12deg) translateY(10px);opacity:.4}}
 .tf-hint{display:none}.js .tf-hint{display:block}
 @media (hover:hover){.tf__pol{transition:transform .5s var(--ease)}.tf__panel:hover .tf__pol{transform:rotate(0deg) translateY(-4px)!important}}
