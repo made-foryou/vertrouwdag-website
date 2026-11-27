@@ -641,7 +641,8 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .folders[data-deck]{
     display:flex;flex-wrap:nowrap;gap:0;align-items:stretch;
     width:100vw;margin-inline:calc(50% - 50vw);
-    padding:8px calc(50vw - min(39vw,150px)) 28px;
+    /* Room for the 58px shadow below the front folder, as with the notes above. */
+    padding:8px calc(50vw - min(39vw,150px)) 60px;margin-bottom:-32px;
     overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;
   }
@@ -1142,7 +1143,8 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf-m{display:none}
 @media (max-width:720px){
   .tf,.tf-hint{display:none!important}
-  .tf-m{display:block}
+  /* A flex column, so the deck's negative margin adds to the dots' margin instead of collapsing with it. */
+  .tf-m{display:flex;flex-direction:column}
   .tf-m .folders[data-deck]{align-items:stretch}
   .tf-m .folder__body{gap:10px}
   .tf-m .price{font-size:24px;margin-bottom:2px}
