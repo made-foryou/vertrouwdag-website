@@ -168,9 +168,14 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
   html:has(.site-nav.is-open) body{overflow:hidden}
   .site-nav a{padding:16px 0;border-bottom:1px dashed rgba(64,72,48,.18);font-size:12px}
   .site-nav .btn{display:inline-flex;margin-top:18px;border-bottom:0;padding:0 28px;color:var(--cream)}
-  .nav-toggle[aria-expanded="true"] .l1{transform:translateY(6px) rotate(45deg);transform-origin:center}
-  .nav-toggle[aria-expanded="true"] .l2{opacity:0}
-  .nav-toggle[aria-expanded="true"] .l3{transform:translate(0,-6px) rotate(-45deg) scaleX(1.5);transform-origin:center}
+  /* The cross is made of the two 18px lines, turned about the middle of the icon (10,7 in its view box):
+     the top line first moves down onto the middle line, then turns. The short bottom line fades out.
+     The turned lines' round caps reach just past the view box, hence overflow:visible. */
+  .nav-toggle svg{overflow:visible}
+  .nav-toggle svg path{transform-box:view-box;transform-origin:center}
+  .nav-toggle[aria-expanded="true"] .l1{transform:rotate(45deg) translateY(6px)}
+  .nav-toggle[aria-expanded="true"] .l2{transform:rotate(-45deg)}
+  .nav-toggle[aria-expanded="true"] .l3{opacity:0}
 }
 
 /* ---------- Secties ---------- */
@@ -608,7 +613,10 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .notes{
     flex-wrap:nowrap;justify-content:flex-start;gap:0;
     width:100vw;margin-inline:calc(50% - 50vw);
-    padding:24px calc(50vw - 115px) 36px;
+    /* A scroller clips everything outside its padding box, and the shadow of the front card
+       reaches 80px below it. The deeper bottom padding gives the shadow room; the negative
+       margin of the same size keeps everything below the deck where it was. */
+    padding:24px calc(50vw - 115px) 84px;margin-bottom:-48px;
     overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;
   }
@@ -638,7 +646,8 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .folders[data-deck]{
     display:flex;flex-wrap:nowrap;gap:0;align-items:stretch;
     width:100vw;margin-inline:calc(50% - 50vw);
-    padding:8px calc(50vw - min(39vw,150px)) 28px;
+    /* Room for the 58px shadow below the front folder, as with the notes above. */
+    padding:8px calc(50vw - min(39vw,150px)) 60px;margin-bottom:-32px;
     overflow-x:auto;overflow-y:hidden;
     scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;
   }
@@ -720,9 +729,13 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 4px;border-radius:12px}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary>h3{transition:color var(--motion-short)}
-.faq summary::after{content:'+';flex:none;width:40px;height:40px;border-radius:999px;background:var(--lila);color:var(--aubergine);display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;transition:transform var(--motion-short) var(--ease),background var(--motion-short),color var(--motion-short)}
+/* The plus is drawn with two lines instead of the '+' glyph, whose ink sits about 3px below the middle
+   of its line box. Chrome rounds a background tile that starts on a fraction of a pixel, so the 1px line
+   is placed with colour stops across the full circle, and the arms are 8px: an even length in the
+   even-sized circle starts on a whole pixel. Cormorant's '+' was 7.5px on mobile and 8.8px on desktop. */
+.faq summary::after{content:'';flex:none;width:40px;height:40px;border-radius:999px;background:linear-gradient(transparent calc(50% - .5px),currentColor 0 calc(50% + .5px),transparent 0) center/8px 100% no-repeat,linear-gradient(90deg,transparent calc(50% - .5px),currentColor 0 calc(50% + .5px),transparent 0) center/100% 8px no-repeat,var(--lila);color:var(--aubergine);transition:transform var(--motion-short) var(--ease),background-color var(--motion-short),color var(--motion-short)}
 .faq summary:hover{--kop:var(--aubergine)}
-.faq[open] summary::after{transform:rotate(45deg);background:var(--aubergine);color:var(--cream)}
+.faq[open] summary::after{transform:rotate(45deg);background-color:var(--aubergine);color:var(--cream)}
 .faq p{padding:0 4px 26px;font-size:20px;line-height:1.7;max-width:calc(60 * var(--ch))}
 .faq[open] p{animation:faqIn var(--motion-short) var(--ease)}
 @keyframes faqIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
@@ -828,7 +841,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .faq-box__tabs .faq-box__tab,.faq-box__tabs .faq-box__tab:hover,.faq-box__tabs .faq-box__tab[aria-selected="true"]{min-height:40px;margin:0;padding:8px 16px;border:1px solid var(--lijn);border-radius:20px;justify-content:center;text-align:center;font-size:10px;letter-spacing:.1em}
   .faq-box__tabs .faq-box__tab[aria-selected="true"]{border-color:var(--lila)}
   .faq summary{padding:20px 2px;gap:16px}
-  .faq summary::after{width:34px;height:34px;font-size:22px}
+  .faq summary::after{width:34px;height:34px}
   .faq p{font-size:18px}
   .meet{gap:40px;padding-top:32px}
   .meet__pol{width:110px;left:-4px}
@@ -923,7 +936,8 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   /* tabel-labels: mogen afbreken en staan altijd op twee regels hoogte */
   .cmp td::before{hyphens:manual;-webkit-hyphens:manual;min-height:2.6em}
   /* WhatsApp: rond icoon zodat hij niets afdekt */
-  .wa{width:52px;height:52px;min-height:0;padding:0;justify-content:center;font-size:0;letter-spacing:0;border-radius:999px}
+  /* The hidden label still counts as a flex item, so any gap would push the heart off-centre. */
+  .wa{width:52px;height:52px;min-height:0;padding:0;gap:0;justify-content:center;font-size:0;letter-spacing:0;border-radius:999px}
   .wa svg{width:20px;height:18px}
 }
 @media (max-width:720px){
@@ -1138,7 +1152,8 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 .tf-m{display:none}
 @media (max-width:720px){
   .tf,.tf-hint{display:none!important}
-  .tf-m{display:block}
+  /* A flex column, so the deck's negative margin adds to the dots' margin instead of collapsing with it. */
+  .tf-m{display:flex;flex-direction:column}
   .tf-m .folders[data-deck]{align-items:stretch}
   .tf-m .folder__body{gap:10px}
   .tf-m .price{font-size:24px;margin-bottom:2px}
