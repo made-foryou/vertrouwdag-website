@@ -111,6 +111,9 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .eb--sm{font-size:10px}
 
 .lead{font-size:22px;line-height:1.6;max-width:calc(32 * var(--ch))}
+/* The intro of the heroes of the homepage, /over-mij and /diensten, as in the design (Romy, 2026-11-27): about 46 characters wide,
+   so a longer text stays a short column and the arch beside it keeps its shape. */
+.lead--breed{max-width:calc(46 * var(--ch));font-size:20px;line-height:1.65}
 .heart{flex:none}
 
 /* ---------- Knoppen ---------- */
@@ -163,15 +166,31 @@ a{color:var(--aubergine)}a:hover{color:var(--groen)}
 .hero__media{flex:1 1 460px;min-width:0;position:relative;--hero-ratio:1.02;aspect-ratio:1/var(--hero-ratio)}
 /* With an arch the photo column grows along with a longer text column, instead of floating in the middle with white
    space above and below it (#83). The collage of arch, polaroid and stickers stands in the middle of that column:
-   never lower than the aspect ratio of the column, with some room above and below, and never taller than one and a
-   half times its width, so a long text does not stretch the arch into a pillar. A collage of loose polaroids and notes
-   keeps its composition. */
+   never lower than the aspect ratio of the column, with some room above and below, and at most a tenth taller than
+   that ratio, so a long text does not stretch the arch into a pillar. One and a half times its width still made the
+   arch a pillar on /, /over-mij and /diensten (Romy, 2026-11-27). A collage of loose polaroids and notes keeps its
+   composition. */
 .hero__collage{position:absolute;inset:0}
 @media (min-width:721px){
   .hero__media:has(>.hero__collage){align-self:stretch;container-type:inline-size}
-  .hero__collage{margin-block:auto;height:clamp(var(--hero-ratio) * 100cqw, 100% - 2 * clamp(24px, 4vw, 56px), 150cqw)}
+  .hero__collage{margin-block:auto;height:clamp(var(--hero-ratio) * 100cqw, 100% - 2 * clamp(24px, 4vw, 56px), var(--hero-ratio) * 110cqw)}
 }
 .hero__media--d{flex-basis:400px;--hero-ratio:.92}
+/* The heroes of the homepage and /diensten, as in the design (Romy, 2026-11-27): from 861px the text and a larger photo
+   side stand in two columns of 1 : 1.08, and on the homepage from 1280px both buttons fit on one line. In a grid a
+   stretched column with an aspect ratio takes its width from its height, hence the width of the photo column. */
+@media (min-width:861px){
+  :is(.hero--home,.hero--diensten){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(40px,5vw,80px);padding-top:56px}
+  :is(.hero--home,.hero--diensten) .hero__txt{gap:22px}
+  :is(.hero--home,.hero--diensten) .hero__media{width:100%}
+  .hero--home .hero__media{--hero-ratio:1.12}
+  :is(.hero--home,.hero--diensten) .row{margin-top:8px}
+}
+@media (min-width:1100px){.hero--home .h1{font-size:clamp(64px,6vw,88px)}}
+@media (min-width:1280px){
+  .hero--home .row{flex-wrap:nowrap;gap:12px}
+  .hero--home .btn{padding-inline:20px;letter-spacing:.12em;white-space:nowrap}
+}
 .arch{position:absolute;overflow:hidden;border-radius:999px 999px 28px 28px;background:var(--plaatshouder)}
 .arch img{width:100%;height:100%;object-fit:cover}
 /* de foto vult de content-box; de plaatshouder ligt daar 1px binnen, zodat hij niet buiten de afgeronde hoeken van de foto valt (#39) */

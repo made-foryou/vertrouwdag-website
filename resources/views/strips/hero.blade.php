@@ -22,11 +22,11 @@
     $eersteKnop = $strip->eerste_knop ?? ['text' => config('vertrouwdag.cta.label'), 'url' => config('vertrouwdag.cta.pad')];
 @endphp
 <section data-cms-strip="{{ $strip->id }}">
-    <div class="wrap hero">
+    <div class="wrap hero hero--home">
         <div class="hero__txt" data-entrance>
             <p class="eb" style="display:flex;align-items:center;gap:10px"><svg width="14" height="13" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg><span data-cms-field="label">{{ $labelBegin }}<span style="white-space:nowrap">{{ $labelEind }}</span></span></p>
             <x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h1" />
-            <p class="lead" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
+            <p class="lead lead--breed" data-cms-field="tekst"><x-regels :tekst="$strip->tekst" /></p>
             <div class="row">
                 <x-knop :href="$eersteKnop['url']" data-cms-field="eerste_knop">{{ $eersteKnop['text'] }}</x-knop>
                 @if ($strip->knop)
@@ -36,9 +36,9 @@
         </div>
         <div class="hero__media">
             <div class="hero__collage" data-entrance>
-                <div class="arch" style="right:0;top:0;width:72%;height:92%"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy-portret.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1527" positie="50% 18%" sizes="(max-width:1110px) 64vw, 380px" veld="foto_boog" fetchpriority="high" /></div>
+                <div class="arch" style="right:0;top:0;width:72%;height:92%"><x-foto :foto="$strip->foto_boog" terugval="resources/images/romy-portret.jpg" alt="Romy, weddingplanner van vertrouwdag in Zuid-Holland" :breedte="1100" :hoogte="1527" positie="50% 18%" sizes="(max-width:523px) 64vw, (max-width:720px) 331px, (max-width:860px) 63vw, (max-width:1240px) 31vw, 380px" veld="foto_boog" fetchpriority="high" /></div>
                 <div class="polaroid tilt" style="left:0;bottom:2%;width:46%;transform:rotate(-7deg)">
-                    <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/ringen-boeket.jpg" alt="Handen met trouwringen en een boeket" :breedte="1100" :hoogte="733" sizes="(max-width:1110px) 42vw, 245px" veld="foto_polaroid" />
+                    <x-foto :foto="$strip->foto_polaroid" terugval="resources/images/ringen-boeket.jpg" alt="Handen met trouwringen en een boeket" :breedte="1100" :hoogte="733" sizes="(max-width:523px) 41vw, (max-width:720px) 218px, (max-width:860px) 42vw, (max-width:1240px) 20vw, 245px" veld="foto_polaroid" />
                     <span data-cms-field="bijschrift">{{ $strip->bijschrift }}</span>
                 </div>
                 <div class="stamp tilt" style="left:10%;top:4%;transform:rotate(9deg)"><img src="{{ Vite::asset('resources/images/monogram-groen.png') }}" alt="" width="460" height="473"></div>
