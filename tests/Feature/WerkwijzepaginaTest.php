@@ -19,7 +19,7 @@ test('the seeded process page comes from the cms with every strip in the order o
     expect(striptypenOp('/werkwijze', documentVoor('/werkwijze')))->toBe([
         'hero-werkwijze',
         'tijdlijn',
-        'trouwdag',
+        'herkenning',
         'tijdlijn',
         'cta',
     ]);
@@ -37,7 +37,7 @@ test('the process page numbers the phases one to six with the wedding day as the
             'Het draaiboek',
             'Afronden',
         ])
-        ->and(platteTekst(strookVanType('/werkwijze', $document, 'trouwdag')?->querySelector('h2')))->toBe('Wat jullie familie die dag doet');
+        ->and(platteTekst(strookVanType('/werkwijze', $document, 'herkenning')?->querySelector('h2')))->toBe('Wat jullie familie die dag doet');
 });
 
 test('only the first timeline lies on the band', function () {

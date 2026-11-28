@@ -16,7 +16,7 @@ test('the seeded services page comes from the cms with every strip in the order 
     $response->assertOk()->assertViewIs('page');
 
     expect(striptypenOp('/diensten', documentVoor('/diensten')))->toBe([
-        'hero-diensten',
+        'hero',
         'lopende-band',
         'pakketten',
         'vergelijking',
@@ -136,7 +136,7 @@ test('every service link on the homepage opens a folder and a card on the servic
 test('the hero links to the meeting and to the comparison', function () {
     $document = documentVoor('/diensten');
 
-    expect(attributenVan(strookVanType('/diensten', $document, 'hero-diensten')?->querySelectorAll('a.btn'), 'href'))->toBe([url('/kennismaken'), '#vergelijk'])
+    expect(attributenVan(strookVanType('/diensten', $document, 'hero')?->querySelectorAll('a.btn'), 'href'))->toBe(['/kennismaken', '#vergelijk'])
         ->and($document->getElementById('vergelijk'))->toBe(strookVanType('/diensten', $document, 'vergelijking'));
 });
 

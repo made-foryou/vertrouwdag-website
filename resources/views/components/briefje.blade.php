@@ -13,6 +13,8 @@
     'href' => null,
 ])
 @php
+    // A strip that passes no style of its own for some notes passes null; merged as is, that would add "; ;".
+    $attributes = $attributes->filter(fn (mixed $value, string $key): bool => $key !== 'style' || filled($value));
     $achtergrond = match ($kleur) {
         'lila' => 'background:#E0D0E0;color:#401838',
         'cream' => 'background:#F6F6F0',

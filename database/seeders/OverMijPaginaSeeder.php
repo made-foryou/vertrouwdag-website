@@ -37,7 +37,15 @@ class OverMijPaginaSeeder extends PaginaSeeder
     protected function stroken(): array
     {
         return [
-            ['hero-over-mij'],
+            ['hero', [
+                'variant' => 'over-mij',
+                'label' => 'Over mij',
+                'kop' => ['text' => 'Hoi, ik ben *Romy*'],
+                'tekst' => 'De planner achter vertrouwdag. Ik woon in Zuid-Holland, houd van een goed gedekte tafel en word blij van een planning die klopt.',
+                'knop' => ['text' => 'Maak kennis met mij', 'link' => ['url' => '/kennismaken']],
+                'bijschrift' => 'hier word ik blij van',
+                'sticker' => null,
+            ]],
             ['lopende-band', [
                 'teksten' => [
                     ['tekst' => 'Punctueel'],
@@ -46,10 +54,24 @@ class OverMijPaginaSeeder extends PaginaSeeder
                     ['tekst' => 'Thuis in Zuid-Holland'],
                 ],
             ]],
-            ['verhaal'],
+            ['verhaal', [
+                'kop' => ['text' => 'Van stagiaire *tot planner*'],
+                'tekst' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus. Curabitur blandit tempus porttitor, vestibulum id ligula porta felis euismod semper. Nullam quis risus eget urna mollis ornare vel eu leo.</p><p>Donec ullamcorper nulla non metus auctor fringilla. Maecenas faucibus mollis interdum, cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur, sed posuere consectetur est at lobortis.</p>',
+            ]],
             ['kijkje'],
             ['citaat'],
-            ['kwaliteiten'],
+            ['herkenning', [
+                'variant' => 'kwaliteiten',
+                'label' => 'Waarom vertrouwdag',
+                'kop' => ['text' => 'Vertrouwd, *zoals een zus* of goede vriendin'],
+                'tekst' => 'Iemand die jullie wensen kent, eerlijk meedenkt en op de dag zelf alles opvangt. Zodat jullie, en jullie familie, er gewoon kunnen zijn.',
+                'citaten' => [
+                    ['titel' => 'Punctueel', 'tekst' => 'Afspraak is afspraak, ook met leveranciers.'],
+                    ['titel' => 'Oog voor detail', 'tekst' => 'Van naamkaartjes tot de looproute van de ceremonie.'],
+                    ['titel' => 'Lokaal', 'tekst' => 'Thuis in Zuid-Holland, van Rotterdam tot de Hoeksche Waard.'],
+                ],
+                'slotzin' => null,
+            ]],
             ['cta', [
                 'kop' => ['text' => 'Ik maak graag *kennis*'],
                 'tekst' => 'Vertel me over jullie plannen. Een half uur, online en vrijblijvend.',

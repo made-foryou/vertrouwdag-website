@@ -122,7 +122,7 @@ abstract class PaginaSeeder extends Seeder
 
         foreach ($this->stroken() as $positie => $strook) {
             $strip = AddStrip::run($page, $strook[0], $positie);
-            $waarden = [...$this->ontwerpfotos($strip), ...($strook[1] ?? [])];
+            $waarden = [...$this->ontwerpfotos($strip, $strook[1] ?? []), ...($strook[1] ?? [])];
 
             if ($waarden !== []) {
                 UpdateStrip::run($page, $strip->id, $waarden, chooseLevels: false);
@@ -169,14 +169,19 @@ abstract class PaginaSeeder extends Seeder
      * van zijn plek, een dienst de foto van de dienst. Een lijst die een
      * seeder zelf meegeeft in stroken(), vervangt deze lijst.
      *
+     * The photos of the opening with an arch and a polaroid follow its variant, which the seeder gives in stroken().
+     *
+     * @param  array<string, mixed>  $gegeven  the values the seeder gives the strip in stroken()
      * @return array<string, mixed>
      */
-    private function ontwerpfotos(Strip $strip): array
+    private function ontwerpfotos(Strip $strip, array $gegeven): array
     {
         return match ($strip->type) {
-            'hero' => ['foto_boog' => $this->ontwerpfoto('romy-portret.jpg'), 'foto_polaroid' => $this->ontwerpfoto('ringen-boeket.jpg')],
-            'hero-diensten' => ['foto_boog' => $this->ontwerpfoto('ceremonie-buiten.jpg'), 'foto_polaroid' => $this->ontwerpfoto('bruid-rozen.jpg')],
-            'hero-over-mij' => ['foto_boog' => $this->ontwerpfoto('romy.jpg'), 'foto_polaroid' => $this->ontwerpfoto('kus-zwartwit.jpg')],
+            'hero' => match ($gegeven['variant'] ?? 'home') {
+                'diensten' => ['foto_boog' => $this->ontwerpfoto('ceremonie-buiten.jpg'), 'foto_polaroid' => $this->ontwerpfoto('bruid-rozen.jpg')],
+                'over-mij' => ['foto_boog' => $this->ontwerpfoto('romy.jpg'), 'foto_polaroid' => $this->ontwerpfoto('kus-zwartwit.jpg')],
+                default => ['foto_boog' => $this->ontwerpfoto('romy-portret.jpg'), 'foto_polaroid' => $this->ontwerpfoto('ringen-boeket.jpg')],
+            },
             'over-mij-intro' => ['foto_boog' => $this->ontwerpfoto('romy.jpg'), 'foto_polaroid' => $this->ontwerpfoto('ringen-pioenen.jpg')],
             'hero-werkwijze' => ['foto_boven' => $this->ontwerpfoto('paar-landschap.jpg'), 'foto_onder' => $this->ontwerpfoto('ringen-goud.jpg')],
             'kijkje' => ['foto_links' => $this->ontwerpfoto('romy-klein.jpg'), 'foto_rechts' => $this->ontwerpfoto('romy-samen.jpg')],

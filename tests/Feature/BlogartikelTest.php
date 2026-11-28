@@ -26,10 +26,10 @@ test('the article keeps its address and comes from the cms, with every section a
         'artikel-tekst',
         'artikel-fotos',
         'artikel-tekst',
-        'artikel-citaat',
+        'citaat',
         'artikel-tekst',
         'auteur',
-        'kennismaking',
+        'cta',
     ]);
 });
 

@@ -38,6 +38,43 @@ test('the first button of the hero is the one from the cms, and the button to th
     'leeg' => [null, 'Plan een kennismaking', '/kennismaken'],
 ]);
 
+test('the opening with photos puts each part of its variant in place', function (string $variant, string $wrap, array $collage, bool $mediaEerst) {
+    $document = renderStrip('hero', [
+        'variant' => $variant,
+        'label' => 'Label',
+        'kop' => kop('Kop', 'h1'),
+        'eerste_knop' => ['text' => 'Eerste', 'url' => '/eerste'],
+        'knop' => ['text' => 'Tweede', 'url' => '/tweede'],
+        'bijschrift' => 'Bijschrift',
+        'sticker' => 'Sticker',
+    ]);
+    $hero = $document->querySelector('section[data-cms-strip] > div');
+    $delen = array_map(fn (Element $deel): string => explode(' ', $deel->getAttribute('class'))[0], iterator_to_array($hero?->querySelector('.hero__collage')?->children ?? []));
+
+    expect($hero?->getAttribute('class'))->toBe($wrap)
+        ->and($delen)->toBe($collage)
+        ->and($hero?->firstElementChild?->classList->contains('hero__media'))->toBe($mediaEerst)
+        ->and($document->querySelectorAll('h1[data-cms-field="kop"]'))->toHaveCount(1);
+})->with([
+    'homepage' => ['home', 'wrap hero hero--home', ['arch', 'polaroid', 'stamp', 'sticker'], false],
+    'diensten' => ['diensten', 'wrap hero hero--diensten', ['arch', 'polaroid', 'sticker'], false],
+    'over mij' => ['over-mij', 'wrap hero', ['arch', 'stamp', 'polaroid'], true],
+]);
+
+test('the opening with photos as Over mij has one button, the field knop', function () {
+    $document = renderStrip('hero', ['variant' => 'over-mij', 'kop' => kop('Kop', 'h1'), 'eerste_knop' => ['text' => 'Eerste', 'url' => '/eerste'], 'knop' => ['text' => 'Maak kennis', 'url' => '/kennismaken']]);
+    $knoppen = $document->querySelectorAll('.hero__txt a.btn');
+
+    expect($knoppen)->toHaveCount(1)
+        ->and($knoppen->item(0)->getAttribute('data-cms-field'))->toBe('knop')
+        ->and($knoppen->item(0)->getAttribute('class'))->toBe('btn');
+});
+
+test('the opening with photos rejects an unknown variant and names it', function () {
+    expect(fn () => renderStrip('hero', ['variant' => 'werkwijze', 'kop' => kop('Kop', 'h1')]))
+        ->toThrow(ViewException::class, 'De strook hero kent geen variant [werkwijze]');
+});
+
 test('the services strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving']];
 
@@ -101,7 +138,12 @@ test('the recognition strip rejects an unknown icon and names it', function () {
     $citaten = [['id' => null, 'tekst' => 'Citaat', 'icoon' => 'eenhoorn']];
 
     expect(fn () => renderStrip('herkenning', ['kop' => kop('Klinkt dit bekend?'), 'citaten' => $citaten]))
-        ->toThrow(ViewException::class, 'De strook herkenning kent geen icoon [eenhoorn]');
+        ->toThrow(ViewException::class, 'De strook briefjes kent geen icoon [eenhoorn]');
+});
+
+test('the notes reject an unknown variant and name it', function () {
+    expect(fn () => renderStrip('herkenning', ['variant' => 'roze', 'kop' => kop('Kop'), 'citaten' => []]))
+        ->toThrow(ViewException::class, 'De strook briefjes kent geen variant [roze]');
 });
 
 test('the steps are numbered in their order', function () {
@@ -207,6 +249,31 @@ test('the closing strip rejects an unknown variant', function () {
         ->toThrow(ViewException::class, 'De strook cta kent geen variant [klein]');
 });
 
+test('the blog opening as the archive has a breadcrumb and filter chips instead of links', function () {
+    $document = renderStrip('hero-blog', ['variant' => 'archief', 'label' => 'Blogarchief', 'kop' => kop('Alle *blogs*', 'h1'), 'tekst' => 'Tekst']);
+    $wrap = $document->querySelector('section[data-cms-strip] > .wrap.stack[data-entrance]');
+
+    expect($wrap?->firstElementChild?->matches('nav.crumbs'))->toBeTrue()
+        ->and($wrap?->querySelectorAll('.chips[role="group"] button.chip[data-filter]'))->toHaveCount(count(Blogcategorie::cases()) + 1)
+        ->and($wrap?->querySelector('nav.chips, a.chip'))->toBeNull();
+});
+
+test('the blog opening rejects an unknown variant and names it', function () {
+    expect(fn () => renderStrip('hero-blog', ['variant' => 'lijst', 'kop' => kop('Kop', 'h1')]))
+        ->toThrow(ViewException::class, 'De strook hero-blog kent geen variant [lijst]');
+});
+
+test('the closing strip as a card is the invitation under an article, with its label and without a photo', function () {
+    $document = renderStrip('cta', ['variant' => 'kaart', 'label' => 'Zullen we kennismaken?', 'kop' => kop('Benieuwd wat het *voor jullie* kan betekenen?'), 'tekst' => "Een half uur,\nonline", 'foto' => fotoUitCms()]);
+    $kaart = $document->querySelector('section[data-cms-strip] > .wrap.sec > .founding[data-reveal]');
+
+    expect(platteTekst($kaart?->querySelector('p.eb.eb--lila[data-cms-field="label"]')))->toBe('Zullen we kennismaken?')
+        ->and(platteTekst($kaart?->querySelector('h2.h2[data-cms-field="kop"]')))->toBe('Benieuwd wat het voor jullie kan betekenen?')
+        ->and($kaart?->querySelectorAll('[data-cms-field="tekst"] br'))->toHaveCount(1)
+        ->and($kaart?->querySelector('a.btn')?->getAttribute('href'))->toBe(url(config('vertrouwdag.cta.pad')))
+        ->and($document->querySelector('img, .cta-split'))->toBeNull();
+});
+
 test('the plain closing strip has a taller photo but no heart and the normal heading', function () {
     $document = renderStrip('cta', ['kop' => kop('Het begint met *een gesprek*'), 'variant' => 'eenvoudig']);
 
@@ -257,8 +324,8 @@ test('the timeline rejects an unknown variant', function () {
         ->toThrow(ViewException::class, 'De strook tijdlijn kent geen variant [aubergine]');
 });
 
-test('the wedding day band shows its phase number only when it has one', function (?string $nummer, array $badges) {
-    $document = renderStrip('trouwdag', ['nummer' => $nummer, 'kop' => kop('Kop'), 'briefjes' => []]);
+test('the notes as the wedding day show the phase number only when they have one', function (?string $nummer, array $badges) {
+    $document = renderStrip('herkenning', ['variant' => 'trouwdag', 'nummer' => $nummer, 'kop' => kop('Kop'), 'citaten' => []]);
 
     expect(tekstenVan($document->querySelectorAll('.tl__badge span')))->toBe($badges);
 })->with([
@@ -269,24 +336,31 @@ test('the wedding day band shows its phase number only when it has one', functio
     'in woorden' => ['vijf', []],
 ]);
 
-test('the notes of the wedding day start again with the first colour after the fourth', function () {
-    $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'wie' => "Wie {$nummer}", 'tekst' => "Tekst {$nummer}"], range(1, 5));
+test('the notes as the wedding day start again with the first colour after the fourth, and say who', function () {
+    $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'titel' => "Wie {$nummer}", 'tekst' => "Tekst {$nummer}"], range(1, 5));
 
-    $document = renderStrip('trouwdag', ['kop' => kop('Kop'), 'briefjes' => $briefjes]);
-    $briefjesOpDePagina = $document->querySelectorAll('[data-cms-items="briefjes"] > .note');
+    $document = renderStrip('herkenning', ['variant' => 'trouwdag', 'kop' => kop('Kop'), 'citaten' => $briefjes]);
+    $briefjesOpDePagina = $document->querySelectorAll('[data-cms-items="citaten"] > .note');
 
     expect($briefjesOpDePagina)->toHaveCount(5)
+        ->and(tekstenVan($document->querySelectorAll('.note > span.eb[data-cms-field="titel"]')))->toBe(['Wie 1', 'Wie 2', 'Wie 3', 'Wie 4', 'Wie 5'])
+        ->and($document->querySelector('section')?->getAttribute('class'))->toBe('band--aub')
+        ->and($document->querySelector('.note svg, a.btn'))->toBeNull()
         ->and($briefjesOpDePagina->item(4)->getAttribute('style'))->toBe($briefjesOpDePagina->item(0)->getAttribute('style'))
         ->and($document->querySelectorAll('.deck-dots span'))->toHaveCount(5);
 });
 
-test('the qualities start again with the first colour after the third', function () {
+test('the notes as qualities start again with the first colour after the third, with a title each', function () {
     $kwaliteiten = array_map(fn (int $nummer): array => ['id' => null, 'titel' => "Kwaliteit {$nummer}", 'tekst' => 'Tekst'], range(1, 4));
 
-    $document = renderStrip('kwaliteiten', ['kop' => kop('Kop'), 'kwaliteiten' => $kwaliteiten]);
-    $briefjes = $document->querySelectorAll('[data-cms-items="kwaliteiten"] > .note');
+    $document = renderStrip('herkenning', ['variant' => 'kwaliteiten', 'kop' => kop('Kop'), 'tekst' => 'Inleiding', 'citaten' => $kwaliteiten]);
+    $briefjes = $document->querySelectorAll('[data-cms-items="citaten"] > .note');
 
     expect($briefjes)->toHaveCount(4)
+        ->and(tekstenVan($document->querySelectorAll('.note > h3[data-cms-field="titel"]')))->toBe(['Kwaliteit 1', 'Kwaliteit 2', 'Kwaliteit 3', 'Kwaliteit 4'])
+        ->and(platteTekst($document->querySelector('p[data-cms-field="tekst"]')))->toBe('Inleiding')
+        ->and($document->querySelector('section')?->hasAttribute('class'))->toBeFalse()
+        ->and($document->querySelector('[data-cms-field="slotzin"], a.btn'))->toBeNull()
         ->and($briefjes->item(3)->getAttribute('style'))->toBe($briefjes->item(0)->getAttribute('style'))
         ->and($briefjes->item(3)->querySelector('svg')?->outerHTML)->toBe($briefjes->item(0)->querySelector('svg')?->outerHTML)
         ->and($document->querySelectorAll('.deck-dots.deck-dots--licht span'))->toHaveCount(4);
@@ -298,6 +372,20 @@ test('a quote without a heading shows only the quote', function () {
 
     expect($review?->querySelector('blockquote[data-cms-field="citaat"]')?->textContent)->toBe('Het antwoord was er al heel lang.')
         ->and($review?->querySelector('p.eb'))->toBeNull();
+});
+
+test('a quote in an article is a narrow card of its own, without the heading or the monogram', function () {
+    $document = renderStrip('citaat', ['variant' => 'artikel', 'kop' => 'Kop', 'citaat' => "Eerste regel\nTweede regel"]);
+    $citaat = $document->querySelector('div[data-cms-strip] > .reviews > .wrap.wrap--smal > blockquote.review.review--groot.art-quote');
+
+    expect($citaat?->getAttribute('data-cms-field'))->toBe('citaat')
+        ->and($citaat?->querySelectorAll('br'))->toHaveCount(1)
+        ->and($document->querySelector('section, figure, .eb, img'))->toBeNull();
+});
+
+test('a quote rejects an unknown variant and names it', function () {
+    expect(fn () => renderStrip('citaat', ['variant' => 'klein', 'citaat' => 'Citaat']))
+        ->toThrow(ViewException::class, 'De strook citaat kent geen variant [klein]');
 });
 
 test('the compact closing strip has a photo of at least 420px, no heart and no empty text', function () {
@@ -566,21 +654,28 @@ test('a column without a photo from the cms gets the photo of the design for its
         ->and(attributenVan($fotos, 'alt'))->toBe(['Twee gouden trouwringen', 'Lange gedekte feesttafel met bloemen']);
 });
 
-test('a text strip shows its heading only when it has one', function (string $type, ?string $kop, array $koppen) {
-    $document = renderStrip($type, ['kop' => $kop === null ? null : kop($kop), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+test('a text strip shows its heading only when it has one, with or without a photo', function (?array $afbeelding, ?string $kop, array $koppen) {
+    $document = renderStrip('verhaal', ['kop' => $kop === null ? null : kop($kop), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => $afbeelding, 'positie' => 'links']);
 
     expect(tekstenVan($document->querySelectorAll('h2[data-cms-field="kop"]')))->toBe($koppen)
         ->and(tekstenVan($document->querySelectorAll('[data-cms-field="tekst"] p')))->toBe(['Alinea.']);
 })->with([
-    'tekst' => ['tekst'],
-    'tekst met afbeelding' => ['tekst-met-afbeelding'],
+    'zonder afbeelding' => fn (): ?array => null,
+    'met afbeelding' => fn (): array => fotoUitCms(),
 ])->with([
     'met kop' => ['Een kop met *accent*', ['Een kop met accent']],
     'zonder kop' => [null, []],
 ]);
 
-test('the text with an image puts its image on the right only when asked', function (?string $positie, string $klasse) {
-    $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
+test('a text strip without a photo is one narrow column', function () {
+    $document = renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => null, 'positie' => 'rechts']);
+
+    expect($document->querySelector('section[data-cms-strip] > div')?->getAttribute('class'))->toBe('wrap wrap--smal sec story')
+        ->and($document->querySelector('img'))->toBeNull();
+});
+
+test('a text strip with a photo puts it on the right only when asked', function (?string $positie, string $klasse) {
+    $document = renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
 
     expect($document->querySelector('section[data-cms-strip] > div')?->getAttribute('class'))->toBe($klasse);
 })->with([
@@ -589,13 +684,13 @@ test('the text with an image puts its image on the right only when asked', funct
     'leeg' => [null, 'wrap sec tekst-foto'],
 ]);
 
-test('the text with an image rejects an unknown position', function () {
-    expect(fn () => renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
-        ->toThrow(ViewException::class, 'De strook tekst-met-afbeelding kent geen positie [midden]');
+test('a text strip rejects an unknown position', function () {
+    expect(fn () => renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
+        ->toThrow(ViewException::class, 'De strook tekst kent geen positie [midden]');
 });
 
-test('the image of a text with an image has the alt text of its file', function () {
-    $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+test('the photo of a text strip has the alt text of its file', function () {
+    $document = renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
 
     expect($document->querySelector('.tekst-foto__media img[data-cms-field="afbeelding"]')?->getAttribute('alt'))->toBe('Twee gouden trouwringen');
 });
