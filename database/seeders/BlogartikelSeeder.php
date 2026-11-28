@@ -85,7 +85,12 @@ class BlogartikelSeeder extends PaginaSeeder
                 'tekst' => '<p>Jullie merken dat de bruiloft elke avond het gesprek is. Jullie familie biedt aan om dingen te regelen, en jullie weten niet goed hoe je dat vriendelijk afslaat. Of jullie hebben al drie offertes liggen en geen idee hoe je ze vergelijkt.</p><p>[Hier verder schrijven, Romy.]</p>',
             ]],
             ['auteur'],
-            ['kennismaking'],
+            ['cta', [
+                'variant' => 'kaart',
+                'label' => 'Zullen we kennismaken?',
+                'kop' => ['text' => 'Benieuwd wat het *voor jullie* kan betekenen?'],
+                'tekst' => 'Een half uur, online en vrijblijvend.',
+            ]],
         ];
     }
 }

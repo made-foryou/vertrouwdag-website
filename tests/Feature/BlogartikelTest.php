@@ -29,7 +29,7 @@ test('the article keeps its address and comes from the cms, with every section a
         'citaat',
         'artikel-tekst',
         'auteur',
-        'kennismaking',
+        'cta',
     ]);
 });
 

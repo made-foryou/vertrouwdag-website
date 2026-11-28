@@ -212,6 +212,17 @@ test('the closing strip rejects an unknown variant', function () {
         ->toThrow(ViewException::class, 'De strook cta kent geen variant [klein]');
 });
 
+test('the closing strip as a card is the invitation under an article, with its label and without a photo', function () {
+    $document = renderStrip('cta', ['variant' => 'kaart', 'label' => 'Zullen we kennismaken?', 'kop' => kop('Benieuwd wat het *voor jullie* kan betekenen?'), 'tekst' => "Een half uur,\nonline", 'foto' => fotoUitCms()]);
+    $kaart = $document->querySelector('section[data-cms-strip] > .wrap.sec > .founding[data-reveal]');
+
+    expect(platteTekst($kaart?->querySelector('p.eb.eb--lila[data-cms-field="label"]')))->toBe('Zullen we kennismaken?')
+        ->and(platteTekst($kaart?->querySelector('h2.h2[data-cms-field="kop"]')))->toBe('Benieuwd wat het voor jullie kan betekenen?')
+        ->and($kaart?->querySelectorAll('[data-cms-field="tekst"] br'))->toHaveCount(1)
+        ->and($kaart?->querySelector('a.btn')?->getAttribute('href'))->toBe(url(config('vertrouwdag.cta.pad')))
+        ->and($document->querySelector('img, .cta-split'))->toBeNull();
+});
+
 test('the plain closing strip has a taller photo but no heart and the normal heading', function () {
     $document = renderStrip('cta', ['kop' => kop('Het begint met *een gesprek*'), 'variant' => 'eenvoudig']);
 
