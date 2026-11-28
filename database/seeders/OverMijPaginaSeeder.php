@@ -46,7 +46,10 @@ class OverMijPaginaSeeder extends PaginaSeeder
                     ['tekst' => 'Thuis in Zuid-Holland'],
                 ],
             ]],
-            ['verhaal'],
+            ['verhaal', [
+                'kop' => ['text' => 'Van stagiaire *tot planner*'],
+                'tekst' => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus. Curabitur blandit tempus porttitor, vestibulum id ligula porta felis euismod semper. Nullam quis risus eget urna mollis ornare vel eu leo.</p><p>Donec ullamcorper nulla non metus auctor fringilla. Maecenas faucibus mollis interdum, cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur, sed posuere consectetur est at lobortis.</p>',
+            ]],
             ['kijkje'],
             ['citaat'],
             ['kwaliteiten'],

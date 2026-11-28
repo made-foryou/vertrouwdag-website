@@ -1248,11 +1248,9 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
 }
 @media (max-width:860px){.persoonlijk__fotos{padding-right:4px}.persoonlijk__fotos .polaroid{width:52%}}
 
-/* Tekst en tekst met afbeelding: algemene stroken, voor elke pagina */
-.tekst{display:flex;flex-direction:column;gap:28px}
-.tekst .prose{flex:none}
+/* Tekst met een afbeelding (de strook verhaal met een foto): een algemene strook, voor elke pagina */
 .tekst-foto .prose{flex:none;max-width:calc(68 * var(--ch))}
-.tekst .prose :is(ul,ol),.tekst-foto .prose :is(ul,ol){margin:0;padding-left:1.2em;font-size:21px;line-height:1.75}
+.tekst-foto .prose :is(ul,ol){margin:0;padding-left:1.2em;font-size:21px;line-height:1.75}
 .tekst-foto{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:72px;align-items:center}
 .tekst-foto--rechts{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
 .tekst-foto--rechts .tekst-foto__media{order:2}

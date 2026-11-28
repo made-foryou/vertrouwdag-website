@@ -566,21 +566,28 @@ test('a column without a photo from the cms gets the photo of the design for its
         ->and(attributenVan($fotos, 'alt'))->toBe(['Twee gouden trouwringen', 'Lange gedekte feesttafel met bloemen']);
 });
 
-test('a text strip shows its heading only when it has one', function (string $type, ?string $kop, array $koppen) {
-    $document = renderStrip($type, ['kop' => $kop === null ? null : kop($kop), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+test('a text strip shows its heading only when it has one, with or without a photo', function (?array $afbeelding, ?string $kop, array $koppen) {
+    $document = renderStrip('verhaal', ['kop' => $kop === null ? null : kop($kop), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => $afbeelding, 'positie' => 'links']);
 
     expect(tekstenVan($document->querySelectorAll('h2[data-cms-field="kop"]')))->toBe($koppen)
         ->and(tekstenVan($document->querySelectorAll('[data-cms-field="tekst"] p')))->toBe(['Alinea.']);
 })->with([
-    'tekst' => ['tekst'],
-    'tekst met afbeelding' => ['tekst-met-afbeelding'],
+    'zonder afbeelding' => fn (): ?array => null,
+    'met afbeelding' => fn (): array => fotoUitCms(),
 ])->with([
     'met kop' => ['Een kop met *accent*', ['Een kop met accent']],
     'zonder kop' => [null, []],
 ]);
 
-test('the text with an image puts its image on the right only when asked', function (?string $positie, string $klasse) {
-    $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
+test('a text strip without a photo is one narrow column', function () {
+    $document = renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => null, 'positie' => 'rechts']);
+
+    expect($document->querySelector('section[data-cms-strip] > div')?->getAttribute('class'))->toBe('wrap wrap--smal sec story')
+        ->and($document->querySelector('img'))->toBeNull();
+});
+
+test('a text strip with a photo puts it on the right only when asked', function (?string $positie, string $klasse) {
+    $document = renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => $positie]);
 
     expect($document->querySelector('section[data-cms-strip] > div')?->getAttribute('class'))->toBe($klasse);
 })->with([
@@ -589,13 +596,13 @@ test('the text with an image puts its image on the right only when asked', funct
     'leeg' => [null, 'wrap sec tekst-foto'],
 ]);
 
-test('the text with an image rejects an unknown position', function () {
-    expect(fn () => renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
-        ->toThrow(ViewException::class, 'De strook tekst-met-afbeelding kent geen positie [midden]');
+test('a text strip rejects an unknown position', function () {
+    expect(fn () => renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'midden']))
+        ->toThrow(ViewException::class, 'De strook tekst kent geen positie [midden]');
 });
 
-test('the image of a text with an image has the alt text of its file', function () {
-    $document = renderStrip('tekst-met-afbeelding', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
+test('the photo of a text strip has the alt text of its file', function () {
+    $document = renderStrip('verhaal', ['kop' => kop('Kop'), 'tekst' => '<p>Alinea.</p>', 'afbeelding' => fotoUitCms(), 'positie' => 'links']);
 
     expect($document->querySelector('.tekst-foto__media img[data-cms-field="afbeelding"]')?->getAttribute('alt'))->toBe('Twee gouden trouwringen');
 });

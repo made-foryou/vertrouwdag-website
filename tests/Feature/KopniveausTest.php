@@ -33,7 +33,7 @@ test('choosing another level changes the element of a heading, not its look', fu
 })->with([
     'hero als h3' => ['hero', ['kop' => kop('Een kop met *nadruk*', 'h3')], '[data-cms-field="kop"]', 'h3', 'h1'],
     'hero als span' => ['hero', ['kop' => kop('Een kop met *nadruk*', 'span')], '[data-cms-field="kop"]', 'span', 'h1'],
-    'tekst als h1' => ['tekst', ['kop' => kop('Een kop met *nadruk*', 'h1'), 'tekst' => '<p>Alinea.</p>'], '[data-cms-field="kop"]', 'h1', 'h2'],
+    'tekst als h1' => ['verhaal', ['kop' => kop('Een kop met *nadruk*', 'h1'), 'tekst' => '<p>Alinea.</p>'], '[data-cms-field="kop"]', 'h1', 'h2'],
     'kolom van twee-kolommen als h2' => ['twee-kolommen', [
         'kop' => kop('Hart *én* hoofd'),
         'tekst' => 'Tekst',
