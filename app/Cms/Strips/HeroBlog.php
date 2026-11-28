@@ -3,6 +3,7 @@
 namespace App\Cms\Strips;
 
 use App\Cms\Velden;
+use Made\CmsPackage\Content\Strips\Fields\Choice;
 use Made\CmsPackage\Content\Strips\Fields\LongText;
 use Made\CmsPackage\Content\Strips\Fields\Text;
 use Made\CmsPackage\Content\Strips\StripType;
@@ -12,6 +13,10 @@ use Made\CmsPackage\Content\Strips\StripType;
  * archief openen op een onderwerp. Hij rendert met de view
  * resources/views/strips/hero-blog.blade.php. De chips komen uit
  * App\Support\Blogcategorie.
+ *
+ * Since the strips were merged (2026-11-28) the variant Archief is the old hero-archief: the opening of the blog
+ * archive, with a breadcrumb and the topics as a filter on the blogs below it. Those strips were moved to this key
+ * with that variant by a migration.
  */
 final class HeroBlog extends StripType
 {
@@ -27,12 +32,19 @@ final class HeroBlog extends StripType
 
     public function description(): string
     {
-        return 'Opening met kop, tekst en de onderwerpen als links naar het archief.';
+        return 'Opening met kop, tekst en de onderwerpen: als links naar het archief, of als filter in het archief.';
     }
 
     public function fields(): array
     {
         return [
+            Choice::make('variant', [
+                'blog' => 'Blog: de onderwerpen als links naar het archief',
+                'archief' => 'Archief: met een kruimelpad en de onderwerpen als filter',
+            ])
+                ->label('Uiterlijk')
+                ->required()
+                ->default('blog'),
             Text::make('label')
                 ->default('Blog')
                 ->hint('Korte regel boven de kop.'),

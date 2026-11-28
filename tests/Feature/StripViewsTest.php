@@ -212,6 +212,20 @@ test('the closing strip rejects an unknown variant', function () {
         ->toThrow(ViewException::class, 'De strook cta kent geen variant [klein]');
 });
 
+test('the blog opening as the archive has a breadcrumb and filter chips instead of links', function () {
+    $document = renderStrip('hero-blog', ['variant' => 'archief', 'label' => 'Blogarchief', 'kop' => kop('Alle *blogs*', 'h1'), 'tekst' => 'Tekst']);
+    $wrap = $document->querySelector('section[data-cms-strip] > .wrap.stack[data-entrance]');
+
+    expect($wrap?->firstElementChild?->matches('nav.crumbs'))->toBeTrue()
+        ->and($wrap?->querySelectorAll('.chips[role="group"] button.chip[data-filter]'))->toHaveCount(count(Blogcategorie::cases()) + 1)
+        ->and($wrap?->querySelector('nav.chips, a.chip'))->toBeNull();
+});
+
+test('the blog opening rejects an unknown variant and names it', function () {
+    expect(fn () => renderStrip('hero-blog', ['variant' => 'lijst', 'kop' => kop('Kop', 'h1')]))
+        ->toThrow(ViewException::class, 'De strook hero-blog kent geen variant [lijst]');
+});
+
 test('the closing strip as a card is the invitation under an article, with its label and without a photo', function () {
     $document = renderStrip('cta', ['variant' => 'kaart', 'label' => 'Zullen we kennismaken?', 'kop' => kop('Benieuwd wat het *voor jullie* kan betekenen?'), 'tekst' => "Een half uur,\nonline", 'foto' => fotoUitCms()]);
     $kaart = $document->querySelector('section[data-cms-strip] > .wrap.sec > .founding[data-reveal]');

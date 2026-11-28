@@ -22,7 +22,7 @@ function blogarchief(): Page
     ])->create(['title' => 'Blog']);
 
     return Page::factory()->published()->under($blog)->at('/blog/archief')->withStrips([
-        ['id' => (string) Str::uuid(), 'type' => 'hero-archief', 'visible' => true, 'values' => []],
+        ['id' => (string) Str::uuid(), 'type' => 'hero-blog', 'visible' => true, 'values' => ['variant' => 'archief']],
         ['id' => (string) Str::uuid(), 'type' => 'blog-archief', 'visible' => true, 'values' => []],
     ])->create(['title' => 'Archief']);
 }
@@ -33,7 +33,7 @@ test('the archive comes from the cms, with every section as a strip in the order
     $response = $this->get('/blog/archief');
 
     $response->assertOk()->assertViewIs('page');
-    expect(striptypenOp('/blog/archief', documentVoor('/blog/archief')))->toBe(['hero-archief', 'blog-archief', 'cta']);
+    expect(striptypenOp('/blog/archief', documentVoor('/blog/archief')))->toBe(['hero-blog', 'blog-archief', 'cta']);
 });
 
 test('the archive shows every article, the newest first, with a link and its topic, without the blogs to come', function () {

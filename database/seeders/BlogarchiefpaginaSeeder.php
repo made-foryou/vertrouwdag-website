@@ -42,7 +42,12 @@ class BlogarchiefpaginaSeeder extends PaginaSeeder
     protected function stroken(): array
     {
         return [
-            ['hero-archief'],
+            ['hero-blog', [
+                'variant' => 'archief',
+                'label' => 'Blogarchief',
+                'kop' => ['text' => 'Alle *blogs*'],
+                'tekst' => 'Alles wat ik schreef over rustig plannen, mooie plekken in Zuid-Holland en het werk achter de schermen.',
+            ]],
             ['blog-archief'],
             ['cta', [
                 'kop' => ['text' => 'Liever direct *persoonlijk advies?*'],

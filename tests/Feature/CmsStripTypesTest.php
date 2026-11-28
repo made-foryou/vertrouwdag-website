@@ -82,7 +82,6 @@ test('the catalogue of the cms builds with the strip types of the pages in the c
     'faq',
     'herkenning',
     'hero',
-    'hero-archief',
     'hero-blog',
     'hero-checklist',
     'hero-diensten',
