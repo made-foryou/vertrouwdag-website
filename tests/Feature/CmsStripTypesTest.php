@@ -66,7 +66,6 @@ function buitenLijsten(Element $strook, string $selector): array
 test('the catalogue of the cms builds with the strip types of the pages in the cms', function (string $key) {
     expect(app(StripTypes::class)->has($key))->toBeTrue();
 })->with([
-    'artikel-citaat',
     'artikel-fotos',
     'artikel-kop',
     'artikel-tekst',

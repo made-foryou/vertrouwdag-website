@@ -75,7 +75,9 @@ class BlogartikelSeeder extends PaginaSeeder
             ['artikel-tekst', [
                 'tekst' => '<p>Voor Helemaal in handen (full service) is 12 tot 18 maanden van tevoren een fijn moment. Willen jullie alleen hulp op de dag zelf, dan is 3 tot 6 maanden ervoor vaak genoeg.</p>',
             ]],
-            ['artikel-citaat', [
+            ['citaat', [
+                'variant' => 'artikel',
+                'kop' => null,
                 'citaat' => 'Hoe eerder jullie hulp vragen, hoe meer van de voorbereiding ook echt leuk blijft.',
             ]],
             ['artikel-tekst', [

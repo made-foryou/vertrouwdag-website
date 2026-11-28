@@ -312,6 +312,20 @@ test('a quote without a heading shows only the quote', function () {
         ->and($review?->querySelector('p.eb'))->toBeNull();
 });
 
+test('a quote in an article is a narrow card of its own, without the heading or the monogram', function () {
+    $document = renderStrip('citaat', ['variant' => 'artikel', 'kop' => 'Kop', 'citaat' => "Eerste regel\nTweede regel"]);
+    $citaat = $document->querySelector('div[data-cms-strip] > .reviews > .wrap.wrap--smal > blockquote.review.review--groot.art-quote');
+
+    expect($citaat?->getAttribute('data-cms-field'))->toBe('citaat')
+        ->and($citaat?->querySelectorAll('br'))->toHaveCount(1)
+        ->and($document->querySelector('section, figure, .eb, img'))->toBeNull();
+});
+
+test('a quote rejects an unknown variant and names it', function () {
+    expect(fn () => renderStrip('citaat', ['variant' => 'klein', 'citaat' => 'Citaat']))
+        ->toThrow(ViewException::class, 'De strook citaat kent geen variant [klein]');
+});
+
 test('the compact closing strip has a photo of at least 420px, no heart and no empty text', function () {
     $document = renderStrip('cta', ['kop' => kop('Liever direct *persoonlijk advies?*'), 'variant' => 'compact']);
 
