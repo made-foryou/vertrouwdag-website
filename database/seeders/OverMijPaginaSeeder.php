@@ -52,7 +52,18 @@ class OverMijPaginaSeeder extends PaginaSeeder
             ]],
             ['kijkje'],
             ['citaat'],
-            ['kwaliteiten'],
+            ['herkenning', [
+                'variant' => 'kwaliteiten',
+                'label' => 'Waarom vertrouwdag',
+                'kop' => ['text' => 'Vertrouwd, *zoals een zus* of goede vriendin'],
+                'tekst' => 'Iemand die jullie wensen kent, eerlijk meedenkt en op de dag zelf alles opvangt. Zodat jullie, en jullie familie, er gewoon kunnen zijn.',
+                'citaten' => [
+                    ['titel' => 'Punctueel', 'tekst' => 'Afspraak is afspraak, ook met leveranciers.'],
+                    ['titel' => 'Oog voor detail', 'tekst' => 'Van naamkaartjes tot de looproute van de ceremonie.'],
+                    ['titel' => 'Lokaal', 'tekst' => 'Thuis in Zuid-Holland, van Rotterdam tot de Hoeksche Waard.'],
+                ],
+                'slotzin' => null,
+            ]],
             ['cta', [
                 'kop' => ['text' => 'Ik maak graag *kennis*'],
                 'tekst' => 'Vertel me over jullie plannen. Een half uur, online en vrijblijvend.',

@@ -22,7 +22,7 @@ test('the seeded about page comes from the cms with every strip in the order of 
         'verhaal',
         'kijkje',
         'citaat',
-        'kwaliteiten',
+        'herkenning',
         'cta',
     ]);
 });
@@ -30,7 +30,7 @@ test('the seeded about page comes from the cms with every strip in the order of 
 test('the about page shows the three qualities', function () {
     $document = documentVoor('/over-mij');
 
-    expect(tekstenVan($document->querySelectorAll('[data-cms-items="kwaliteiten"] > .note h3')))->toBe(['Punctueel', 'Oog voor detail', 'Lokaal']);
+    expect(tekstenVan($document->querySelectorAll('[data-cms-items="citaten"] > .note h3')))->toBe(['Punctueel', 'Oog voor detail', 'Lokaal']);
 });
 
 test('the about page has its own texts in the running band', function () {

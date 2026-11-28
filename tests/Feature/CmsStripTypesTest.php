@@ -94,7 +94,6 @@ test('the catalogue of the cms builds with the strip types of the pages in the c
     'juridisch',
     'kennismaking',
     'kijkje',
-    'kwaliteiten',
     'leveranciers',
     'lopende-band',
     'over-mij-intro',
@@ -102,7 +101,6 @@ test('the catalogue of the cms builds with the strip types of the pages in the c
     'reviews',
     'stappen',
     'tijdlijn',
-    'trouwdag',
     'twee-kolommen',
     'vergelijking',
     'verhaal',
@@ -191,10 +189,10 @@ test('the edit frame finds every field of a strip type in its view', function (s
         'artikel-tekst' => ['kop', 'inleiding'],
         'blog-laatste' => ['binnenkort'],
         'faq' => ['label_2', 'vragen_2', 'label_3', 'vragen_3'],
+        'herkenning' => ['nummer', 'tekst', 'citaten.titel'],
         'lopende-band' => ['teksten'],
         'pakketten' => ['diensten.kenmerken', 'diensten.prijs'],
         'tijdlijn' => ['eerste_nummer'],
-        'trouwdag' => ['nummer'],
         'verhaal' => ['afbeelding'],
         'vergelijking' => ['onderdelen'],
     ][$type->key()] ?? [];
@@ -393,13 +391,14 @@ function tekstvakkenVan(StripType $type): array
 
 /**
  * Een enter in een tekstvak is op de site een nieuwe regel, ook in elk item van een lijst. Niet hier de intro van een
- * artikel: die staat op de blogkaart (zie de test daarvan).
+ * artikel: die staat op de blogkaart (zie de test daarvan). The notes (herkenning) show their intro only as
+ * Kwaliteiten, so they render as that variant here.
  */
 test('every text area of a strip type shows its line breaks on the site', function (string $striptype) {
     /** @var StripType $type */
     $type = new $striptype;
     $tekstvakken = array_values(array_filter(tekstvakkenVan($type), fn (array $tekstvak): bool => $tekstvak !== [null, 'intro'] || $type->key() !== 'artikel-kop'));
-    $waarden = $type->defaults();
+    $waarden = [...$type->defaults(), ...(['herkenning' => ['variant' => 'kwaliteiten']][$type->key()] ?? [])];
 
     foreach ($tekstvakken as [$lijst, $key]) {
         if ($lijst === null) {

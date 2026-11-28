@@ -35,7 +35,19 @@ class WerkwijzepaginaSeeder extends PaginaSeeder
         return [
             ['hero-werkwijze'],
             ['tijdlijn'],
-            ['trouwdag'],
+            ['herkenning', [
+                'variant' => 'trouwdag',
+                'nummer' => '5',
+                'label' => 'Jullie trouwdag',
+                'kop' => ['text' => 'Wat jullie familie *die dag doet*'],
+                'citaten' => [
+                    ['titel' => 'Jullie ouders', 'tekst' => 'Genieten. Verder niets.'],
+                    ['titel' => 'De getuigen', 'tekst' => 'Een speech en een proost.'],
+                    ['titel' => 'Jullie', 'tekst' => 'Ja zeggen, en de rest van de dag dansen.'],
+                    ['titel' => 'Ik', 'tekst' => 'Alles wat jullie niet hoeven te merken.'],
+                ],
+                'slotzin' => 'Ik ben er van de opbouw tot de laatste dans. Leveranciers, vragen en onverwachte dingen komen bij mij terecht.',
+            ]],
             ['tijdlijn', [
                 'variant' => null,
                 'eerste_nummer' => '6',

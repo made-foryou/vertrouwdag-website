@@ -101,7 +101,12 @@ test('the recognition strip rejects an unknown icon and names it', function () {
     $citaten = [['id' => null, 'tekst' => 'Citaat', 'icoon' => 'eenhoorn']];
 
     expect(fn () => renderStrip('herkenning', ['kop' => kop('Klinkt dit bekend?'), 'citaten' => $citaten]))
-        ->toThrow(ViewException::class, 'De strook herkenning kent geen icoon [eenhoorn]');
+        ->toThrow(ViewException::class, 'De strook briefjes kent geen icoon [eenhoorn]');
+});
+
+test('the notes reject an unknown variant and name it', function () {
+    expect(fn () => renderStrip('herkenning', ['variant' => 'roze', 'kop' => kop('Kop'), 'citaten' => []]))
+        ->toThrow(ViewException::class, 'De strook briefjes kent geen variant [roze]');
 });
 
 test('the steps are numbered in their order', function () {
@@ -257,8 +262,8 @@ test('the timeline rejects an unknown variant', function () {
         ->toThrow(ViewException::class, 'De strook tijdlijn kent geen variant [aubergine]');
 });
 
-test('the wedding day band shows its phase number only when it has one', function (?string $nummer, array $badges) {
-    $document = renderStrip('trouwdag', ['nummer' => $nummer, 'kop' => kop('Kop'), 'briefjes' => []]);
+test('the notes as the wedding day show the phase number only when they have one', function (?string $nummer, array $badges) {
+    $document = renderStrip('herkenning', ['variant' => 'trouwdag', 'nummer' => $nummer, 'kop' => kop('Kop'), 'citaten' => []]);
 
     expect(tekstenVan($document->querySelectorAll('.tl__badge span')))->toBe($badges);
 })->with([
@@ -269,24 +274,31 @@ test('the wedding day band shows its phase number only when it has one', functio
     'in woorden' => ['vijf', []],
 ]);
 
-test('the notes of the wedding day start again with the first colour after the fourth', function () {
-    $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'wie' => "Wie {$nummer}", 'tekst' => "Tekst {$nummer}"], range(1, 5));
+test('the notes as the wedding day start again with the first colour after the fourth, and say who', function () {
+    $briefjes = array_map(fn (int $nummer): array => ['id' => null, 'titel' => "Wie {$nummer}", 'tekst' => "Tekst {$nummer}"], range(1, 5));
 
-    $document = renderStrip('trouwdag', ['kop' => kop('Kop'), 'briefjes' => $briefjes]);
-    $briefjesOpDePagina = $document->querySelectorAll('[data-cms-items="briefjes"] > .note');
+    $document = renderStrip('herkenning', ['variant' => 'trouwdag', 'kop' => kop('Kop'), 'citaten' => $briefjes]);
+    $briefjesOpDePagina = $document->querySelectorAll('[data-cms-items="citaten"] > .note');
 
     expect($briefjesOpDePagina)->toHaveCount(5)
+        ->and(tekstenVan($document->querySelectorAll('.note > span.eb[data-cms-field="titel"]')))->toBe(['Wie 1', 'Wie 2', 'Wie 3', 'Wie 4', 'Wie 5'])
+        ->and($document->querySelector('section')?->getAttribute('class'))->toBe('band--aub')
+        ->and($document->querySelector('.note svg, a.btn'))->toBeNull()
         ->and($briefjesOpDePagina->item(4)->getAttribute('style'))->toBe($briefjesOpDePagina->item(0)->getAttribute('style'))
         ->and($document->querySelectorAll('.deck-dots span'))->toHaveCount(5);
 });
 
-test('the qualities start again with the first colour after the third', function () {
+test('the notes as qualities start again with the first colour after the third, with a title each', function () {
     $kwaliteiten = array_map(fn (int $nummer): array => ['id' => null, 'titel' => "Kwaliteit {$nummer}", 'tekst' => 'Tekst'], range(1, 4));
 
-    $document = renderStrip('kwaliteiten', ['kop' => kop('Kop'), 'kwaliteiten' => $kwaliteiten]);
-    $briefjes = $document->querySelectorAll('[data-cms-items="kwaliteiten"] > .note');
+    $document = renderStrip('herkenning', ['variant' => 'kwaliteiten', 'kop' => kop('Kop'), 'tekst' => 'Inleiding', 'citaten' => $kwaliteiten]);
+    $briefjes = $document->querySelectorAll('[data-cms-items="citaten"] > .note');
 
     expect($briefjes)->toHaveCount(4)
+        ->and(tekstenVan($document->querySelectorAll('.note > h3[data-cms-field="titel"]')))->toBe(['Kwaliteit 1', 'Kwaliteit 2', 'Kwaliteit 3', 'Kwaliteit 4'])
+        ->and(platteTekst($document->querySelector('p[data-cms-field="tekst"]')))->toBe('Inleiding')
+        ->and($document->querySelector('section')?->hasAttribute('class'))->toBeFalse()
+        ->and($document->querySelector('[data-cms-field="slotzin"], a.btn'))->toBeNull()
         ->and($briefjes->item(3)->getAttribute('style'))->toBe($briefjes->item(0)->getAttribute('style'))
         ->and($briefjes->item(3)->querySelector('svg')?->outerHTML)->toBe($briefjes->item(0)->querySelector('svg')?->outerHTML)
         ->and($document->querySelectorAll('.deck-dots.deck-dots--licht span'))->toHaveCount(4);
