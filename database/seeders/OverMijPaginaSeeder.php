@@ -37,7 +37,15 @@ class OverMijPaginaSeeder extends PaginaSeeder
     protected function stroken(): array
     {
         return [
-            ['hero-over-mij'],
+            ['hero', [
+                'variant' => 'over-mij',
+                'label' => 'Over mij',
+                'kop' => ['text' => 'Hoi, ik ben *Romy*'],
+                'tekst' => 'De planner achter vertrouwdag. Ik woon in Zuid-Holland, houd van een goed gedekte tafel en word blij van een planning die klopt.',
+                'knop' => ['text' => 'Maak kennis met mij', 'link' => ['url' => '/kennismaken']],
+                'bijschrift' => 'hier word ik blij van',
+                'sticker' => null,
+            ]],
             ['lopende-band', [
                 'teksten' => [
                     ['tekst' => 'Punctueel'],

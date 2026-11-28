@@ -34,7 +34,15 @@ class DienstenpaginaSeeder extends PaginaSeeder
     protected function stroken(): array
     {
         return [
-            ['hero-diensten'],
+            ['hero', [
+                'variant' => 'diensten',
+                'label' => 'Diensten en prijzen',
+                'kop' => ['text' => 'Zoveel hulp *als jullie* nodig hebben'],
+                'tekst' => 'Van alleen de dag zelf tot het hele traject. Elk pakket heeft een vaste vanaf-prijs, zodat jullie vooraf weten waar jullie aan toe zijn.',
+                'knop' => ['text' => 'Vergelijk de pakketten', 'link' => ['url' => '#vergelijk']],
+                'bijschrift' => 'alles geregeld',
+                'sticker' => "vaste\nprijzen",
+            ]],
             ['lopende-band', [
                 'teksten' => [
                     ['tekst' => 'De Dag in handen'],

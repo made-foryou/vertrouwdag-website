@@ -17,7 +17,7 @@ test('the seeded about page comes from the cms with every strip in the order of 
     $this->get('/over-mij')->assertOk()->assertViewIs('page');
 
     expect(striptypenOp('/over-mij', documentVoor('/over-mij')))->toBe([
-        'hero-over-mij',
+        'hero',
         'lopende-band',
         'verhaal',
         'kijkje',
@@ -43,5 +43,5 @@ test('the about page has its own texts in the running band', function () {
 test('the about hero has one button, to the meeting', function () {
     $document = documentVoor('/over-mij');
 
-    expect(attributenVan(strookVanType('/over-mij', $document, 'hero-over-mij')?->querySelectorAll('a.btn'), 'href'))->toBe(['/kennismaken']);
+    expect(attributenVan(strookVanType('/over-mij', $document, 'hero')?->querySelectorAll('a.btn'), 'href'))->toBe(['/kennismaken']);
 });

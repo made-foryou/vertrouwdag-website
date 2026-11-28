@@ -38,6 +38,43 @@ test('the first button of the hero is the one from the cms, and the button to th
     'leeg' => [null, 'Plan een kennismaking', '/kennismaken'],
 ]);
 
+test('the opening with photos puts each part of its variant in place', function (string $variant, string $wrap, array $collage, bool $mediaEerst) {
+    $document = renderStrip('hero', [
+        'variant' => $variant,
+        'label' => 'Label',
+        'kop' => kop('Kop', 'h1'),
+        'eerste_knop' => ['text' => 'Eerste', 'url' => '/eerste'],
+        'knop' => ['text' => 'Tweede', 'url' => '/tweede'],
+        'bijschrift' => 'Bijschrift',
+        'sticker' => 'Sticker',
+    ]);
+    $hero = $document->querySelector('section[data-cms-strip] > div');
+    $delen = array_map(fn (Element $deel): string => explode(' ', $deel->getAttribute('class'))[0], iterator_to_array($hero?->querySelector('.hero__collage')?->children ?? []));
+
+    expect($hero?->getAttribute('class'))->toBe($wrap)
+        ->and($delen)->toBe($collage)
+        ->and($hero?->firstElementChild?->classList->contains('hero__media'))->toBe($mediaEerst)
+        ->and($document->querySelectorAll('h1[data-cms-field="kop"]'))->toHaveCount(1);
+})->with([
+    'homepage' => ['home', 'wrap hero hero--home', ['arch', 'polaroid', 'stamp', 'sticker'], false],
+    'diensten' => ['diensten', 'wrap hero hero--diensten', ['arch', 'polaroid', 'sticker'], false],
+    'over mij' => ['over-mij', 'wrap hero', ['arch', 'stamp', 'polaroid'], true],
+]);
+
+test('the opening with photos as Over mij has one button, the field knop', function () {
+    $document = renderStrip('hero', ['variant' => 'over-mij', 'kop' => kop('Kop', 'h1'), 'eerste_knop' => ['text' => 'Eerste', 'url' => '/eerste'], 'knop' => ['text' => 'Maak kennis', 'url' => '/kennismaken']]);
+    $knoppen = $document->querySelectorAll('.hero__txt a.btn');
+
+    expect($knoppen)->toHaveCount(1)
+        ->and($knoppen->item(0)->getAttribute('data-cms-field'))->toBe('knop')
+        ->and($knoppen->item(0)->getAttribute('class'))->toBe('btn');
+});
+
+test('the opening with photos rejects an unknown variant and names it', function () {
+    expect(fn () => renderStrip('hero', ['variant' => 'werkwijze', 'kop' => kop('Kop', 'h1')]))
+        ->toThrow(ViewException::class, 'De strook hero kent geen variant [werkwijze]');
+});
+
 test('the services strip rejects an unknown service and names it', function () {
     $diensten = [['id' => null, 'dienst' => 'goud', 'soort' => 'Soort', 'titel' => 'Titel', 'omschrijving' => 'Omschrijving']];
 
