@@ -55,6 +55,14 @@ test('a review without a label or name shows only its quote', function () {
         ->and($review?->querySelector('.review__label, figcaption'))->toBeNull();
 });
 
+test('a long review can fold in behind Lees verder', function () {
+    $reviews = [['id' => null, 'label' => null, 'citaat' => '"Fijn samengewerkt."', 'naam' => '']];
+
+    $document = renderStrip('reviews', ['kop' => kop('Wat anderen *zeggen*'), 'reviews' => $reviews]);
+
+    expect($document->querySelector('[data-cms-items="reviews"] > figure > [data-read-more] > blockquote'))->not->toBeNull();
+});
+
 test('the notes start again with the first colour after the fourth quote', function () {
     $citaten = array_map(fn (int $nummer): array => ['id' => null, 'tekst' => "Citaat {$nummer}"], range(1, 5));
 

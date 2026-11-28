@@ -1159,7 +1159,7 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .tf-m .price{font-size:24px;margin-bottom:2px}
   .tf-m .price .incl{font-size:13.5px}
   .tf-m .folder__desc{font-size:16px;line-height:1.5}
-  .tf-m .hl{gap:6px;flex-grow:1}
+  .tf-m .hl{gap:6px}
   .tf-m .hl li{font-size:15.5px;line-height:1.4}
   .tf-m .hl svg{margin-top:4px}
   .tf-m .btn{margin-top:8px;min-height:46px;font-size:10px}
@@ -1264,3 +1264,38 @@ html:not(.motion) .notes .note,html:not(.motion) .folders[data-deck] .folder{tra
   .tekst-foto--rechts .tekst-foto__media{order:0}
   .tekst-foto__media{width:100%;max-width:440px;justify-self:center}
 }
+
+/* ==========================================================
+   Lees verder (feedback Romy, 2026-11-28): a long text folds in on a phone, see <x-read-more>
+   ========================================================== */
+/* After how many lines a text folds in, per place. The font size and line height are those of the text itself, so a
+   line of the fold (1lh) is a line of the text. Where no line count is set, nothing folds in. */
+@media (max-width:720px){
+  .review .read-more{--read-more-lines:8;font-size:20px;line-height:1.5}
+  .tf-m .read-more{--read-more-lines:6;font-size:16px;line-height:1.5}
+}
+/* Folded from the first paint (html.js is set before it), so nothing shifts when read-more.js starts. Only a text that
+   is really longer gets the fade, and the button. */
+.js .read-more:not([data-state="open"]){max-height:calc(var(--read-more-lines) * 1lh);overflow:hidden}
+.js .read-more[data-state="closed"]{-webkit-mask-image:linear-gradient(#000 calc(100% - 2lh),transparent);mask-image:linear-gradient(#000 calc(100% - 2lh),transparent)}
+/* Soft open and close where the browser animates to the height of the text (Safari opens at once). The clip margin
+   keeps the focus ring of a link in the text whole. */
+@supports (interpolate-size:allow-keywords){
+  html.motion .read-more{interpolate-size:allow-keywords;transition:max-height var(--motion-short) var(--ease)}
+  html.motion .read-more[data-state="open"]{max-height:max-content;overflow:clip;overflow-clip-margin:6px}
+}
+.read-more__toggle{display:inline-flex;align-items:center;align-self:flex-start;min-height:44px;margin:-8px 0;padding:0;border:0;background:none;font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:inherit;text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--lila-mid);cursor:pointer}
+.read-more__toggle[aria-expanded="false"] .read-more__collapse,.read-more__toggle[aria-expanded="true"] .read-more__expand{display:none}
+.review .read-more__toggle{align-self:center;color:var(--aubergine)}
+/* In the mobile deck of /pakketten the button of the card stays at the bottom, as it did when the features grew. An
+   open card keeps its own height, and the cards behind it do not stretch along. */
+.tf-m .read-more{flex-grow:1}
+.tf-m .read-more>*+*{margin-top:10px}
+.tf-m .read-more__toggle{margin-bottom:auto}
+.tf-m .folders[data-deck]:has(.read-more[data-state="open"]){align-items:flex-start}
+
+/* De foutpagina's (feedback Romy, 2026-11-28): the footer stands at the bottom of the screen, also when the card is
+   lower than the screen. The stripes fill the space between the header and the footer, with the card in the middle. */
+body:has(>main>.error-page){display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+body:has(>main>.error-page)>main{flex-grow:1;display:flex;flex-direction:column}
+.error-page{flex-grow:1;display:flex;flex-direction:column;justify-content:center}

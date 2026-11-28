@@ -19,6 +19,7 @@ import blogfilter from './modules/blogfilter';
 import cookiebanner from './modules/cookiebanner';
 import calendlyAgenda from './modules/calendly-agenda';
 import blogPhotoTransition from './modules/blog-photo-transition';
+import readMore from './modules/read-more';
 
 fotosLaden();
 mobielMenu();
@@ -31,3 +32,4 @@ blogfilter();
 cookiebanner();
 calendlyAgenda();
 blogPhotoTransition();
+readMore();

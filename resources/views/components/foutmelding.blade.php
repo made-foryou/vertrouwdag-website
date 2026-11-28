@@ -6,12 +6,15 @@
 
     De slot is de tekst. Het slot knoppen staat eronder. Het hartje komt
     uit het symbool #heart, dat de pagina zelf definieert.
+
+    The section fills the screen between the header and the footer
+    (.error-page), so the footer of the 404 stands at the bottom.
 --}}
 @props([
     'label',
     'kop',
 ])
-<section class="reviews">
+<section class="reviews error-page">
     <div class="wrap sec" style="display:flex;justify-content:center">
         <div class="review review--groot" style="transform:rotate(-1.5deg)">
             <svg width="30" height="27" fill="#C8AEC6" aria-hidden="true"><use href="#heart"/></svg>
