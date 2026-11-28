@@ -5,10 +5,14 @@
     groot: de brede variant, iets scheef. zegel: het monogram rechtsonder.
     De slots geven hun attributen door aan hun element, bijvoorbeeld
     data-cms-field.
+
+    inklapbaar: a long quote folds in on a phone behind "Lees verder"
+    (<x-read-more>).
 --}}
 @props([
     'groot' => false,
     'zegel' => false,
+    'inklapbaar' => false,
     'citaat',
     'label' => null,
     'kop' => null,
@@ -21,7 +25,11 @@
     @if ($kop)
         <p {{ $kop->attributes->class(['eb']) }}>{{ $kop }}</p>
     @endif
-    <blockquote {{ $citaat->attributes }}>{{ $citaat }}</blockquote>
+    @if ($inklapbaar)
+        <x-read-more><blockquote {{ $citaat->attributes }}>{{ $citaat }}</blockquote></x-read-more>
+    @else
+        <blockquote {{ $citaat->attributes }}>{{ $citaat }}</blockquote>
+    @endif
     @if ($naam)
         <figcaption {{ $naam->attributes }}>{{ $naam }}</figcaption>
     @endif

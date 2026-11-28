@@ -2,6 +2,8 @@
     Strook: reviews op papier onder de kop "Wat anderen zeggen". De eerste
     review krijgt het monogram.
 
+    A long review folds in on a phone behind "Lees verder" (<x-read-more>).
+
     Velden: kop (Kop met nadruk) en reviews (lijst met label, citaat en naam;
     label en naam zijn optioneel).
 --}}
@@ -10,7 +12,7 @@
         <div class="pill" data-reveal="text"><x-made-cms::heading :heading="$strip->kop" field="kop" emphasis class="h2" /></div>
         <div class="review-list" data-reveal-group data-cms-items="reviews">
             @foreach ($strip->reviews as $review)
-                <x-review :zegel="$loop->first">
+                <x-review :zegel="$loop->first" inklapbaar>
                     @if (filled($review['label']))
                         <x-slot:label data-cms-field="label">{{ $review['label'] }}</x-slot:label>
                     @endif

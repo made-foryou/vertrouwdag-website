@@ -80,7 +80,8 @@ test('the homepage comes from the cms with every strip in the order of the desig
  *   dus valt hij niet onder de uitzondering;
  * - .price: de prijs uit de strook pakketten op /diensten (#17) met "vanaf", "incl. btw" en "excl. btw";
  * - .step__nr: het nummer van een stap volgt de volgorde;
- * - de velden, de toestemming en de knop van het checklistformulier, dat ook op /checklist staat.
+ * - de velden, de toestemming en de knop van het checklistformulier, dat ook op /checklist staat;
+ * - the "Lees verder" button of a long review (<x-read-more>), a text of the site in lang/nl.
  */
 test('every text on the homepage is a field of the cms, except the listed exceptions', function () {
     $this->seed(HomepaginaSeeder::class);
@@ -95,6 +96,7 @@ test('every text on the homepage is a field of the cms, except the listed except
         'form .field',
         'form .check',
         'form [type="submit"]',
+        '.read-more__toggle',
     ]);
 
     expect(tekstenBuitenVelden($main, $uitzonderingen))->toBe([]);

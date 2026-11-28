@@ -16,6 +16,9 @@
     Zonder href is de omschrijving opgemaakte tekst uit het CMS, met een
     eigen alinea. Daarom staat ze dan in een div en niet in een p.
 
+    Without href the description and the features fold in behind "Lees
+    verder" (<x-read-more>), so the card fits on the screen of a phone.
+
     foto is de foto uit het CMS ({url, alt, width, height, focal}) of
     null; zonder foto staat de foto van de dienst uit het ontwerp
     (App\Support\Dienst::foto()). De foto is sfeer en heeft daarom altijd
@@ -67,14 +70,16 @@
             @endswitch
         @else
             <x-prijsregel :prijs="$prijs" :dienst="$dienst" :gedempt="$stijl->isGedempt()" />
-            <div {{ $omschrijving->attributes->class(['folder__desc']) }}>{{ $omschrijving }}</div>
-            @if (count($kenmerken) > 0)
-                <ul class="hl">
-                    @foreach ($kenmerken as $kenmerk)
-                        <li><svg width="14" height="13" fill="{{ $stijl->hartKleur() }}" aria-hidden="true"><use href="#heart"/></svg>{{ $kenmerk }}</li>
-                    @endforeach
-                </ul>
-            @endif
+            <x-read-more>
+                <div {{ $omschrijving->attributes->class(['folder__desc']) }}>{{ $omschrijving }}</div>
+                @if (count($kenmerken) > 0)
+                    <ul class="hl">
+                        @foreach ($kenmerken as $kenmerk)
+                            <li><svg width="14" height="13" fill="{{ $stijl->hartKleur() }}" aria-hidden="true"><use href="#heart"/></svg>{{ $kenmerk }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </x-read-more>
             <x-knop :href="url(config('vertrouwdag.cta.pad'))" :variant="$stijl->knopVariant()">{{ config('vertrouwdag.cta.label') }}</x-knop>
         @endif
     </div>

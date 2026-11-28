@@ -162,9 +162,10 @@ describe('dienstkaart', function () {
         $body = $kaart?->querySelector('.folder__body');
         $knop = $body?->querySelector('a.btn');
 
-        expect(klassenVan($document->querySelectorAll('.folder__body > p, .folder__body > div')))->toBe(['eb eb--sm', 'price', 'folder__desc'])
-            ->and($body->querySelector('div.folder__desc > p > strong')?->textContent)->toBe('Voor stellen')
-            ->and(platteTekst($body->querySelector('ul.hl li:last-child')))->toBe('Afstemming met leveranciers')
+        expect(klassenVan($document->querySelectorAll('.folder__body > p, .folder__body > div')))->toBe(['eb eb--sm', 'price', 'read-more'])
+            ->and($body->querySelector('.read-more > div.folder__desc > p > strong')?->textContent)->toBe('Voor stellen')
+            ->and(platteTekst($body->querySelector('.read-more > ul.hl li:last-child')))->toBe('Afstemming met leveranciers')
+            ->and($body->querySelector('.read-more + button.read-more__toggle + a.btn'))->not->toBeNull()
             ->and($body->querySelector('.folder__icon'))->toBeNull()
             ->and($knop?->getAttribute('href'))->toBe(url(config('vertrouwdag.cta.pad')))
             ->and(platteTekst($knop))->toBe(config('vertrouwdag.cta.label'));
@@ -356,6 +357,44 @@ describe('review', function () {
             ->and($review?->querySelector('p.eb')?->textContent)->toBe('Kiezen voor wat mijn hart al lang zei')
             ->and($review?->querySelector('img.review__seal')?->getAttribute('alt'))->toBe('')
             ->and($review?->querySelector('figcaption'))->toBeNull();
+    });
+
+    test('only a collapsible review puts its quote in a text that folds in', function () {
+        $document = renderComponent(<<<'BLADE'
+            <x-review inklapbaar>
+                <x-slot:citaat data-cms-field="citaat">"Fijn samengewerkt."</x-slot:citaat>
+                <x-slot:naam>Sanne</x-slot:naam>
+            </x-review>
+            <x-review>
+                <x-slot:citaat>"Ook fijn."</x-slot:citaat>
+            </x-review>
+            BLADE);
+        [$collapsible, $plain] = [$document->querySelectorAll('figure')->item(0), $document->querySelectorAll('figure')->item(1)];
+
+        expect($collapsible?->querySelector('.read-more > blockquote[data-cms-field="citaat"]')?->textContent)->toBe('"Fijn samengewerkt."')
+            ->and($collapsible?->querySelector('.read-more + .read-more__toggle + figcaption'))->not->toBeNull()
+            ->and($plain?->querySelector('blockquote')?->parentElement)->toBe($plain)
+            ->and($plain?->querySelector('.read-more, .read-more__toggle'))->toBeNull();
+    });
+});
+
+describe('read-more', function () {
+    test('the text is followed by a hidden button that read-more.js shows when the text is longer than the fold', function () {
+        $document = renderComponent(<<<'BLADE'
+            <x-read-more class="extra"><p>Een lange tekst.</p></x-read-more>
+            BLADE);
+        $text = $document->querySelector('div.read-more');
+        $toggle = $text?->nextElementSibling;
+
+        expect($text?->getAttribute('class'))->toBe('read-more extra')
+            ->and($text?->hasAttribute('data-read-more'))->toBeTrue()
+            ->and($text?->querySelector('p')?->textContent)->toBe('Een lange tekst.')
+            ->and($toggle?->tagName)->toBe('BUTTON')
+            ->and($toggle?->getAttribute('type'))->toBe('button')
+            ->and($toggle?->getAttribute('aria-expanded'))->toBe('false')
+            ->and($toggle?->hasAttribute('hidden'))->toBeTrue()
+            ->and(platteTekst($toggle?->querySelector('.read-more__expand')))->toBe(__('read-more.expand'))
+            ->and(platteTekst($toggle?->querySelector('.read-more__collapse')))->toBe(__('read-more.collapse'));
     });
 });
 
